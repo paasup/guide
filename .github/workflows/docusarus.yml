@@ -27,10 +27,4 @@ jobs:
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
           publish_dir: ./build
-
-          #      - name: Deploy to GitHub Pages
-          #        env:
-          #          GIT_USER: ${{ secrets.GIT_USER }}
-          #          USE_SSH: false                        
-          #          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }} 
-          #        run: npm run deploy      
+         
