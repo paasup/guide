@@ -44,5 +44,5 @@ function HomepageHeader() {
 // }
 
 export default function Home() {
-  return <Redirect to="/paasup/docs/intro" />;
+  return <Redirect to="/guide/docs/intro" />;
 }

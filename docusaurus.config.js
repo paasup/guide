@@ -15,15 +15,15 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://lucirr.github.io',
+  url: 'https://paasup.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/paasup/',
+  baseUrl: '/guide/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'lucirr', // Usually your GitHub org/user name.
-  projectName: 'paasup', // Usually your repo name.
+  organizationName: 'paasup', // Usually your GitHub org/user name.
+  projectName: 'guide', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
