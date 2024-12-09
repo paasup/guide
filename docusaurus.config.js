@@ -70,19 +70,7 @@ const config = {
     ],
   ],
 
-  // plugins: [
-  //     [
-  //       '@docusaurus/plugin-client-redirects',
-  //       {
-  //         redirects: [
-  //           {
-  //             to: '/docs/intro', // 원하는 문서 경로
-  //             from: '/paasup',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   ],
+
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */

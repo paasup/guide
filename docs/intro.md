@@ -10,10 +10,7 @@ Gitea 카탈로그:
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- host
-- username 
 - password 
-- ROOT_URL
 
 ```yaml
 global:
@@ -24,20 +21,23 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: 200m
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
   hosts:
-    - host: gitea.my.org
+    - host: {{ .Name }}.{{ .Domain }}
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        host: gitea.my.org
-      secretName: platform
+        host: {{ .Name }}.{{ .Domain }}
+      secretName: {{ .Name }}-tls-secret
 
 extraVolumes:
  - name: gitea-tls
    secret:
-     secretName: platform
+     secretName: {{ .Name }}-tls-secret
 
 extraContainerVolumeMounts:
   - name: gitea-tls
@@ -72,13 +72,13 @@ persistence:
 gitea:
   admin:   
     username: sudouser
-    password: xxxxxxxxx
-    email: "sudouser@cro.com"
+    password: password
+    email: "sudouser@paasup.io"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
     server:
-      ROOT_URL: https://gitea.my.org
+      ROOT_URL: https://{{ .Name }}.{{ .Domain }}
     database:
       DB_TYPE: postgres
       HOST: postgresql-ha-postgresql:5432
