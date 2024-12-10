@@ -235,16 +235,19 @@ tracking:
   ingress:
     enabled: true
     pathType: ImplementationSpecific
-    hostname: mlflow.my.org
+    hostname: {{ .Name }}.{{ .Domain }}
     ingressClassName: "nginx"
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+      cert-manager.io/duration: 8760h  
+      cert-manager.io/renew-before: 720h
     path: /
     tls: false
     extraTls:
     - hosts:
-        - mlflow.my.org
-      secretName: platform
+        - {{ .Name }}.{{ .Domain }}
+      secretName: {{ .Name }}-tls-secret
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
@@ -257,10 +260,10 @@ externalS3:
   host: "192.168.1.21"
   port: 9000
   useCredentialsInSecret: true
-  accessKeyID: "XXXXXXX"
-  accessKeySecret: "xxxxxxxxxxxxxxxxxx"
+  accessKeyID: "{{ .AccessKey }}"
+  accessKeySecret: "{{ .SecretKey }}"
   protocol: "http"
-  bucket: "dev-mlflow"
+  bucket: "{{ .Path }}"
   serveArtifacts: true
 ```
 
@@ -270,8 +273,6 @@ Mlflow 카탈로그:
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- hostname
-- hosts
 - password
 - minio > rootPassword
 
@@ -285,16 +286,19 @@ tracking:
   ingress:
     enabled: true
     pathType: ImplementationSpecific
-    hostname: mlflow.stg.paasup.io
+    hostname: {{ .Name }}.{{ .Domain }}
     ingressClassName: "nginx"
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+      cert-manager.io/duration: 8760h  
+      cert-manager.io/renew-before: 720h
     path: /
     tls: false
     extraTls:
     - hosts:
-        - mlflow.stg.paasup.io
-      secretName: platform
+        - {{ .Name }}.{{ .Domain }}
+      secretName: {{ .Name }}-tls-secret
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
@@ -329,16 +333,19 @@ tracking:
   ingress:
     enabled: true
     pathType: ImplementationSpecific
-    hostname: mlflow.stg.paasup.io
+    hostname: {{ .Name }}.{{ .Domain }}
     ingressClassName: "nginx"
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+      cert-manager.io/duration: 8760h  
+      cert-manager.io/renew-before: 720h
     path: /
     tls: false
     extraTls:
     - hosts:
-        - mlflow.stg.paasup.io
-      secretName: platform
+        - {{ .Name }}.{{ .Domain }}
+      secretName: {{ .Name }}-tls-secret
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
@@ -351,9 +358,9 @@ externalS3:
   host: "minio.stg.paasup.io"
   port: 443
   useCredentialsInSecret: true
-  accessKeyID: "xxxxx"
-  accessKeySecret: "XXXXXXXXXX"
+  accessKeyID: "{{ .AccessKey }}"
+  accessKeySecret: "{{ .SecretKey }}"
   protocol: "https"
-  bucket: "mlflow"
+  bucket: "{{ .Path }}"
   serveArtifacts: true
 ```
