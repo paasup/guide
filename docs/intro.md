@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 카탈로그 설정값 예제
 
-## Gitea DB 외부 참조
+## Gitea 시스템 카탈로그 (DB 외부 참조)
 
 Gitea 시스템 카탈로그:
 
@@ -25,19 +25,19 @@ ingress:
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
   hosts:
-    - host: {{ .Name }}.{{ .Domain }}
+    - host: gitea.{{ .Domain }}
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        host: {{ .Name }}.{{ .Domain }}
-      secretName: {{ .Name }}-tls-secret
+        host: gitea.{{ .Domain }}
+      secretName: platform
 
 extraVolumes:
  - name: gitea-tls
    secret:
-     secretName: {{ .Name }}-tls-secret
+     secretName: platform
 
 extraContainerVolumeMounts:
   - name: gitea-tls
@@ -73,12 +73,12 @@ gitea:
   admin:   
     username: sudouser
     password: password
-    email: "sudouser@paasup.io"
+    email: "sudouser@cro.com"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
     server:
-      ROOT_URL: https://{{ .Name }}.{{ .Domain }}
+      ROOT_URL: https://gitea.{{ .Domain }}
     database:
       DB_TYPE: postgres
       HOST: postgresql-ha-postgresql:5432
@@ -90,7 +90,7 @@ gitea:
       SSL_MODE: disable
     session:
       PROVIDER: postgres
-      PROVIDER_CONFIG: user=gitea password=gitea host={{ .Name }}-postgresql port=5432 dbname=gitea sslmode=disable
+      PROVIDER_CONFIG: user=gitea password=gitea host=postgresql-ha-postgresql port=5432 dbname=gitea sslmode=disable
       COOKIE_NAME: i_hate_gitea
     service:
       DEFAULT_ALLOW_CREATE_ORGANIZATION: true
@@ -98,7 +98,7 @@ gitea:
       DEFAULT_BRANCH: master
 ```
 
-## Gitea DB 포함
+## Gitea 일반 카탈로그 (DB 내장)
 
 Gitea 일반 카탈로그:
 
@@ -194,14 +194,9 @@ gitea:
       DEFAULT_BRANCH: master
 ```
 
-## Argo CD
+## Argo CD 시스템 카탈로그
 
 Argo CD 카탈로그:
-
-아래 항목은 사이트에 따라 수정이 필요합니다.
-
-- hostname
-- hosts
 
 ```yaml
 server:
@@ -212,10 +207,10 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     ingressClassName: "nginx"
-    hostname: "argocd.my.org"
+    hostname: "argocd.{{ .Domain }}"
     extraTls:
       - hosts:
-        - argocd.my.org
+        - argocd.{{ .Domain }}
         secretName: platform
 ```
 
