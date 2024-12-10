@@ -220,10 +220,7 @@ Mlflow 카탈로그:
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- hostname
-- hosts
 - password
-- externalS3 > host, port, accessKeyID, accessKeySecret
 
 ```yaml
 tracking:
@@ -318,10 +315,7 @@ Mlflow 카탈로그:
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- hostname
-- hosts
 - password
-- minio > host, port, accessKeyID, accessKeySecret
 
 ```yaml
 tracking:
