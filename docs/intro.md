@@ -129,25 +129,26 @@ ingress:
       secretName: {{ .Name }}-tls-secret
 
 extraVolumes:
- - name: gitea-tls
+ - name: keycloak-tls
    secret:
-     secretName: {{ .Name }}-tls-secret
+     secretName: keycloak-tls
+
 
 extraContainerVolumeMounts:
-  - name: gitea-tls
-    mountPath: /data/gitea/https
+  - name: keycloak-tls
+    mountPath: /etc/ssl/certs/ca.crt
+    subPath: ca.crt
 
 lifecycleHooks:
   postStart:
     exec:
-      command: ["/bin/sh", "-c", "cp /data/gitea/https/tls.crt /usr/local/share/ca-certificates/; update-ca-certificates"]
-
+      command: 
+      - "/bin/sh"
+      -  "-c"
+      - |
+        POST_START
 
 replicaCount: 1
-
-tolerations: []
-
-nodeSelector: {}
 
 resources:
   requests:
@@ -160,16 +161,13 @@ resources:
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: ""
-
-postgresql:
-  enabled: true
+  storageClass: "longhorn"
 
 gitea:
   admin:   
     username: sudouser
     password: password
-    email: "sudouser@paasup.io"
+    email: "sudouser@cro.com"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
@@ -182,16 +180,22 @@ gitea:
       USER: gitea
       PASSWD: gitea
       CHARSET: utf8
-      SCHEMA: public
       SSL_MODE: disable
-    session:
-      PROVIDER: postgres
-      PROVIDER_CONFIG: user=gitea password=gitea host={{ .Name }}-postgresql port=5432 dbname=gitea sslmode=disable
-      COOKIE_NAME: i_hate_gitea
     service:
       DEFAULT_ALLOW_CREATE_ORGANIZATION: true
     repository:
       DEFAULT_BRANCH: master
+
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      postgresqlDatabase: gitea
+      postgresqlUsername: gitea
+      postgresqlPassword: gitea
+      servicePort: 5432
+  persistence:
+    size: 5Gi
 ```
 
 ## Argo CD 시스템 카탈로그
