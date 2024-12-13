@@ -131,7 +131,7 @@ ingress:
 extraVolumes:
  - name: keycloak-tls
    secret:
-     secretName: keycloak-tls
+     secretName: keycloak-tls-secret
 
 
 extraContainerVolumeMounts:
