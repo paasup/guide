@@ -98,7 +98,7 @@ gitea:
       DEFAULT_BRANCH: master
 ```
 
-## Gitea 일반 카탈로그 (DB 내장)
+## Gitea 카탈로그 (DB 내장)
 
 Gitea 일반 카탈로그:
 
@@ -218,101 +218,6 @@ server:
         secretName: platform
 ```
 
-## MLflow와 S3 사용할 때
-
-Mlflow 카탈로그:
-
-아래 항목은 사이트에 따라 수정이 필요합니다.
-
-- password
-
-```yaml
-tracking:
-  auth:
-    username: mlflow
-    password: xxxxxxxxx
-  service:
-    type: ClusterIP
-  ingress:
-    enabled: true
-    pathType: ImplementationSpecific
-    hostname: {{ .Name }}.{{ .Domain }}
-    ingressClassName: "nginx"
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 2048m
-      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
-      cert-manager.io/duration: 8760h  
-      cert-manager.io/renew-before: 720h
-    path: /
-    tls: false
-    extraTls:
-    - hosts:
-        - {{ .Name }}.{{ .Domain }}
-      secretName: {{ .Name }}-tls-secret
-  extraArgs:
-    - "--gunicorn-opts=--timeout 600"
-postgresql:
-  auth:
-    username: mlflow
-    password: xxxxxxxx
-minio:
-  enabled: false
-externalS3:
-  host: "192.168.1.21"
-  port: 9000
-  useCredentialsInSecret: true
-  accessKeyID: "{{ .AccessKey }}"
-  accessKeySecret: "{{ .SecretKey }}"
-  protocol: "http"
-  bucket: "{{ .Path }}"
-  serveArtifacts: true
-```
-
-## MLflow와  내부 minio 사용할 때
-
-Mlflow 카탈로그:
-
-아래 항목은 사이트에 따라 수정이 필요합니다.
-
-- password
-- minio > rootPassword
-
-```yaml
-tracking:
-  auth:
-    username: mlflow
-    password: xxxxxxxxx
-  service:
-    type: ClusterIP
-  ingress:
-    enabled: true
-    pathType: ImplementationSpecific
-    hostname: {{ .Name }}.{{ .Domain }}
-    ingressClassName: "nginx"
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 2048m
-      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
-      cert-manager.io/duration: 8760h  
-      cert-manager.io/renew-before: 720h
-    path: /
-    tls: false
-    extraTls:
-    - hosts:
-        - {{ .Name }}.{{ .Domain }}
-      secretName: {{ .Name }}-tls-secret
-  extraArgs:
-    - "--gunicorn-opts=--timeout 600"
-postgresql:
-  auth:
-    username: mlflow
-    password: xxxxxxxx
-minio:
-  enabled: true
-  auth:
-    rootUser: mlflow
-    rootPassword: xxxxxxxx
-```
-
 ## MLflow와 외부 minio 사용할 때
 
 Mlflow 카탈로그:
@@ -325,7 +230,7 @@ Mlflow 카탈로그:
 tracking:
   auth:
     username: mlflow
-    password: xxxxxxx
+    password: password
   service:
     type: ClusterIP
   ingress:
@@ -349,7 +254,7 @@ tracking:
 postgresql:
   auth:
     username: mlflow
-    password: xxxxxxxx
+    password: mlflow
 minio:
   enabled: false
 externalS3:
