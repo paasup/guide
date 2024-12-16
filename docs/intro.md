@@ -276,7 +276,7 @@ Kubeflow 카탈로그:
 apiVersion: kubeflow.org/v1
 kind: Profile
 metadata:
-  name: {{ .Name }}
+  name: {{ .Namespace }}
 spec:
   owner:
     kind: User
