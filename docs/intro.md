@@ -267,3 +267,23 @@ externalS3:
   bucket: "{{ .Path }}"
   serveArtifacts: true
 ```
+
+## Kubeflow
+
+Kubeflow 카탈로그:
+
+```yaml
+apiVersion: kubeflow.org/v1
+kind: Profile
+metadata:
+  name: {{ .Name }}
+spec:
+  owner:
+    kind: User
+    name: {{ .Email }}
+  resourceQuotaSpec:
+    hard:
+      cpu: "4"
+      memory: 2Gi
+      persistentvolumeclaims: "4"
+```
