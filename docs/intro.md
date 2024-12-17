@@ -287,3 +287,40 @@ spec:
       memory: 2Gi
       persistentvolumeclaims: "4"
 ```
+
+## Rancher
+
+Rancher 카탈로그:
+
+```yaml
+hostname: {{ .Name }}.{{ .Domain }}
+ingress:
+  enable: true
+  tls:
+    source: secret
+    secretName: rancher-tls-ingress
+  extraAnnotations:    
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+
+privateCA: true
+
+replicas: 1
+
+tolerations: []
+
+nodeSelector: {}
+
+resources: 
+  requests:
+    cpu: 100m
+    memory: 500Mi
+  limits:
+    cpu: 1000m
+    memory: 1000Mi
+
+extraEnv:
+- name: TZ
+  value: Asia/Seoul
+
+preinstallHook: true
+```
