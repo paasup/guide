@@ -100,9 +100,9 @@ gitea:
       DEFAULT_BRANCH: master
 ```
 
-## Argo CD 시스템 카탈로그
+## Argocd 시스템 카탈로그
 
-Argo CD 카탈로그:
+Argocd 카탈로그:
 
 ```yaml
 server:
