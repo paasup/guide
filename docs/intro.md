@@ -4,9 +4,11 @@ sidebar_position: 1
 
 # 카탈로그 설정값
 
-## Gitea 시스템 카탈로그 (DB 외부 참조)
+## Gitea 시스템 카탈로그
 
 Gitea 시스템 카탈로그:
+
+외부 DB 참조조
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
@@ -98,9 +100,31 @@ gitea:
       DEFAULT_BRANCH: master
 ```
 
-## Gitea 카탈로그 (DB 내장)
+## Argo CD 시스템 카탈로그
+
+Argo CD 카탈로그:
+
+```yaml
+server:
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingressClassName: "nginx"
+    hostname: "argocd.{{ .Domain }}"
+    extraTls:
+      - hosts:
+        - argocd.{{ .Domain }}
+        secretName: platform
+```
+
+## Gitea
 
 Gitea 일반 카탈로그:
+
+DB 내장장
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
@@ -198,29 +222,11 @@ postgresql:
     size: 5Gi
 ```
 
-## Argo CD 시스템 카탈로그
-
-Argo CD 카탈로그:
-
-```yaml
-server:
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingressClassName: "nginx"
-    hostname: "argocd.{{ .Domain }}"
-    extraTls:
-      - hosts:
-        - argocd.{{ .Domain }}
-        secretName: platform
-```
-
-## MLflow와 외부 minio 사용할 때
+## MLflow
 
 Mlflow 카탈로그:
+
+외부 minio 사용할 때
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
