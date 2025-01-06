@@ -609,8 +609,8 @@ configOverrides:
             "icon": "fa-key",
             "token_key": "access_token",
             "remote_app": {
-                "client_id": "{{ .ClientId }}",
-                "client_secret": "{{ .ClientSecret }}",
+                "client_id": "$CLIENT_ID",
+                "client_secret": "$CLIENT_SECRET",
                 "client_kwargs": {
                   "scope": "openid email profile",
                   'verify': False
