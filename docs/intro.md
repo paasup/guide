@@ -407,7 +407,7 @@ controller:
     enable: true
   uiIngress:
     enable: true
-    urlFormat: "{{ .Name }}.{{ .Domain }}/{{$appNamespace}}/{{$appName}}"
+    urlFormat: "{{ .Name }}.{{ .Domain }}/{{`{{$appNamespace}}`}}/{{`{{$appName}}`}}"
 
   resources:
     limits:
