@@ -332,6 +332,8 @@ extraEnv:
   value: Asia/Seoul
 
 preinstallHook: true
+
+NewPassword: rancherPassword
 ```
 
 ## rancher-monitoring-crd
