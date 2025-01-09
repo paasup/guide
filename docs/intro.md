@@ -307,6 +307,9 @@ ingress:
     secretName: rancher-tls-ingress
   extraAnnotations:    
     nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
 
 privateCA: true
 
