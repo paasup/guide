@@ -798,3 +798,46 @@ ingress:
        - {{ .Name }}.{{ .Domain }}
        secretName: {{ .Name }}-tls-secret
 ```
+
+## flowise
+
+flowise 카탈로그:
+
+```yaml
+image:
+  registry: docker.io
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: longhorn
+
+resources: {}
+
+config:
+  username: flowise
+  password: flowise
+
+ingress:
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
+  hosts:
+  - host: {{ .Name }}.{{ .Domain }}
+    paths:
+      - /
+  tls: 
+  -  hosts:
+     - {{ .Name }}.{{ .Domain }}
+     secretName: {{ .Name }}-tls-secret
+
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+```
