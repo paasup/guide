@@ -742,3 +742,59 @@ redis:
       storageClass: ""
       size: 8Gi
 ```
+
+## ollama
+
+ollama 카탈로그:
+
+```yaml
+image:
+  repository: ollama/ollama
+  tag: 0.5.4
+
+runtimeClassName: nvidia
+
+persistentVolume:
+  enabled: true
+  size: "30Gi"
+  storageClass: longhorn
+
+resources:
+  requests:
+    memory: 4096Mi
+    cpu: 2000m
+  limits:
+    memory: 8192Mi
+    cpu: 4000m
+
+ollama:
+  gpu:
+    enabled: ture
+    type: 'nvidia'
+    number: 1
+
+  models:
+    pull:
+      - mistral
+      #- benedict/linkbricks-mistral-nemo-korean:12b
+      #- benedict/linkbricks-gemma2-korean:27b
+      #- qwen2.5-coder:32b
+      #- codeqwen:7b-chat
+      # - llama3
+
+ingress:
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
+  hosts:
+  - host: {{ .Name }}.{{ .Domain }}
+    paths:
+      - path: /
+        pathType: Prefix
+  tls: 
+    -  hosts:
+       - {{ .Name }}.{{ .Domain }}
+       secretName: {{ .Name }}-tls-secret
+```
