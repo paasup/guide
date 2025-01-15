@@ -83,7 +83,7 @@ gitea:
       ROOT_URL: https://gitea.{{ .Domain }}
     database:
       DB_TYPE: postgres
-      HOST: postgresql-ha-postgresql:5432
+      HOST: postgresql-postgresql-ha-postgresql:5432
       NAME: gitea
       USER: gitea
       PASSWD: gitea
@@ -92,7 +92,7 @@ gitea:
       SSL_MODE: disable
     session:
       PROVIDER: postgres
-      PROVIDER_CONFIG: user=gitea password=gitea host=postgresql-ha-postgresql port=5432 dbname=gitea sslmode=disable
+      PROVIDER_CONFIG: user=gitea password=gitea host=postgresql-postgresql-ha-postgresql port=5432 dbname=gitea sslmode=disable
       COOKIE_NAME: i_hate_gitea
     service:
       DEFAULT_ALLOW_CREATE_ORGANIZATION: true
