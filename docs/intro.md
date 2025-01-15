@@ -391,6 +391,17 @@ alertmanager:
       limits:
         cpu: 1000m
         memory: 500Mi
+
+rke2ControllerManager:
+  enabled: true
+rke2Etcd:
+  enabled: true
+rke2Proxy:
+  enabled: true
+rke2Scheduler:
+  enabled: true
+rke2IngressNginx:
+  enabled: true
 ```
 
 ## spark-operator
