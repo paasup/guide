@@ -349,6 +349,11 @@ rancher-monitoring-crd 카탈로그:
 rancher-monitoring 카탈로그:
 
 ```yaml
+global:
+  cattle:
+    clusterId: local
+    clusterName: local
+
 grafana:
   resources:
     requests:
