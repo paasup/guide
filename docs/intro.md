@@ -282,16 +282,16 @@ Kubeflow 카탈로그:
 apiVersion: kubeflow.org/v1
 kind: Profile
 metadata:
-  name: {{ .Namespace }}
+  name: {{ .Name }}
 spec:
   owner:
     kind: User
     name: {{ .Email }}
   resourceQuotaSpec:
     hard:
-      cpu: "4"
+      cpu: "1"
       memory: 2Gi
-      persistentvolumeclaims: "4"
+      persistentvolumeclaims: "2"
 ```
 
 ## Rancher
