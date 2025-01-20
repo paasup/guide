@@ -153,13 +153,13 @@ ingress:
       secretName: {{ .Name }}-tls-secret
 
 extraVolumes:
- - name: gitea-tls
+ - name: keycloak-tls
    secret:
-     secretName: {{ .Name }}-tls-secret
+     secretName: keycloak-tls
 
 
 extraContainerVolumeMounts:
-  - name: gitea-tls
+  - name: keycloak-tls
     mountPath: /etc/ssl/certs/ca.crt
     subPath: ca.crt
 
