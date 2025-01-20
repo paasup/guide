@@ -124,7 +124,7 @@ server:
 
 Gitea 일반 카탈로그:
 
-DB 내장장
+DB 내장
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
@@ -153,13 +153,13 @@ ingress:
       secretName: {{ .Name }}-tls-secret
 
 extraVolumes:
- - name: keycloak-tls
+ - name: gitea-tls
    secret:
-     secretName: keycloak-tls
+     secretName: {{ .Name }}-tls-secret
 
 
 extraContainerVolumeMounts:
-  - name: keycloak-tls
+  - name: gitea-tls
     mountPath: /etc/ssl/certs/ca.crt
     subPath: ca.crt
 
