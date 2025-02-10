@@ -885,6 +885,9 @@ ingress:
   enabled: true
   annotations:
     cert-manager.io/cluster-issuer: "selfsigned-issuer"
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   host: "{{ .Name }}.{{ .Domain }}"
   tls: true
   existingSecret: "{{ .Name }}-tls-secret"
