@@ -932,5 +932,5 @@ volumeMounts:
 volumes:
 - name: "keycloak-tls"
   secret:
-    secretName: keycloak-tls-secret
+    secretName: keycloak-tls
 ```
