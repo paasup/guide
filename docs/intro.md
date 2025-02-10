@@ -21,11 +21,12 @@ global:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: kong
     nginx.ingress.kubernetes.io/proxy-body-size: 200m
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
     - host: gitea.{{ .Domain }}
       paths:
@@ -112,7 +113,8 @@ server:
       nginx.ingress.kubernetes.io/rewrite-target: /
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingressClassName: "nginx"
+      konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+    ingressClassName: "kong"
     hostname: "argocd.{{ .Domain }}"
     extraTls:
       - hosts:
@@ -137,11 +139,12 @@ global:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: kong
     nginx.ingress.kubernetes.io/proxy-body-size: 200m
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
     - host: {{ .Name }}.{{ .Domain }}
       paths:
@@ -249,6 +252,7 @@ tracking:
       cert-manager.io/cluster-issuer: "selfsigned-issuer" 
       cert-manager.io/duration: 8760h  
       cert-manager.io/renew-before: 720h
+      konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
     path: /
     tls: false
     extraTls:
@@ -310,6 +314,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
 
 privateCA: true
 
@@ -501,6 +506,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
   - host: {{ .Name }}.{{ .Domain }}
     paths:
@@ -589,6 +595,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
     - host: {{ .Name }}.{{ .Domain }}
       paths:
@@ -671,6 +678,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   path: /
   pathType: ImplementationSpecific
   hosts:
@@ -804,6 +812,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
   - host: {{ .Name }}.{{ .Domain }}
     paths:
@@ -840,6 +849,7 @@ ingress:
     cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
   - host: {{ .Name }}.{{ .Domain }}
     paths:
@@ -856,4 +866,68 @@ postgresql:
       enabled: true
       size: 8Gi
       storageClass: ""
+```
+
+## open-webui
+
+open-webui 카탈로그:
+
+```yaml
+ollama:
+  enabled: false
+tika:
+  enabled: false
+websocket:
+  enabled: false
+redis-cluster:
+  enabled: false
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
+  host: "{{ .Name }}.{{ .Domain }}"
+  tls: true
+  existingSecret: "{{ .Name }}-tls-secret"
+persistence:
+  enabled: true
+  size: 2Gi
+  existingClaim: ""
+  subPath: ""
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+  selector: {}
+  annotations: {}
+extraEnvVars:
+  - name: OPENAI_API_KEY
+    value: "$SECRET_KEY"
+  - name: OAUTH_CLIENT_ID
+    value: $CLIENT_ID
+  - name: OAUTH_CLIENT_SECRET
+    value: $CLIENT_SECRET
+  - name: OPENID_PROVIDER_URL
+    value: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration
+  - name: OAUTH_PROVIDER_NAME
+    value: paasup
+  - name: OAUTH_SCOPES
+    value: 'openid email profile'
+  - name: ENABLE_LOGIN_FORM
+    value: 'false'
+  - name: SSL_CERT_FILE
+    value: '/etc/ssl/certs/keycloak/ca.crt'
+  - name: ENABLE_OAUTH_SIGNUP
+    value: 'true'
+  - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+    value: 'true'
+
+volumeMounts:
+  initContainer: []
+  container:
+  - name: "keycloak-tls"
+    mountPath: "/etc/ssl/certs/keycloak"
+
+volumes:
+- name: "keycloak-tls"
+  secret:
+    secretName: keycloak-tls-secret
 ```
