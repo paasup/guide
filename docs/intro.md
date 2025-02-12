@@ -630,7 +630,50 @@ configOverrides:
     SECRET_KEY = '$SECRET_KEY'
   enable_oauth: |
     from flask_appbuilder.security.manager import (AUTH_DB, AUTH_OAUTH)
+    from superset.security import SupersetSecurityManager
+    from flask import request
+
+    import requests
+    import logging
+
+    class CustomSsoSecurityManager(SupersetSecurityManager):
+        def oauth_user_info(self, provider, response=None):
+            me = self.appbuilder.sm.oauth_remotes[provider].get("openid-connect/userinfo")
+            me.raise_for_status()
+            data = me.json()
+
+            logging.debug("User info from Keycloak: %s", data)
+
+            role = []
+            username = data.get("preferred_username", "")
+            host = request.host
+            dip_api_url =  "http://dip-api.platform.svc.cluster.local:8087"
+            
+            url = f"{dip_api_url}/gwapi/v1/projectusers/{username}"
+            request_data = {"url": f"https://{host}"}
+            response = requests.post(url, json=request_data, headers={"Content-Type": "application/json"}, verify=False)
+
+            if response.status_code == 200:
+                logging.info(f"API 요청 성공: {response.status_code}, {response.text}")
+                role.append(response.json().get("roleName",""))
+            else:
+                logging.info(f"API 요청 실패: {response.status_code}, {response.text}")
+                role.append("")
+
+            return {
+                "username": data.get("preferred_username", ""),
+                "first_name": data.get("given_name", ""),
+                "last_name": data.get("family_name", ""),
+                "email": data.get("email", ""),
+                "role_keys": role,
+            }
+
     AUTH_TYPE = AUTH_OAUTH
+    AUTH_USER_REGISTRATION = True
+    AUTH_USER_REGISTRATION_ROLE = "Public"
+    AUTH_ROLES_SYNC_AT_LOGIN = True
+    CUSTOM_SECURITY_MANAGER = CustomSsoSecurityManager
+
     OAUTH_PROVIDERS = [
         {
             "name": "keycloak",
@@ -649,15 +692,13 @@ configOverrides:
         }
     ]
 
-    AUTH_ROLE_ADMIN = 'Admin'
-    AUTH_ROLE_PUBLIC = 'Public'
-
-    AUTH_USER_REGISTRATION = True
-
-    AUTH_USER_REGISTRATION_ROLE = "Gamma"
+    AUTH_ROLES_MAPPING = {
+    'root': ['Admin'],
+    'admin': ['Admin'],
+    'manager': ['Admin'],
+    'member': ['Alpha'],
+    }
     
-
-
 bootstrapScript: |
   #!/bin/bash
   pip install sqlalchemy-drill psycopg2-binary Authlib
