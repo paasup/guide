@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Gitea 시스템 카탈로그:
 
-외부 DB 참조조
+외부 DB 참조
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
