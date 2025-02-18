@@ -973,3 +973,11 @@ volumes:
   secret:
     secretName: keycloak-tls
 ```
+
+
+## vllm
+
+vllm 카탈로그:
+
+```yaml
+```
