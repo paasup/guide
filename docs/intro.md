@@ -26,7 +26,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
     - host: gitea.{{ .Domain }}
       paths:
@@ -110,15 +109,18 @@ server:
   ingress:
     enabled: true
     annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+      konghq.com/https-redirect-status-code: "301"
+      konghq.com/preserve-host: "true"
+      konghq.com/protocols: https
     hostname: "argocd.{{ .Domain }}"
     extraTls:
       - hosts:
         - argocd.{{ .Domain }}
-        secretName: platform
+        secretName: argocd-tls
+
+  service:
+    annotations:
+      konghq.com/protocol: https        
 ```
 
 ## Gitea
@@ -143,7 +145,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
     - host: {{ .Name }}.{{ .Domain }}
       paths:
@@ -312,7 +313,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
 
 privateCA: true
 
@@ -717,7 +717,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   path: /
   pathType: ImplementationSpecific
   hosts:
@@ -926,7 +925,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer"
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   host: "{{ .Name }}.{{ .Domain }}"
   tls: true
   existingSecret: "{{ .Name }}-tls-secret"
