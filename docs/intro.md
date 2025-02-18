@@ -21,9 +21,9 @@ global:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: kong
-    nginx.ingress.kubernetes.io/proxy-body-size: 200m
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    konghq.com/protocols: https
+    konghq.com/https-redirect-status-code: "301"
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -114,7 +114,6 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
-    ingressClassName: "kong"
     hostname: "argocd.{{ .Domain }}"
     extraTls:
       - hosts:
@@ -139,9 +138,9 @@ global:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: kong
-    nginx.ingress.kubernetes.io/proxy-body-size: 200m
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    konghq.com/protocols: https
+    konghq.com/https-redirect-status-code: "301"
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -238,18 +237,15 @@ Mlflow 카탈로그:
 ```yaml
 tracking:
   auth:
-    username: mlflow
-    password: password
+    enabled: false
   service:
     type: ClusterIP
   ingress:
     enabled: true
     pathType: ImplementationSpecific
     hostname: {{ .Name }}.{{ .Domain }}
-    ingressClassName: "nginx"
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 2048m
-      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+      cert-manager.io/cluster-issuer: "root-ca-issuer" 
       cert-manager.io/duration: 8760h  
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -268,7 +264,7 @@ postgresql:
 minio:
   enabled: false
 externalS3:
-  host: "minio.stg.paasup.io"
+  host: "minio.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
   accessKeyID: "{{ .AccessKey }}"
@@ -293,9 +289,9 @@ spec:
     name: {{ .Email }}
   resourceQuotaSpec:
     hard:
-      cpu: "1"
-      memory: 2Gi
-      persistentvolumeclaims: "2"
+      cpu: "16"
+      memory: 32Gi
+      persistentvolumeclaims: "12"
 ```
 
 ## Rancher
@@ -310,8 +306,10 @@ ingress:
     source: secret
     secretName: rancher-tls-ingress
   extraAnnotations:    
-    nginx.ingress.kubernetes.io/proxy-body-size: 10m
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    konghq.com/connect-timeout: "30000"
+    konghq.com/read-timeout: "1800000"
+    konghq.com/write-timeout: "1800000"
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -503,7 +501,7 @@ readOnlyApiKey: false
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -592,7 +590,7 @@ langflow:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -716,7 +714,7 @@ tolerations: []
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -850,7 +848,7 @@ ollama:
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -887,7 +885,7 @@ config:
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -925,7 +923,7 @@ redis-cluster:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "selfsigned-issuer"
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
