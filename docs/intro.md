@@ -877,10 +877,6 @@ persistence:
 
 resources: {}
 
-config:
-  username: flowise
-  password: flowise
-
 ingress:
   enabled: true
   annotations: 
