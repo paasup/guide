@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # 카탈로그 설정값
 
-## Gitea 시스템 카탈로그
+<!-- ## Gitea 시스템 카탈로그 -->
 
-Gitea 시스템 카탈로그:
+<!-- Gitea 시스템 카탈로그:
 
 외부 DB 참조
 
@@ -121,7 +121,7 @@ server:
   service:
     annotations:
       konghq.com/protocol: https        
-```
+``` -->
 
 ## Gitea
 
