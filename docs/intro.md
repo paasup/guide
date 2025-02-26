@@ -336,7 +336,7 @@ extraEnv:
 
 preinstallHook: true
 
-newPassword: rancherPassword1!
+newPassword: "$PASSWORD_KEY"
 ```
 
 ## rancher-monitoring-crd
