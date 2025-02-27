@@ -996,7 +996,7 @@ servingEngineSpec:
       maxModelLen: 24576
       dtype: "float16"
       extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
-    hf_token: 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
+    hf_token: $TOKEN
   resources:
     requests:
       cpu: "4"
