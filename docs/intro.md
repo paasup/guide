@@ -977,7 +977,26 @@ vllm 카탈로그:
 
 ```yaml
 servingEngineSpec:
-  modelSpec: []
+  modelSpec:
+  - name: "llama3"
+    repository: "vllm/vllm-openai"
+    tag: "latest"
+    modelURL: "meta-llama/Llama-3.1-8B-Instruct"
+    replicaCount: 1
+
+    requestCPU: 10
+    requestMemory: "16Gi"
+    requestGPU: 1
+
+    pvcStorage: "50Gi"
+
+    vllmConfig:
+      enableChunkedPrefill: false
+      enablePrefixCaching: false
+      maxModelLen: 24576
+      dtype: "float16"
+      extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
+    hf_token: $TOKEN
   resources:
     requests:
       cpu: "4"
