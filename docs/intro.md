@@ -976,4 +976,41 @@ volumes:
 vllm 카탈로그:
 
 ```yaml
+servingEngineSpec:
+  modelSpec: []
+  resources:
+    requests:
+      cpu: "4"
+      memory: "16G"
+    limits:
+      cpu: "8"
+      memory: "32G"
+
+routerSpec:
+  repository: "lmcache/lmstack-router"
+  tag: "latest"
+  resources:
+    requests:
+      cpu: "2"
+      memory: "8G"
+    limits:
+      cpu: "4"
+      memory: "16G"
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      cert-manager.io/cluster-issuer: "root-ca-issuer" 
+      cert-manager.io/duration: 8760h  
+      cert-manager.io/renew-before: 720h
+      konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+    hosts:
+      - host: "{{ .Name }}.{{ .Domain }}"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+     - secretName: "{{ .Name }}-tls-secret"
+       hosts:
+         - "{{ .Name }}.{{ .Domain }}"
 ```
