@@ -23,7 +23,7 @@ ingress:
   annotations:
     konghq.com/protocols: https
     konghq.com/https-redirect-status-code: "301"
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
   hosts:
@@ -142,7 +142,7 @@ ingress:
   annotations:
     konghq.com/protocols: https
     konghq.com/https-redirect-status-code: "301"
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
   hosts:
@@ -246,7 +246,7 @@ tracking:
     pathType: ImplementationSpecific
     hostname: {{ .Name }}.{{ .Domain }}
     annotations:
-      cert-manager.io/cluster-issuer: "root-ca-issuer" 
+      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
       cert-manager.io/duration: 8760h  
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -265,7 +265,7 @@ postgresql:
 minio:
   enabled: false
 externalS3:
-  host: "minio.{{ .Domain }}"
+  host: "minio-console.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
   accessKeyID: "{{ .AccessKey }}"
@@ -310,7 +310,7 @@ ingress:
     konghq.com/connect-timeout: "30000"
     konghq.com/read-timeout: "1800000"
     konghq.com/write-timeout: "1800000"
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
 
@@ -501,7 +501,7 @@ readOnlyApiKey: false
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -590,7 +590,7 @@ langflow:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -714,7 +714,7 @@ tolerations: []
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -848,7 +848,7 @@ ollama:
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -881,7 +881,7 @@ resources: {}
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/cluster-issuer: "selfsigned-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -919,7 +919,7 @@ redis-cluster:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -1019,7 +1019,7 @@ routerSpec:
     enabled: true
     className: ""
     annotations:
-      cert-manager.io/cluster-issuer: "root-ca-issuer" 
+      cert-manager.io/cluster-issuer: "selfsigned-issuer" 
       cert-manager.io/duration: 8760h  
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
@@ -1032,4 +1032,98 @@ routerSpec:
      - secretName: "{{ .Name }}-tls-secret"
        hosts:
          - "{{ .Name }}.{{ .Domain }}"
+```
+
+## langfuse
+
+langfuse 카탈로그:
+
+```yaml
+langfuse:
+  logging:
+    level: info
+  salt:
+    value: "$SALT_KEY$"
+  encryptionKey:
+    value: "$ENC_KEY"
+
+  ingress:
+    enabled: true
+    className: "kong"
+    annotations: 
+      cert-manager.io/cluster-issuer: "selfsigned-issuer"
+    hosts: 
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+    tls:
+      enabled: true
+      secretName: "{{ .Name }}-tls-secret"
+  web:
+    image:
+      repository: langfuse/langfuse
+    resources: {}
+    replicas: 1
+  worker:
+    image:
+      repository: langfuse/langfuse-worker
+    resources: {}
+    replicas: 1
+
+  nextauth:
+    url: https://{{ .Name }}.{{ .Domain }}
+    secret:
+      value: "$SECRET_KEY$"
+  additionalEnv:
+    - name: AUTH_DISABLE_USERNAME_PASSWORD
+      value: "true"
+    - name: AUTH_KEYCLOAK_CLIENT_ID
+      value: "$CLIENT_ID"
+    - name: "AUTH_KEYCLOAK_CLIENT_SECRET"
+      value: "$CLIENT_SECRET"
+    - name: "AUTH_KEYCLOAK_ISSUER"
+      value: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
+    - name: NODE_TLS_REJECT_UNAUTHORIZED
+      value: '0'
+
+postgresql:
+  auth:
+    username: "postgres"
+    password: "postgres"
+    
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 5Gi
+
+redis:
+  auth:
+    password: "password"
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 5Gi
+
+clickhouse:  
+  auth:
+    username: default
+    password: "password"
+    
+  shards: 1
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 10Gi
+
+s3:
+  deploy: false
+  bucket: "{{ .Path }}"
+  region: "auto"
+  endpoint: "https://"minio-console.{{ .Domain }}"
+  accessKeyId:
+    value: "{{ .AccessKey }}"
+  secretAccessKey:
+    value: "{{ .SecretKey }}"
 ```
