@@ -950,13 +950,17 @@ extraEnvVars:
   - name: OAUTH_SCOPES
     value: 'openid email profile'
   - name: ENABLE_LOGIN_FORM
-    value: 'false'
+    value: 'true'
   - name: SSL_CERT_FILE
     value: '/etc/ssl/certs/keycloak/ca.crt'
   - name: ENABLE_OAUTH_SIGNUP
     value: 'true'
   - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
     value: 'true'
+  - name: DEFAULT_USER_ROLE
+    value: user
+  - name: ENV
+    value: prod
 
 volumeMounts:
   initContainer: []
