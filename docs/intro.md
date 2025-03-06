@@ -1125,7 +1125,7 @@ s3:
   deploy: false
   bucket: "{{ .Path }}"
   region: "auto"
-  endpoint: "https://"minio-console.{{ .Domain }}"
+  endpoint: "https://minio-console.{{ .Domain }}"
   accessKeyId:
     value: "{{ .AccessKey }}"
   secretAccessKey:
