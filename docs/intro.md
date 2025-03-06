@@ -1095,6 +1095,9 @@ postgresql:
     username: "postgres"
     password: "postgres"
     
+  migration:
+    autoMigrate: true
+        
   persistence:
     enabled: true
     storageClass: ""
