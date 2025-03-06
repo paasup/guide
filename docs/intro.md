@@ -1053,7 +1053,6 @@ langfuse:
 
   ingress:
     enabled: true
-    className: "kong"
     annotations: 
       cert-manager.io/cluster-issuer: "selfsigned-issuer"
     hosts: 
