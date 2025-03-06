@@ -1086,7 +1086,7 @@ langfuse:
     - name: "AUTH_KEYCLOAK_CLIENT_SECRET"
       value: "$CLIENT_SECRET"
     - name: "AUTH_KEYCLOAK_ISSUER"
-      value: "$KEYCLOAK_URL./realms/$KEYCLOAK_REALM"
+      value: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
     - name: NODE_TLS_REJECT_UNAUTHORIZED
       value: '0'
 
