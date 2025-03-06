@@ -1043,7 +1043,7 @@ langfuse:
   logging:
     level: info
   salt:
-    value: "$SALT_KEY$"
+    value: "$SALT_KEY"
   encryptionKey:
     value: "$ENC_KEY"
 
@@ -1074,7 +1074,7 @@ langfuse:
   nextauth:
     url: https://{{ .Name }}.{{ .Domain }}
     secret:
-      value: "$SECRET_KEY$"
+      value: "$SECRET_KEY"
   additionalEnv:
     - name: AUTH_DISABLE_USERNAME_PASSWORD
       value: "true"
