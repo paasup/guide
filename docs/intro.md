@@ -541,15 +541,7 @@ langflow:
       - name: LANGFLOW_LOG_LEVEL
         value: "info"
       - name: LANGFLOW_AUTO_LOGIN
-        value: "False"
-      - name: LANGFLOW_SUPERUSER
-        value: "admin"
-      - name: LANGFLOW_SUPERUSER_PASSWORD
-        value: "password"
-      - name: LANGFLOW_SECRET_KEY
-        value: "randomly_generated_secure_key"
-      - name: LANGFLOW_NEW_USER_IS_ACTIVE
-        value: "False"
+        value: "True"
     externalDatabase:
       enabled: true
       driver:
