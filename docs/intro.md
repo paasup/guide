@@ -193,8 +193,9 @@ persistence:
 gitea:
   admin:   
     username: sudouser
-    password: password
-    email: "sudouser@cro.com"
+    password: ""
+    email: "gitea@local.domain"
+    existingSecret: "$GITEA_USER_SECRET"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
@@ -769,7 +770,7 @@ postgresql:
     username: superset
     password: ""
     database: superset
-    existingSecret: $SUPERSET_PG_SECRET
+    existingSecret: "$SUPERSET_PG_SECRET"
   image:
     registry: docker.io
   primary:
