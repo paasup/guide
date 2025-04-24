@@ -260,16 +260,19 @@ tracking:
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
+  enabled: true
   auth:
     username: mlflow
-    password: mlflow
+    password: ""
+    database: bitnami_mlflow
+    existingSecret: "$MLFLOW_PG_SECRET"
 minio:
   enabled: false
 externalS3:
   host: "minio-console.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
-  existingSecret: "$MLFLOW_SECRET"
+  existingSecret: "$MLFLOW_S3_SECRET"
   existingSecretAccessKeyIDKey: "root-user"
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
