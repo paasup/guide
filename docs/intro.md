@@ -268,8 +268,9 @@ externalS3:
   host: "minio-console.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
-  accessKeyID: "{{ .AccessKey }}"
-  accessKeySecret: "{{ .SecretKey }}"
+  existingSecret: "$MLFLOW_SECRET"
+  existingSecretAccessKeyIDKey: "root-user"
+  existingSecretKeySecretKey: "root-password"
   protocol: "https"
   bucket: "{{ .Path }}"
   serveArtifacts: true
@@ -602,8 +603,9 @@ postgresql:
   fullnameOverride: "{{ .Name }}-ide-postgresql-service"
   auth:
     username: "langflow"
-    password: "langflow-postgres"
+    password: ""
     database: "langflow-db"
+    existingSecret: "$LANGFLOW_SECRET"
   primary:
     persistence:
       size: 5Gi
@@ -765,8 +767,9 @@ postgresql:
   enabled: true
   auth:
     username: superset
-    password: superset
+    password: ""
     database: superset
+    existingSecret: $SUPERSET_PG_SECRET
   image:
     registry: docker.io
   primary:
@@ -784,8 +787,10 @@ redis:
   enabled: true
   architecture: standalone
   auth:
-    enabled: false    
-    password: superset
+    enabled: true    
+    password: ""
+    existingSecret: "$SUPERSET_REDIS_SECRET"
+   existingSecretKey: "redis-password"
   image:
     registry: docker.io
   master:
@@ -888,6 +893,8 @@ ingress:
 
 postgresql:
   enabled: true
+  auth:
+   existingSecret: "$FLOWISE_SECRET"
   primary:
     persistence:
       enabled: true
@@ -1085,7 +1092,8 @@ langfuse:
 postgresql:
   auth:
     username: "postgres"
-    password: "postgres"
+    password: ""
+    existingSecret: "$LANGFUSE_PG_SECRET"
     
   migration:
     autoMigrate: true
@@ -1097,7 +1105,9 @@ postgresql:
 
 redis:
   auth:
-    password: "password"
+    enabled: true
+    password: ""
+    existingSecret: "$LANGFUSE_REDIS_SECRET"
   primary:
     persistence:
       enabled: true
@@ -1105,9 +1115,11 @@ redis:
       size: 5Gi
 
 clickhouse:  
+  deploy: true
   auth:
     username: default
-    password: "password"
+    password: ""
+    existingSecret: "$LANGFUSE_CLICK_SECRET"
     
   shards: 1
   persistence:
