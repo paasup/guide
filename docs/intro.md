@@ -794,7 +794,7 @@ redis:
     enabled: true    
     password: ""
     existingSecret: "$SUPERSET_SECRET"
-   existingSecretKey: "redis-password"
+    existingSecretKey: "redis-password"
   image:
     registry: docker.io
   master:
