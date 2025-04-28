@@ -265,14 +265,14 @@ postgresql:
     username: mlflow
     password: ""
     database: bitnami_mlflow
-    existingSecret: "$MLFLOW_PG_SECRET"
+    existingSecret: "$MLFLOW_SECRET"
 minio:
   enabled: false
 externalS3:
   host: "minio-console.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
-  existingSecret: "$MLFLOW_S3_SECRET"
+  existingSecret: "$MLFLOW_SECRET"
   existingSecretAccessKeyIDKey: "root-user"
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
@@ -773,7 +773,7 @@ postgresql:
     username: superset
     password: ""
     database: superset
-    existingSecret: "$SUPERSET_PG_SECRET"
+    existingSecret: "$SUPERSET_SECRET"
   image:
     registry: docker.io
   primary:
@@ -793,7 +793,7 @@ redis:
   auth:
     enabled: true    
     password: ""
-    existingSecret: "$SUPERSET_REDIS_SECRET"
+    existingSecret: "$SUPERSET_SECRET"
    existingSecretKey: "redis-password"
   image:
     registry: docker.io
@@ -1097,7 +1097,7 @@ postgresql:
   auth:
     username: "postgres"
     password: ""
-    existingSecret: "$LANGFUSE_PG_SECRET"
+    existingSecret: "$LANGFUSE_SECRET"
     
   migration:
     autoMigrate: true
@@ -1111,7 +1111,7 @@ redis:
   auth:
     enabled: true
     password: ""
-    existingSecret: "$LANGFUSE_REDIS_SECRET"
+    existingSecret: "$LANGFUSE_SECRET"
   primary:
     persistence:
       enabled: true
@@ -1123,7 +1123,7 @@ clickhouse:
   auth:
     username: default
     password: ""
-    existingSecret: "$LANGFUSE_CLICK_SECRET"
+    existingSecret: "$LANGFUSE_SECRET"
     
   shards: 1
   persistence:
