@@ -1110,8 +1110,8 @@ postgresql:
 redis:
   auth:
     enabled: true
-    password: ""
     existingSecret: "$LANGFUSE_SECRET"
+    existingSecretPasswordKey: "valkey-password"
   primary:
     persistence:
       enabled: true
@@ -1124,6 +1124,7 @@ clickhouse:
     username: default
     password: ""
     existingSecret: "$LANGFUSE_SECRET"
+    existingSecretKey: "admin-password"
     
   shards: 1
   persistence:
