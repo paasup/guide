@@ -791,10 +791,10 @@ redis:
   enabled: true
   architecture: standalone
   auth:
-    enabled: true    
+    enabled: false    
     password: ""
-    existingSecret: "$SUPERSET_SECRET"
-    existingSecretKey: "redis-password"
+    existingSecret: ""
+    existingSecretPasswordKey: ""
   image:
     registry: docker.io
   master:
@@ -1096,8 +1096,9 @@ langfuse:
 postgresql:
   auth:
     username: "postgres"
-    password: ""
     existingSecret: "$LANGFUSE_SECRET"
+    secretKeys:
+      userPasswordKey: "postgres-password"
     
   migration:
     autoMigrate: true
