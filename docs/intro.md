@@ -146,14 +146,14 @@ ingress:
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
   hosts:
-    - host: {{ .Name }}.{{ .Domain }}
+    - host: "{{ .Name }}.{{ .Domain }}"
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        host: {{ .Name }}.{{ .Domain }}
-      secretName: {{ .Name }}-tls-secret
+        host: "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 
 extraVolumes:
  - name: keycloak-tls
@@ -200,10 +200,10 @@ gitea:
     APP_NAME: paasup git
     RUN_MODE: prod
     server:
-      ROOT_URL: https://{{ .Name }}.{{ .Domain }}
+      ROOT_URL: "https://{{ .Name }}.{{ .Domain }}"
     database:
       DB_TYPE: postgres
-      HOST: {{ .Name }}-postgresql:5432
+      HOST: "{{ .Name }}-postgresql:5432"
       NAME: gitea
       USER: gitea
       PASSWD: gitea
@@ -245,7 +245,7 @@ tracking:
   ingress:
     enabled: true
     pathType: ImplementationSpecific
-    hostname: {{ .Name }}.{{ .Domain }}
+    hostname: "{{ .Name }}.{{ .Domain }}"
     annotations:
       cert-manager.io/cluster-issuer: "root-ca-issuer" 
       cert-manager.io/duration: 8760h  
@@ -255,7 +255,7 @@ tracking:
     tls: false
     extraTls:
     - hosts:
-        - {{ .Name }}.{{ .Domain }}
+        - "{{ .Name }}.{{ .Domain }}"
       secretName: {{ .Name }}-tls-secret
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
@@ -288,11 +288,11 @@ Kubeflow 카탈로그:
 apiVersion: kubeflow.org/v1
 kind: Profile
 metadata:
-  name: {{ .Name }}
+  name: "{{ .Name }}"
 spec:
   owner:
     kind: User
-    name: {{ .Email }}
+    name: "{{ .Email }}"
   resourceQuotaSpec:
     hard:
       cpu: "16"
@@ -305,7 +305,7 @@ spec:
 Rancher 카탈로그:
 
 ```yaml
-hostname: {{ .Name }}.{{ .Domain }}
+hostname: "{{ .Name }}.{{ .Domain }}"
 ingress:
   enable: true
   tls:
@@ -511,15 +511,15 @@ ingress:
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: {{ .Name }}.{{ .Domain }}
+  - host: "{{ .Name }}.{{ .Domain }}"
     paths:
     - path: /
       pathType: Prefix
       servicePort: 6333
   tls: 
   -  hosts:
-     - {{ .Name }}.{{ .Domain }}
-     secretName: {{ .Name }}-tls-secret
+     - "{{ .Name }}.{{ .Domain }}"
+     secretName: "{{ .Name }}-tls-secret"
 ```
 
 ## langflow-ide
@@ -592,15 +592,15 @@ ingress:
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-    - host: {{ .Name }}.{{ .Domain }}
+    - host: "{{ .Name }}.{{ .Domain }}"
       paths:
         - path: /
           pathType: ImplementationSpecific
           servicePort: 7860
   tls: 
   -  hosts:
-     - {{ .Name }}.{{ .Domain }}
-     secretName: {{ .Name }}-tls-secret
+     - "{{ .Name }}.{{ .Domain }}"
+     secretName: "{{ .Name }}-tls-secret"
 
 postgresql:
   enabled: true
@@ -719,11 +719,11 @@ ingress:
   path: /
   pathType: ImplementationSpecific
   hosts:
-  - {{ .Name }}.{{ .Domain }}
+  - "{{ .Name }}.{{ .Domain }}"
   tls: 
   -  hosts:
-     - {{ .Name }}.{{ .Domain }}
-     secretName: {{ .Name }}-tls-secret
+     - "{{ .Name }}.{{ .Domain }}"
+     secretName: "{{ .Name }}-tls-secret"
   
 
 
@@ -854,14 +854,14 @@ ingress:
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: {{ .Name }}.{{ .Domain }}
+  - host: "{{ .Name }}.{{ .Domain }}"
     paths:
       - path: /
         pathType: Prefix
   tls: 
     -  hosts:
-       - {{ .Name }}.{{ .Domain }}
-       secretName: {{ .Name }}-tls-secret
+       - "{{ .Name }}.{{ .Domain }}"
+       secretName: "{{ .Name }}-tls-secret"
 ```
 
 ## flowise
@@ -887,13 +887,13 @@ ingress:
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: {{ .Name }}.{{ .Domain }}
+  - host: "{{ .Name }}.{{ .Domain }}"
     paths:
       - /
   tls: 
   -  hosts:
-     - {{ .Name }}.{{ .Domain }}
-     secretName: {{ .Name }}-tls-secret
+     - "{{ .Name }}.{{ .Domain }}"
+     secretName: "{{ .Name }}-tls-secret"
 
 postgresql:
   enabled: true
@@ -1003,7 +1003,7 @@ servingEngineSpec:
       maxModelLen: 24576
       dtype: "float16"
       extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
-    hf_token: $TOKEN
+    hf_token: "$TOKEN"
   resources:
     requests:
       cpu: "4"
@@ -1078,7 +1078,7 @@ langfuse:
     replicas: 1
 
   nextauth:
-    url: https://{{ .Name }}.{{ .Domain }}
+    url: "https://{{ .Name }}.{{ .Domain }}"
     secret:
       value: "$SECRET_KEY"
   additionalEnv:
