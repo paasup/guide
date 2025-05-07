@@ -256,7 +256,7 @@ tracking:
     extraTls:
     - hosts:
         - "{{ .Name }}.{{ .Domain }}"
-      secretName: {{ .Name }}-tls-secret
+      secretName: "{{ .Name }}-tls-secret"
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
