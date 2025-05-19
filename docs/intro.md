@@ -1143,3 +1143,53 @@ s3:
   secretAccessKey:
     value: "{{ .SecretKey }}"
 ```
+
+## postgresql
+
+postgresql-ha 카탈로그:
+
+```yaml
+global:
+  imageRegistry: ""
+
+postgresql:
+  username: postgres
+  existingSecret: "$PG_SECRET"
+
+  maxConnections: "100" 
+  sharedPreloadLibraries: "repmgr, pgaudit, pg_stat_statements"
+
+  
+  replicaCount: 1
+
+  extraEnvVars:
+    - name: TZ
+      value: Asia/Seoul
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+  
+  tolerations: []
+
+  nodeSelector: {}
+
+pgpool:
+  existingSecret: "$PG_SECRET"
+
+  replicaCount: 0
+
+persistence:
+  enabled: true
+  storageClass: ""
+  size: 1Gi
+
+volumePermissions:
+  enabled: true
+  podSecurityContext:
+    runAsUser: 0
+```
