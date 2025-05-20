@@ -1144,7 +1144,7 @@ s3:
     value: "{{ .SecretKey }}"
 ```
 
-## postgresql
+## postgresql-ha
 
 postgresql-ha 카탈로그:
 
