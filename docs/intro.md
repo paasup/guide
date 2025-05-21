@@ -1241,8 +1241,8 @@ dags:
     storageClassName: longhorn
     accessMode: ReadWriteMany
   gitSync:
-    enabled: true
-    repo: http://gitea-service-http.gitea-service.svc.cluster.local:3000/airflow/dags.git
+    enabled: false
+    repo: "$AIRFLOW_DAG_REPO"
     branch: master
     rev: HEAD
     depth: 1
@@ -1277,10 +1277,14 @@ postgresql:
   auth:
     enablePostgresUser: true
     existingSecret: "$AIRFLOW_SECRET"
+    secretKeys:
+      userPasswordKey: "postgres-password"
   primary:
     persistence:
       enabled: true
       size: 8Gi
       storageClass: ""
 
+migrateDatabaseJob:
+  useHelmHooks: false
 ```
