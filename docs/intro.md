@@ -1193,3 +1193,94 @@ volumePermissions:
   podSecurityContext:
     runAsUser: 0
 ```
+
+## airflow
+
+airflow 카탈로그:
+
+```yaml
+ingress:
+  web:
+    enabled: true
+    annotations:
+      cert-manager.io/issuer: "root-ca-issuer"
+      cert-manager.io/duration: 8760h  
+      cert-manager.io/renew-before: 720h
+      konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+      kubernetes.io/ingress.class: kong
+      konghq.com/protocols: https
+      konghq.com/https-redirect-status-code: "301"
+    hosts:
+    - name: "{{ .Name }}.{{ .Domain }}"
+      tls:
+        enabled: true
+        secretName: "{{ .Name }}-tls-secret"
+
+executor: "KubernetesExecutor"
+
+config:
+  core:
+    executor: KubernetesExecutor
+    default_timezone: kst
+  logging:
+    colored_console_log: 'False'
+    logging_level: "INFO"
+  webserver:
+    enable_proxy_fix: 'True'
+    rbac: 'True'
+    default_ui_timezone: kst
+
+
+scheduler:
+  replicas: 1
+
+dags:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: longhorn
+    accessMode: ReadWriteMany
+  gitSync:
+    enabled: true
+    repo: http://gitea-service-http.gitea-service.svc.cluster.local:3000/airflow/dags.git
+    branch: master
+    rev: HEAD
+    depth: 1
+    subPath: ""
+    credentialsSecret: "$AIRFLOW_SECRET"
+    env:
+    - name: GIT_SSL_NO_VERIFY
+      value: "true"
+
+webserver:
+  defaultUser:
+    enabled: true
+    password: password
+  livenessProbe:
+    initialDelaySeconds: 120
+  readinessProbe:
+    initialDelaySeconds: 120
+  startupProbe:
+    initialDelaySeconds: 30
+
+logs:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: longhorn
+
+statsd:
+  enabled: false
+  
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: true
+    existingSecret: "$AIRFLOW_SECRET"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+
+```
