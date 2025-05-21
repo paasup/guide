@@ -1275,7 +1275,7 @@ statsd:
 postgresql:
   enabled: true
   auth:
-    enablePostgresUser: true
+    username: "postgres"
     existingSecret: "$AIRFLOW_SECRET"
     secretKeys:
       userPasswordKey: "postgres-password"
