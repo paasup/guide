@@ -1287,4 +1287,7 @@ postgresql:
 
 migrateDatabaseJob:
   useHelmHooks: false
+
+data:
+  metadataSecretName: "$AIRFLOW_SECRET"
 ```
