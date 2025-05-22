@@ -624,6 +624,13 @@ superset 카탈로그:
 configOverrides: 
   secret: |
     SECRET_KEY = '$SECRET_KEY'
+  my_override: |
+    FEATURE_FLAGS = {
+    	"ENABLE_TEMPLATE_REMOVE_FILTERS" : True,
+    	"ENABLE_TEMPLATE_PROCESSING": True,	
+        "DASHBOARD_NATIVE_FILTERS" : True,
+        "DASHBOARD_NATIVE_FILTERS_SET": True
+    }    
   enable_oauth: |
     from flask_appbuilder.security.manager import (AUTH_DB, AUTH_OAUTH)
     from superset.security import SupersetSecurityManager
@@ -1203,13 +1210,10 @@ ingress:
   web:
     enabled: true
     annotations:
-      cert-manager.io/issuer: "root-ca-issuer"
+      cert-manager.io/cluster-issuer: "root-ca-issuer"
       cert-manager.io/duration: 8760h  
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
-      kubernetes.io/ingress.class: kong
-      konghq.com/protocols: https
-      konghq.com/https-redirect-status-code: "301"
     hosts:
     - name: "{{ .Name }}.{{ .Domain }}"
       tls:
@@ -1229,7 +1233,6 @@ config:
     enable_proxy_fix: 'True'
     rbac: 'True'
     default_ui_timezone: kst
-
 
 scheduler:
   replicas: 1
@@ -1262,7 +1265,9 @@ webserver:
     initialDelaySeconds: 120
   startupProbe:
     initialDelaySeconds: 30
-
+  webserverConfig: |
+    AUTH_ROLE_PUBLIC = 'User'
+  
 logs:
   persistence:
     enabled: true
