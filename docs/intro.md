@@ -931,7 +931,6 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer"
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   host: "{{ .Name }}.{{ .Domain }}"
   tls: true
   existingSecret: "{{ .Name }}-tls-secret"
