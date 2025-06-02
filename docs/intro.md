@@ -1294,3 +1294,31 @@ migrateDatabaseJob:
 data:
   metadataSecretName: "$AIRFLOW_SECRET"
 ```
+
+## litellm
+
+litellm 카탈로그:
+
+```yaml
+masterkey: "$PASSWORD_KEY"
+
+proxy_config:
+  model_list: []
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+  hosts:
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "{{ .Name }}-tls-secret"
+      hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+
+```
