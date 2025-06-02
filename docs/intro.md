@@ -1307,6 +1307,7 @@ proxy_config:
 
 ingress:
   enabled: true
+  className: "kong"
   annotations:
     cert-manager.io/cluster-issuer: "root-ca-issuer"
     cert-manager.io/duration: 8760h
