@@ -1256,7 +1256,7 @@ dags:
 webserver:
   defaultUser:
     enabled: true
-    password: password
+    password: "$ADMIN_PASSWORD"
   livenessProbe:
     initialDelaySeconds: 120
   readinessProbe:
