@@ -1323,3 +1323,86 @@ ingress:
         - "{{ .Name }}.{{ .Domain }}"
 
 ```
+
+## unitycatalog
+
+unitycatalog 카탈로그:
+
+```yaml
+storage:
+  credentials:
+    s3:
+    - bucketPath: "s3://$S3_BUCKET"
+      region: us-east-1
+      awsRoleArn: 
+      serviceEndpoint: "$S3_ENDPOINT"
+      credentialsSecretName: "$S3_SECRET"
+
+auth:
+  enabled: false
+  users:
+    - name: admin
+      email: paasup@paasup.io
+
+  provider: keycloak
+  authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
+  clientSecretName: "$CLIENT_SECRET"
+  
+privateCA:
+  enabled: true
+  secretName: "{{ .Name }}-tls-secret"
+
+server:
+  statefulset:
+    image:
+      repository: paasup/unitycatalog
+      tag: "0.3.0-minio-2"
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  ingress:
+    enabled: true
+    className: kong
+    annotations:
+      cert-manager.io/cluster-issuer: root-ca-issuer
+      konghq.com/https-redirect-status-code: '301'
+      konghq.com/protocols: https
+    hosts:
+      - host: "{{ .Name }}.{{ .Domain }}"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - "{{ .Name }}.{{ .Domain }}"
+        secretName: "{{ .Name }}-tls-secret"
+  config:
+    persistence:
+      enabled: true
+      accessModes: [ "ReadWriteOnce" ]
+      size: 100Mi
+      storageClassName: ""
+    logLevel: "INFO"
+
+db:
+  type: postgresql
+  postgresqlConfig:
+    user: uc_default_user
+    password: uc_default_password
+    database: ucdb
+
+postgresql:
+  enabled: true
+  auth:
+    username: "uc_default_user"
+    password: "uc_default_password"
+    database: "ucdb"
+  
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    storageClassName: ""
+```
