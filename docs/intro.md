@@ -1333,7 +1333,7 @@ storage:
   credentials:
     s3:
     - bucketPath: "s3://$S3_BUCKET"
-      region: us-east-1
+      region: "$S3_REGION"
       awsRoleArn: 
       serviceEndpoint: "$S3_ENDPOINT"
       credentialsSecretName: "$S3_SECRET"
@@ -1346,7 +1346,7 @@ auth:
 
   provider: keycloak
   authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
-  clientSecretName: "$CLIENT_SECRET"
+  clientSecretName: "$SSO_SECRET"
   
 privateCA:
   enabled: true
@@ -1389,15 +1389,16 @@ db:
   type: postgresql
   postgresqlConfig:
     user: uc_default_user
-    password: uc_default_password
+    password: "$DB_PASSWORD"
     database: ucdb
 
 postgresql:
   enabled: true
   auth:
     username: "uc_default_user"
-    password: "uc_default_password"
+    password: ""
     database: "ucdb"
+    existingSecret: "$UNITYCATALOG_SECRET"
   
   persistence:
     enabled: true
