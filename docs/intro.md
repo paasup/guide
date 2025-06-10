@@ -1356,7 +1356,7 @@ server:
   statefulset:
     image:
       repository: paasup/unitycatalog
-      tag: "0.3.0-minio-2"
+      tag: "0.3.0-minio-250522"
     resources: {}
     nodeSelector: {}
     tolerations: []
