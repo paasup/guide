@@ -1333,7 +1333,7 @@ storage:
   credentials:
     s3:
     - bucketPath: "s3://{{ .Path }}"
-      region: us-east-1"
+      region: us-east-1
       awsRoleArn: 
       serviceEndpoint: "https://minio.{{ .Domain }}"
       credentialsSecretName: "$S3_SECRET"
