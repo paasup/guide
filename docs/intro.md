@@ -1332,17 +1332,17 @@ unitycatalog 카탈로그:
 storage:
   credentials:
     s3:
-    - bucketPath: "s3://$S3_BUCKET"
-      region: "$S3_REGION"
+    - bucketPath: "s3://{{ .Path }}"
+      region: us-east-1"
       awsRoleArn: 
-      serviceEndpoint: "$S3_ENDPOINT"
+      serviceEndpoint: "https://minio.{{ .Domain }}"
       credentialsSecretName: "$S3_SECRET"
 
 auth:
-  enabled: false
+  enabled: true
   users:
-    - name: admin
-      email: paasup@paasup.io
+    - name: "$USER"
+      email: "$EMAIL"
 
   provider: keycloak
   authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
@@ -1406,4 +1406,85 @@ postgresql:
       - ReadWriteOnce
     size: 5Gi
     storageClassName: ""
+```
+
+## nemo
+
+nemo 카탈로그:
+
+```yaml
+ngcAPIKey: "$API_KEY"
+
+imagePullSecrets:
+  - name: nvcrimagepullsecret
+    registry: nvcr.io
+    username: "$oauthtoken"
+    password: "$API_KEY"
+
+data-store:
+  enabled: true
+  external:
+    rootUrl: "https://nemo-datastore.{{ .Domain }}"
+    domain: "nemo-datastore.{{ .Domain }}"
+
+customizer:
+  enabled: true
+
+
+nim:
+  enabled: false
+
+evaluator:
+  enabled: true
+  argoWorkflows:
+    enabled: true
+    crds:
+      install: false
+
+guardrails:
+  enabled: true
+
+nemo-operator:
+  enabled: true
+
+nim-operator:
+  enabled: true
+
+
+dgxc-admission-controller:
+  enabled: false
+
+entity-store:
+  enabled: true
+
+volcano:
+  enabled: true
+
+deployment-management:
+  enabled: true
+
+nim-proxy:
+  enabled: true
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: root-ca-issuer
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+  className: "kong"
+  tls:
+    - hosts:
+        - "nemo.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
+  hosts:
+    default:
+      name: "nemo.{{ .Domain }}"
+    nimProxy:
+      name: "nim.{{ .Domain }}"
+    dataStore:
+      name: "data-store.{{ .Domain }}"
+
+virtualService:
+  enabled: false
 ```
