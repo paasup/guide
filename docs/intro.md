@@ -1424,8 +1424,8 @@ imagePullSecrets:
 data-store:
   enabled: true
   external:
-    rootUrl: "https://nemo-datastore.{{ .Domain }}"
-    domain: "nemo-datastore.{{ .Domain }}"
+    rootUrl: "https://nemo-datastore-{{ .Name }}.{{ .Domain }}"
+    domain: "nemo-datastore-{{ .Name }}.{{ .Domain }}"
 
 customizer:
   enabled: true
@@ -1475,15 +1475,15 @@ ingress:
   className: "kong"
   tls:
     - hosts:
-        - "nemo.{{ .Domain }}"
+        - "nemo-{{ .Name }}.{{ .Domain }}"
       secretName: "{{ .Name }}-tls-secret"
   hosts:
     default:
-      name: "nemo.{{ .Domain }}"
+      name: "nemo-{{ .Name }}.{{ .Domain }}"
     nimProxy:
-      name: "nim.{{ .Domain }}"
+      name: "nim-{{ .Name }}.{{ .Domain }}"
     dataStore:
-      name: "data-store.{{ .Domain }}"
+      name: "data-store-{{ .Name }}.{{ .Domain }}"
 
 virtualService:
   enabled: false
