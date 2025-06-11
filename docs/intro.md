@@ -269,7 +269,7 @@ postgresql:
 minio:
   enabled: false
 externalS3:
-  host: "minio-console.{{ .Domain }}"
+  host: "minio.{{ .Domain }}"
   port: 443
   useCredentialsInSecret: true
   existingSecret: "$MLFLOW_SECRET"
