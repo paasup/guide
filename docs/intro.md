@@ -1336,17 +1336,17 @@ storage:
       region: "us-east-1"
       awsRoleArn: 
       serviceEndpoint: "https://minio.{{ .Domain }}"
-      credentialsSecretName: "$S3_SECRET"
+      credentialsSecretName: "$UNITYCATALOG_SECRET"
 
 auth:
   enabled: true
   users:
-    - name: "$USER"
-      email: "$EMAIL"
+    - name: "{{ .Username }}"
+      email: "{{ .Email }}"
 
   provider: keycloak
   authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
-  clientSecretName: "$SSO_SECRET"
+  clientSecretName: "$UNITYCATALOG_SECRET"
   
 privateCA:
   enabled: true
