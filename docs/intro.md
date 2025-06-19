@@ -1462,6 +1462,8 @@ volcano:
 
 deployment-management:
   enabled: true
+  deployments:
+    defaultStorageClass: "longhorn"
 
 nim-proxy:
   enabled: true
