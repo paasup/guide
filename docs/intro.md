@@ -922,14 +922,14 @@ persistence:
     - ReadWriteOnce
   storageClass: ""
   selector: {}
-  annotations: {}
+  annotations: {}$extraEnvVars
 extraEnvVars:
   - name: OPENAI_API_KEY
-    value: "$SECRET_KEY"
+    value: ""
   - name: OAUTH_CLIENT_ID
-    value: $CLIENT_ID
+    value: $KEYCLOAK_CLIENT_ID
   - name: OAUTH_CLIENT_SECRET
-    value: $CLIENT_SECRET
+    value: $KEYCLOAK_CLIENT_SECRET
   - name: OPENID_PROVIDER_URL
     value: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration
   - name: OAUTH_PROVIDER_NAME
