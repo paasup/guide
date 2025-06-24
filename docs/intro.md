@@ -623,14 +623,7 @@ superset 카탈로그:
 ```yaml
 configOverrides: 
   secret: |
-    SECRET_KEY = '$SECRET_KEY'
-  my_override: |
-    FEATURE_FLAGS = {
-    	"ENABLE_TEMPLATE_REMOVE_FILTERS" : True,
-    	"ENABLE_TEMPLATE_PROCESSING": True,	
-        "DASHBOARD_NATIVE_FILTERS" : True,
-        "DASHBOARD_NATIVE_FILTERS_SET": True
-    }    
+    SECRET_KEY = '$configOverrides.secret'
   enable_oauth: |
     from flask_appbuilder.security.manager import (AUTH_DB, AUTH_OAUTH)
     from superset.security import SupersetSecurityManager
@@ -683,8 +676,8 @@ configOverrides:
             "icon": "fa-key",
             "token_key": "access_token",
             "remote_app": {
-                "client_id": "$CLIENT_ID",
-                "client_secret": "$CLIENT_SECRET",
+                "client_id": "$KEYCLOAK_CLIENT_ID",
+                "client_secret": "$KEYCLOAK_CLIENT_SECRET",
                 "client_kwargs": {
                   "scope": "openid email profile",
                   'verify': False
@@ -722,6 +715,7 @@ ingress:
     cert-manager.io/cluster-issuer: "root-ca-issuer" 
     cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   path: /
   pathType: ImplementationSpecific
   hosts:
@@ -751,7 +745,7 @@ supersetNode:
     db_host: '{{ .Name }}-postgresql'
     db_port: "5432"
     db_user: superset
-    db_pass: superset
+    db_pass: "$supersetNode.connections.db_pass"
     db_name: superset
   resources: {}
 
@@ -779,7 +773,7 @@ postgresql:
     username: superset
     password: ""
     database: superset
-    existingSecret: "$SUPERSET_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   image:
     registry: docker.io
   primary:
@@ -798,7 +792,6 @@ redis:
   architecture: standalone
   auth:
     enabled: false    
-    password: ""
     existingSecret: ""
     existingSecretPasswordKey: ""
   image:
@@ -1159,7 +1152,7 @@ global:
 
 postgresql:
   username: postgres
-  existingSecret: "$PG_SECRET"
+  existingSecret: "$INFISICAL_SECRET"
 
   maxConnections: "100" 
   sharedPreloadLibraries: "repmgr, pgaudit, pg_stat_statements"
@@ -1184,7 +1177,7 @@ postgresql:
   nodeSelector: {}
 
 pgpool:
-  existingSecret: "$PG_SECRET"
+  existingSecret: "$INFISICAL_SECRET"
 
   replicaCount: 0
 
@@ -1413,13 +1406,13 @@ postgresql:
 nemo 카탈로그:
 
 ```yaml
-ngcAPIKey: "$API_KEY"
+ngcAPIKey: "$ngcAPIKey"
 
 imagePullSecrets:
   - name: nvcrimagepullsecret
     registry: nvcr.io
     username: "$oauthtoken"
-    password: "$API_KEY"
+    password: "$ngcAPIKey"
 
 data-store:
   enabled: true
@@ -1429,6 +1422,9 @@ data-store:
 
 customizer:
   enabled: true
+  customizerConfig:
+    meta/llama-3.2-1b-instruct:
+      enabled: true
 
 
 nim:
