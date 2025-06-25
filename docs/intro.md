@@ -194,7 +194,7 @@ gitea:
     username: sudouser
     password: ""
     email: "gitea@local.domain"
-    existingSecret: "$GITEA_USER_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
@@ -1312,7 +1312,7 @@ storage:
         region: "us-east-1"
         awsRoleArn:
         serviceEndpoint: "$storage.credentials.s3.serviceEndpoint"
-        credentialsSecretName: "$UNITYCATALOG_SECRET"
+        credentialsSecretName: "$INFISICAL_SECRET"
 
 auth:
   enabled: true
@@ -1322,7 +1322,7 @@ auth:
 
   provider: keycloak
   authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
-  clientSecretName: "$UNITYCATALOG_SECRET"
+  clientSecretName: "$INFISICAL_SECRET"
 
 privateCA:
   enabled: true
@@ -1374,7 +1374,7 @@ postgresql:
     username: "uc_default_user"
     password: ""
     database: "ucdb"
-    existingSecret: "$UNITYCATALOG_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
 
   persistence:
     enabled: true
