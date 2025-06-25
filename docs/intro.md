@@ -883,7 +883,7 @@ ingress:
 postgresql:
   enabled: true
   auth:
-    existingSecret: "$FLOWISE_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   primary:
     persistence:
       enabled: true
@@ -971,7 +971,7 @@ servingEngineSpec:
     - name: "llama3"
       repository: "vllm/vllm-openai"
       tag: "latest"
-      modelURL: "meta-llama/Llama-3.1-8B-Instruct"
+      modelURL: "$servingEngineSpec.modelSpec.modelURL"
       replicaCount: 1
 
       requestCPU: 10
@@ -986,7 +986,7 @@ servingEngineSpec:
         maxModelLen: 24576
         dtype: "float16"
         extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
-      hf_token: "$TOKEN"
+      hf_token: "$servingEngineSpec.modelSpec.hf_token"
   resources:
     requests:
       cpu: "4"
@@ -1308,10 +1308,10 @@ unitycatalog 카탈로그:
 storage:
   credentials:
     s3:
-      - bucketPath: "s3://{{ .Path }}"
+      - bucketPath: "$storage.credentials.s3.bucketPath"
         region: "us-east-1"
         awsRoleArn:
-        serviceEndpoint: "https://minio.{{ .Domain }}"
+        serviceEndpoint: "$storage.credentials.s3.serviceEndpoint"
         credentialsSecretName: "$UNITYCATALOG_SECRET"
 
 auth:
@@ -1365,7 +1365,7 @@ db:
   type: postgresql
   postgresqlConfig:
     user: uc_default_user
-    password: "$DB_PASSWORD"
+    password: "$db.postgresqlConfig.password"
     database: ucdb
 
 postgresql:
