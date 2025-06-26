@@ -142,8 +142,8 @@ ingress:
   annotations:
     konghq.com/protocols: https
     konghq.com/https-redirect-status-code: "301"
-    cert-manager.io/cluster-issuer: "root-ca-issuer"
-    cert-manager.io/duration: 8760h
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/duration: 8760h  
     cert-manager.io/renew-before: 720h
   hosts:
     - host: "{{ .Name }}.{{ .Domain }}"
@@ -156,9 +156,10 @@ ingress:
       secretName: "{{ .Name }}-tls-secret"
 
 extraVolumes:
-  - name: keycloak-tls
-    secret:
-      secretName: keycloak-tls
+ - name: keycloak-tls
+   secret:
+     secretName: keycloak-tls
+
 
 extraContainerVolumeMounts:
   - name: keycloak-tls
@@ -168,11 +169,11 @@ extraContainerVolumeMounts:
 lifecycleHooks:
   postStart:
     exec:
-      command:
-        - "/bin/sh"
-        - "-c"
-        - |
-          POST_START
+      command: 
+      - "/bin/sh"
+      -  "-c"
+      - |
+        POST_START
 
 replicaCount: 1
 
@@ -190,7 +191,7 @@ persistence:
   storageClass: "longhorn"
 
 gitea:
-  admin:
+  admin:   
     username: sudouser
     password: ""
     email: "gitea@local.domain"
