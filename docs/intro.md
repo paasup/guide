@@ -12,7 +12,7 @@ sidebar_position: 1
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- password 
+- password
 
 ```yaml
 global:
@@ -23,8 +23,8 @@ ingress:
   annotations:
     konghq.com/protocols: https
     konghq.com/https-redirect-status-code: "301"
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
   hosts:
     - host: gitea.{{ .Domain }}
@@ -72,7 +72,7 @@ persistence:
 
 
 gitea:
-  admin:   
+  admin:
     username: sudouser
     password: password
     email: "sudouser@cro.com"
@@ -120,7 +120,7 @@ server:
 
   service:
     annotations:
-      konghq.com/protocol: https        
+      konghq.com/protocol: https
 ``` -->
 
 ## Gitea
@@ -131,7 +131,7 @@ DB 내장
 
 아래 항목은 사이트에 따라 수정이 필요합니다.
 
-- password 
+- password
 
 ```yaml
 global:
@@ -195,7 +195,7 @@ gitea:
     username: sudouser
     password: ""
     email: "gitea@local.domain"
-    existingSecret: "$GITEA_USER_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   config:
     APP_NAME: paasup git
     RUN_MODE: prod
@@ -247,16 +247,16 @@ tracking:
     pathType: ImplementationSpecific
     hostname: "{{ .Name }}.{{ .Domain }}"
     annotations:
-      cert-manager.io/cluster-issuer: "root-ca-issuer" 
-      cert-manager.io/duration: 8760h  
+      cert-manager.io/cluster-issuer: "root-ca-issuer"
+      cert-manager.io/duration: 8760h
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
     path: /
     tls: false
     extraTls:
-    - hosts:
-        - "{{ .Name }}.{{ .Domain }}"
-      secretName: "{{ .Name }}-tls-secret"
+      - hosts:
+          - "{{ .Name }}.{{ .Domain }}"
+        secretName: "{{ .Name }}-tls-secret"
   extraArgs:
     - "--gunicorn-opts=--timeout 600"
 postgresql:
@@ -265,18 +265,18 @@ postgresql:
     username: mlflow
     password: ""
     database: bitnami_mlflow
-    existingSecret: "$MLFLOW_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
 minio:
   enabled: false
 externalS3:
-  host: "minio.{{ .Domain }}"
+  host: "$externalS3.host"
   port: 443
   useCredentialsInSecret: true
-  existingSecret: "$MLFLOW_SECRET"
+  existingSecret: "$INFISICAL_SECRET"
   existingSecretAccessKeyIDKey: "root-user"
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
-  bucket: "{{ .Path }}"
+  bucket: "$externalS3.bucket"
   serveArtifacts: true
 ```
 
@@ -311,12 +311,12 @@ ingress:
   tls:
     source: secret
     secretName: rancher-tls-ingress
-  extraAnnotations:    
+  extraAnnotations:
     konghq.com/connect-timeout: "30000"
     konghq.com/read-timeout: "1800000"
     konghq.com/write-timeout: "1800000"
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
 
 privateCA: true
@@ -327,7 +327,7 @@ tolerations: []
 
 nodeSelector: {}
 
-resources: 
+resources:
   requests:
     cpu: 100m
     memory: 500Mi
@@ -336,8 +336,8 @@ resources:
     memory: 1000Mi
 
 extraEnv:
-- name: TZ
-  value: Asia/Seoul
+  - name: TZ
+    value: Asia/Seoul
 
 preinstallHook: true
 
@@ -382,13 +382,13 @@ prometheus:
         memory: 2000Mi
     scrapeInterval: 1m
     evaluationInterval: 1m
-    retention:  30d
+    retention: 30d
     retentionSize: 10GB
     storageSpec:
       volumeClaimTemplate:
         spec:
           accessModes:
-          - ReadWriteOnce
+            - ReadWriteOnce
           resources:
             requests:
               storage: 10Gi
@@ -426,12 +426,12 @@ image:
   registry: docker.io
   repository: kubeflow/spark-operator
   tag: "2.0.2"
-  
+
 controller:
   workers: 10
-  
+
   logLevel: info
-  
+
   uiService:
     enable: true
   uiIngress:
@@ -445,7 +445,6 @@ controller:
     requests:
       cpu: 100m
       memory: 300Mi
-
 
   workqueueRateLimiter:
     bucketQPS: 50
@@ -482,12 +481,10 @@ nodeSelector: {}
 tolerations: []
 resources: {}
 
-
 persistence:
   accessModes: ["ReadWriteOnce"]
   size: 10Gi
   storageClassName: ""
-
 
 config:
   log_level: INFO
@@ -498,28 +495,26 @@ config:
     consensus:
       tick_period_ms: 100
 
-
 apiKey: false
 readOnlyApiKey: false
-
 
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: "{{ .Name }}.{{ .Domain }}"
-    paths:
-    - path: /
-      pathType: Prefix
-      servicePort: 6333
-  tls: 
-  -  hosts:
-     - "{{ .Name }}.{{ .Domain }}"
-     secretName: "{{ .Name }}-tls-secret"
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: Prefix
+          servicePort: 6333
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 ```
 
 ## langflow-ide
@@ -591,8 +586,8 @@ langflow:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
@@ -601,10 +596,10 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
           servicePort: 7860
-  tls: 
-  -  hosts:
-     - "{{ .Name }}.{{ .Domain }}"
-     secretName: "{{ .Name }}-tls-secret"
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 
 postgresql:
   enabled: true
@@ -628,7 +623,7 @@ dip:
 superset 카탈로그:
 
 ```yaml
-configOverrides: 
+configOverrides:
   secret: |
     SECRET_KEY = '$configOverrides.secret'
   enable_oauth: |
@@ -701,11 +696,10 @@ configOverrides:
     'manager': ['Admin'],
     'member': ['Alpha'],
     }
-    
+
 bootstrapScript: |
   #!/bin/bash
   pip install sqlalchemy-drill psycopg2-binary Authlib
-
 
 image:
   repository: apachesuperset.docker.scarf.sh/apache/superset
@@ -715,25 +709,21 @@ resources: {}
 nodeSelector: {}
 tolerations: []
 
-
 ingress:
   enabled: true
-  annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   path: /
   pathType: ImplementationSpecific
   hosts:
-  - "{{ .Name }}.{{ .Domain }}"
-  tls: 
-  -  hosts:
-     - "{{ .Name }}.{{ .Domain }}"
-     secretName: "{{ .Name }}-tls-secret"
-  
-
-
+    - "{{ .Name }}.{{ .Domain }}"
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 
 supersetNode:
   replicas:
@@ -741,7 +731,7 @@ supersetNode:
     replicaCount: 1
 
   connections:
-    redis_host: '{{ .Name }}-redis-headless'
+    redis_host: "{{ .Name }}-redis-headless"
     redis_port: "6379"
     redis_user: ""
     redis_cache_db: "1"
@@ -749,21 +739,18 @@ supersetNode:
     redis_ssl:
       enabled: false
       ssl_cert_reqs: CERT_NONE
-    db_host: '{{ .Name }}-postgresql'
+    db_host: "{{ .Name }}-postgresql"
     db_port: "5432"
     db_user: superset
     db_pass: "$supersetNode.connections.db_pass"
     db_name: superset
   resources: {}
 
-
 supersetWorker:
   replicas:
     enabled: true
     replicaCount: 1
   resources: {}
-  
-
 
 supersetCeleryBeat:
   enabled: false
@@ -798,7 +785,7 @@ redis:
   enabled: true
   architecture: standalone
   auth:
-    enabled: false    
+    enabled: false
     existingSecret: ""
     existingSecretPasswordKey: ""
   image:
@@ -840,7 +827,7 @@ resources:
 ollama:
   gpu:
     enabled: ture
-    type: 'nvidia'
+    type: "nvidia"
     number: 1
 
   models:
@@ -854,20 +841,20 @@ ollama:
 
 ingress:
   enabled: true
-  annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: "{{ .Name }}.{{ .Domain }}"
-    paths:
-      - path: /
-        pathType: Prefix
-  tls: 
-    -  hosts:
-       - "{{ .Name }}.{{ .Domain }}"
-       secretName: "{{ .Name }}-tls-secret"
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 ```
 
 ## flowise
@@ -887,24 +874,24 @@ resources: {}
 
 ingress:
   enabled: true
-  annotations: 
-    cert-manager.io/cluster-issuer: "root-ca-issuer" 
-    cert-manager.io/duration: 8760h  
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   hosts:
-  - host: "{{ .Name }}.{{ .Domain }}"
-    paths:
-      - /
-  tls: 
-  -  hosts:
-     - "{{ .Name }}.{{ .Domain }}"
-     secretName: "{{ .Name }}-tls-secret"
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - /
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
 
 postgresql:
   enabled: true
   auth:
-   existingSecret: "$FLOWISE_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   primary:
     persistence:
       enabled: true
@@ -929,7 +916,7 @@ ingress:
   enabled: true
   annotations:
     cert-manager.io/cluster-issuer: "root-ca-issuer"
-    cert-manager.io/duration: 8760h  
+    cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
   host: "{{ .Name }}.{{ .Domain }}"
   tls: true
@@ -943,28 +930,28 @@ persistence:
     - ReadWriteOnce
   storageClass: ""
   selector: {}
-  annotations: {}
+  annotations: {}$extraEnvVars
 extraEnvVars:
   - name: OPENAI_API_KEY
-    value: "$SECRET_KEY"
+    value: ""
   - name: OAUTH_CLIENT_ID
-    value: $CLIENT_ID
+    value: $KEYCLOAK_CLIENT_ID
   - name: OAUTH_CLIENT_SECRET
-    value: $CLIENT_SECRET
+    value: $KEYCLOAK_CLIENT_SECRET
   - name: OPENID_PROVIDER_URL
     value: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration
   - name: OAUTH_PROVIDER_NAME
     value: paasup
   - name: OAUTH_SCOPES
-    value: 'openid email profile'
+    value: "openid email profile"
   - name: ENABLE_LOGIN_FORM
-    value: 'true'
+    value: "true"
   - name: SSL_CERT_FILE
-    value: '/etc/ssl/certs/keycloak/ca.crt'
+    value: "/etc/ssl/certs/keycloak/ca.crt"
   - name: ENABLE_OAUTH_SIGNUP
-    value: 'true'
+    value: "true"
   - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
-    value: 'true'
+    value: "true"
   - name: DEFAULT_USER_ROLE
     value: user
   - name: ENV
@@ -973,15 +960,14 @@ extraEnvVars:
 volumeMounts:
   initContainer: []
   container:
-  - name: "keycloak-tls"
-    mountPath: "/etc/ssl/certs/keycloak"
+    - name: "keycloak-tls"
+      mountPath: "/etc/ssl/certs/keycloak"
 
 volumes:
-- name: "keycloak-tls"
-  secret:
-    secretName: keycloak-tls
+  - name: "keycloak-tls"
+    secret:
+      secretName: keycloak-tls
 ```
-
 
 ## vllm
 
@@ -990,25 +976,25 @@ vllm 카탈로그:
 ```yaml
 servingEngineSpec:
   modelSpec:
-  - name: "llama3"
-    repository: "vllm/vllm-openai"
-    tag: "latest"
-    modelURL: "meta-llama/Llama-3.1-8B-Instruct"
-    replicaCount: 1
+    - name: "llama3"
+      repository: "vllm/vllm-openai"
+      tag: "latest"
+      modelURL: "$servingEngineSpec.modelSpec.modelURL"
+      replicaCount: 1
 
-    requestCPU: 10
-    requestMemory: "16Gi"
-    requestGPU: 1
+      requestCPU: 10
+      requestMemory: "16Gi"
+      requestGPU: 1
 
-    pvcStorage: "50Gi"
+      pvcStorage: "50Gi"
 
-    vllmConfig:
-      enableChunkedPrefill: false
-      enablePrefixCaching: false
-      maxModelLen: 24576
-      dtype: "float16"
-      extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
-    hf_token: "$TOKEN"
+      vllmConfig:
+        enableChunkedPrefill: false
+        enablePrefixCaching: false
+        maxModelLen: 24576
+        dtype: "float16"
+        extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.8"]
+      hf_token: "$servingEngineSpec.modelSpec.hf_token"
   resources:
     requests:
       cpu: "4"
@@ -1031,8 +1017,8 @@ routerSpec:
     enabled: true
     className: ""
     annotations:
-      cert-manager.io/cluster-issuer: "root-ca-issuer" 
-      cert-manager.io/duration: 8760h  
+      cert-manager.io/cluster-issuer: "root-ca-issuer"
+      cert-manager.io/duration: 8760h
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
     hosts:
@@ -1041,9 +1027,9 @@ routerSpec:
           - path: /
             pathType: Prefix
     tls:
-     - secretName: "{{ .Name }}-tls-secret"
-       hosts:
-         - "{{ .Name }}.{{ .Domain }}"
+      - secretName: "{{ .Name }}-tls-secret"
+        hosts:
+          - "{{ .Name }}.{{ .Domain }}"
 ```
 
 ## langfuse
@@ -1061,13 +1047,13 @@ langfuse:
 
   ingress:
     enabled: true
-    annotations: 
+    annotations:
       cert-manager.io/cluster-issuer: "root-ca-issuer"
-    hosts: 
-    - host: "{{ .Name }}.{{ .Domain }}"
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+    hosts:
+      - host: "{{ .Name }}.{{ .Domain }}"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
     tls:
       enabled: true
       secretName: "{{ .Name }}-tls-secret"
@@ -1096,7 +1082,7 @@ langfuse:
     - name: "AUTH_KEYCLOAK_ISSUER"
       value: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
     - name: NODE_TLS_REJECT_UNAUTHORIZED
-      value: '0'
+      value: "0"
 
 postgresql:
   auth:
@@ -1104,10 +1090,10 @@ postgresql:
     existingSecret: "$LANGFUSE_SECRET"
     secretKeys:
       userPasswordKey: "postgres-password"
-    
+
   migration:
     autoMigrate: true
-        
+
   persistence:
     enabled: true
     storageClass: ""
@@ -1124,14 +1110,14 @@ redis:
       storageClass: ""
       size: 5Gi
 
-clickhouse:  
+clickhouse:
   deploy: true
   auth:
     username: default
     password: ""
     existingSecret: "$LANGFUSE_SECRET"
     existingSecretKey: "admin-password"
-    
+
   shards: 1
   persistence:
     enabled: true
@@ -1161,16 +1147,15 @@ postgresql:
   username: postgres
   existingSecret: "$INFISICAL_SECRET"
 
-  maxConnections: "100" 
+  maxConnections: "100"
   sharedPreloadLibraries: "repmgr, pgaudit, pg_stat_statements"
 
-  
   replicaCount: 1
 
   extraEnvVars:
     - name: TZ
       value: Asia/Seoul
-  
+
   resources:
     requests:
       cpu: 100m
@@ -1178,7 +1163,7 @@ postgresql:
     limits:
       cpu: 500m
       memory: 1024Mi
-  
+
   tolerations: []
 
   nodeSelector: {}
@@ -1209,14 +1194,14 @@ ingress:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: "root-ca-issuer"
-      cert-manager.io/duration: 8760h  
+      cert-manager.io/duration: 8760h
       cert-manager.io/renew-before: 720h
       konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
     hosts:
-    - name: "{{ .Name }}.{{ .Domain }}"
-      tls:
-        enabled: true
-        secretName: "{{ .Name }}-tls-secret"
+      - name: "{{ .Name }}.{{ .Domain }}"
+        tls:
+          enabled: true
+          secretName: "{{ .Name }}-tls-secret"
 
 executor: "KubernetesExecutor"
 
@@ -1225,11 +1210,11 @@ config:
     executor: KubernetesExecutor
     default_timezone: kst
   logging:
-    colored_console_log: 'False'
+    colored_console_log: "False"
     logging_level: "INFO"
   webserver:
-    enable_proxy_fix: 'True'
-    rbac: 'True'
+    enable_proxy_fix: "True"
+    rbac: "True"
     default_ui_timezone: kst
 
 scheduler:
@@ -1250,8 +1235,8 @@ dags:
     subPath: ""
     credentialsSecret: "$AIRFLOW_SECRET"
     env:
-    - name: GIT_SSL_NO_VERIFY
-      value: "true"
+      - name: GIT_SSL_NO_VERIFY
+        value: "true"
 
 webserver:
   defaultUser:
@@ -1265,7 +1250,7 @@ webserver:
     initialDelaySeconds: 30
   webserverConfig: |
     AUTH_ROLE_PUBLIC = 'User'
-  
+
 logs:
   persistence:
     enabled: true
@@ -1274,7 +1259,7 @@ logs:
 
 statsd:
   enabled: false
-  
+
 postgresql:
   enabled: true
   auth:
@@ -1321,7 +1306,6 @@ ingress:
     - secretName: "{{ .Name }}-tls-secret"
       hosts:
         - "{{ .Name }}.{{ .Domain }}"
-
 ```
 
 ## unitycatalog
@@ -1332,11 +1316,11 @@ unitycatalog 카탈로그:
 storage:
   credentials:
     s3:
-    - bucketPath: "s3://{{ .Path }}"
-      region: "us-east-1"
-      awsRoleArn: 
-      serviceEndpoint: "https://minio.{{ .Domain }}"
-      credentialsSecretName: "$UNITYCATALOG_SECRET"
+      - bucketPath: "$storage.credentials.s3.bucketPath"
+        region: "us-east-1"
+        awsRoleArn:
+        serviceEndpoint: "$storage.credentials.s3.serviceEndpoint"
+        credentialsSecretName: "$INFISICAL_SECRET"
 
 auth:
   enabled: true
@@ -1346,8 +1330,8 @@ auth:
 
   provider: keycloak
   authorizationUrl: "$KEYCLOAK_URL/auth/realms/$KEYCLOAK_REALM/protocol/openid-connect/auth"
-  clientSecretName: "$UNITYCATALOG_SECRET"
-  
+  clientSecretName: "$INFISICAL_SECRET"
+
 privateCA:
   enabled: true
   secretName: "{{ .Name }}-tls-secret"
@@ -1366,7 +1350,7 @@ server:
     className: kong
     annotations:
       cert-manager.io/cluster-issuer: root-ca-issuer
-      konghq.com/https-redirect-status-code: '301'
+      konghq.com/https-redirect-status-code: "301"
       konghq.com/protocols: https
     hosts:
       - host: "{{ .Name }}.{{ .Domain }}"
@@ -1380,7 +1364,7 @@ server:
   config:
     persistence:
       enabled: true
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: ["ReadWriteOnce"]
       size: 100Mi
       storageClassName: ""
     logLevel: "INFO"
@@ -1389,7 +1373,7 @@ db:
   type: postgresql
   postgresqlConfig:
     user: uc_default_user
-    password: "$DB_PASSWORD"
+    password: "$db.postgresqlConfig.password"
     database: ucdb
 
 postgresql:
@@ -1398,8 +1382,8 @@ postgresql:
     username: "uc_default_user"
     password: ""
     database: "ucdb"
-    existingSecret: "$UNITYCATALOG_SECRET"
-  
+    existingSecret: "$INFISICAL_SECRET"
+
   persistence:
     enabled: true
     accessModes:
@@ -1433,7 +1417,6 @@ customizer:
     meta/llama-3.2-1b-instruct:
       enabled: true
 
-
 nim:
   enabled: false
 
@@ -1452,7 +1435,6 @@ nemo-operator:
 
 nim-operator:
   enabled: true
-
 
 dgxc-admission-controller:
   enabled: false
