@@ -1087,7 +1087,7 @@ langfuse:
 postgresql:
   auth:
     username: "postgres"
-    existingSecret: "$LANGFUSE_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
     secretKeys:
       userPasswordKey: "postgres-password"
 
@@ -1102,7 +1102,7 @@ postgresql:
 redis:
   auth:
     enabled: true
-    existingSecret: "$LANGFUSE_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
     existingSecretPasswordKey: "valkey-password"
   primary:
     persistence:
@@ -1115,7 +1115,7 @@ clickhouse:
   auth:
     username: default
     password: ""
-    existingSecret: "$LANGFUSE_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
     existingSecretKey: "admin-password"
 
   shards: 1
@@ -1233,7 +1233,7 @@ dags:
     rev: HEAD
     depth: 1
     subPath: ""
-    credentialsSecret: "$AIRFLOW_SECRET"
+    credentialsSecret: "$INFISICAL_SECRET"
     env:
       - name: GIT_SSL_NO_VERIFY
         value: "true"
@@ -1264,7 +1264,7 @@ postgresql:
   enabled: true
   auth:
     username: "postgres"
-    existingSecret: "$AIRFLOW_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
     secretKeys:
       userPasswordKey: "postgres-password"
   primary:
@@ -1277,7 +1277,7 @@ migrateDatabaseJob:
   useHelmHooks: false
 
 data:
-  metadataSecretName: "$AIRFLOW_SECRET"
+  metadataSecretName: "$INFISICAL_SECRET"
 ```
 
 ## litellm
