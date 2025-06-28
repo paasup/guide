@@ -547,6 +547,10 @@ langflow:
         value: "info"
       - name: LANGFLOW_AUTO_LOGIN
         value: "True"
+      - name: LANGFLOW_SUPERUSER
+        value: "$langflow.backend.env.username"
+      - name: LANGFLOW_SUPERUSER_PASSWORD
+        value: "$langflow.backend.env.password"  
     externalDatabase:
       enabled: true
       driver:
@@ -609,11 +613,14 @@ postgresql:
     username: "langflow"
     password: ""
     database: "langflow-db"
-    existingSecret: "$LANGFLOW_SECRET"
+    existingSecret: "$INFISICAL_SECRET"
   primary:
     persistence:
       size: 5Gi
       storageClass: ""
+
+dip:
+  mainPath: dashboard
 ```
 
 ## superset
@@ -1083,9 +1090,9 @@ langfuse:
     - name: AUTH_DISABLE_USERNAME_PASSWORD
       value: "true"
     - name: AUTH_KEYCLOAK_CLIENT_ID
-      value: "$CLIENT_ID"
+      value: "$KEYCLOAK_CLIENT_ID"
     - name: "AUTH_KEYCLOAK_CLIENT_SECRET"
-      value: "$CLIENT_SECRET"
+      value: "$KEYCLOAK_CLIENT_SECRET"
     - name: "AUTH_KEYCLOAK_ISSUER"
       value: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
     - name: NODE_TLS_REJECT_UNAUTHORIZED
@@ -1236,7 +1243,7 @@ dags:
     accessMode: ReadWriteMany
   gitSync:
     enabled: false
-    repo: "$AIRFLOW_DAG_REPO"
+    repo: "$dags.gitSync.repo"
     branch: master
     rev: HEAD
     depth: 1
@@ -1249,7 +1256,7 @@ dags:
 webserver:
   defaultUser:
     enabled: true
-    password: "$ADMIN_PASSWORD"
+    password: "$webserver.defaultUser.password"
   livenessProbe:
     initialDelaySeconds: 120
   readinessProbe:
@@ -1293,7 +1300,7 @@ data:
 litellm 카탈로그:
 
 ```yaml
-masterkey: "$PASSWORD_KEY"
+masterkey: "$masterkey"
 
 proxy_config:
   model_list: []
