@@ -1306,6 +1306,9 @@ ingress:
     - secretName: "{{ .Name }}-tls-secret"
       hosts:
         - "{{ .Name }}.{{ .Domain }}"
+
+dip:
+  mainPath: ui        
 ```
 
 ## unitycatalog
