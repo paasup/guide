@@ -515,6 +515,9 @@ ingress:
     - hosts:
         - "{{ .Name }}.{{ .Domain }}"
       secretName: "{{ .Name }}-tls-secret"
+
+dip:
+  mainPath: dashboard      
 ```
 
 ## langflow-ide
@@ -613,9 +616,6 @@ postgresql:
     persistence:
       size: 5Gi
       storageClass: ""
-
-dip:
-  mainPath: dashboard
 ```
 
 ## superset
