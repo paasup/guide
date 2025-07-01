@@ -1227,7 +1227,7 @@ dags:
     storageClassName: longhorn
     accessMode: ReadWriteMany
   gitSync:
-    enabled: false
+    enabled: true
     repo: "$dags.gitSync.repo"
     branch: master
     rev: HEAD
