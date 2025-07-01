@@ -1478,3 +1478,37 @@ ingress:
 virtualService:
   enabled: false
 ```
+
+## nim
+
+nim 카탈로그:
+
+```yaml
+apiVersion: apps.nvidia.com/v1alpha1
+kind: NIMService
+metadata:
+  name: "$metadata.name"
+spec:
+  image:
+    repository: "$spec.image.repository"
+    tag: "$spec.image.tag"
+    pullPolicy: IfNotPresent
+    pullSecrets:
+      - nvcrimagepullsecret
+  authSecret: ngc-api
+  replicas: 1
+  storage:
+    pvc:
+      create: true
+      storageClass: longhorn
+      size: 30Gi
+      volumeAccessMode: ReadWriteMany
+  runtimeClassName: nvidia
+  resources:
+    limits:
+      nvidia.com/gpu: 1
+  expose:
+    service:
+      type: ClusterIP
+      port: 8000
+```
