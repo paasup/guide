@@ -565,7 +565,7 @@ langflow:
         valueFrom:
           secretKeyRef:
             key: "password"
-            name: "{{ .Name }}-ide-postgresql-service"
+            name: "$INFISICAL_SECRET"
     sqlite:
       enabled: false
     probe:
