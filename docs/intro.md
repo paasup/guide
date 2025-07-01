@@ -1126,13 +1126,13 @@ clickhouse:
 
 s3:
   deploy: false
-  bucket: "{{ .Path }}"
+  bucket: "$s3.bucket"
   region: "auto"
-  endpoint: "https://minio.{{ .Domain }}"
+  endpoint: "https://$s3.endpoint"
   accessKeyId:
-    value: "{{ .AccessKey }}"
+    value: "$s3.accessKeyId.value"
   secretAccessKey:
-    value: "{{ .SecretKey }}"
+    value: "$s3.secretAccessKey.value"
 ```
 
 ## postgresql-ha
