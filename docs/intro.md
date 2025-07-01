@@ -1041,9 +1041,9 @@ langfuse:
   logging:
     level: info
   salt:
-    value: "$SALT_KEY"
+    value: "$langfuse.salt.value"
   encryptionKey:
-    value: "$ENC_KEY"
+    value: "$langfuse.encryptionKey.value"
 
   ingress:
     enabled: true
@@ -1071,7 +1071,7 @@ langfuse:
   nextauth:
     url: "https://{{ .Name }}.{{ .Domain }}"
     secret:
-      value: "$SECRET_KEY"
+      value: "$langfuse.nextauth.secret.value"
   additionalEnv:
     - name: AUTH_DISABLE_USERNAME_PASSWORD
       value: "true"
