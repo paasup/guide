@@ -626,6 +626,13 @@ superset 카탈로그:
 configOverrides:
   secret: |
     SECRET_KEY = '$configOverrides.secret'
+  my_override: |
+    FEATURE_FLAGS = {
+    	"ENABLE_TEMPLATE_REMOVE_FILTERS" : True,
+    	"ENABLE_TEMPLATE_PROCESSING": True,	
+        "DASHBOARD_NATIVE_FILTERS" : True,
+        "DASHBOARD_NATIVE_FILTERS_SET": True
+    }     
   enable_oauth: |
     from flask_appbuilder.security.manager import (AUTH_DB, AUTH_OAUTH)
     from superset.security import SupersetSecurityManager
