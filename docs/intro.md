@@ -1496,6 +1496,8 @@ kind: NIMService
 metadata:
   name: "$metadata.name"
 spec:
+  labels:
+    app.nvidia.com/nim-type: inference
   image:
     repository: "$spec.image.repository"
     tag: "$spec.image.tag"
