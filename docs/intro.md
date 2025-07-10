@@ -1491,33 +1491,19 @@ virtualService:
 nim 카탈로그:
 
 ```yaml
-apiVersion: apps.nvidia.com/v1alpha1
-kind: NIMService
-metadata:
-  name: "$metadata.name"
-spec:
-  labels:
-    app.nvidia.com/nim-type: inference
-  image:
-    repository: "$spec.image.repository"
-    tag: "$spec.image.tag"
-    pullPolicy: IfNotPresent
-    pullSecrets:
-      - nvcrimagepullsecret
-  authSecret: ngc-api
-  replicas: 1
-  storage:
-    pvc:
-      create: true
-      storageClass: longhorn
-      size: 30Gi
-      volumeAccessMode: ReadWriteMany
-  runtimeClassName: nvidia
-  resources:
-    limits:
-      nvidia.com/gpu: 1
-  expose:
-    service:
-      type: ClusterIP
-      port: 8000
+nimService:
+  name: "{{ .Name }}"
+  existingAuthSecret: "$INFISICAL_SECRET"
+  existingPVC: ""
+
+image:
+  repository: "$image.repository"
+  pullPolicy: IfNotPresent
+  tag: "$image.tag"
+
+imagePullSecrets:
+  - name: nvcrimagepullsecret
+    registry: nvcr.io
+    username: "$oauthtoken"
+    password: "$imagePullSecrets.password"
 ```
