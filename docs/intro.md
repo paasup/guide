@@ -1507,3 +1507,37 @@ imagePullSecrets:
     username: "$oauthtoken"
     password: "$imagePullSecrets.password"
 ```
+
+## kserve
+
+kserve 카탈로그:
+
+```yaml
+inferenceService:
+  name: "{{ .Name }}"
+  
+  model:
+    args:
+      - --backend=vllm
+      - --model_name=$model.name
+      - --dtype=float16
+    storageUri: "pvc://$model.volume/$model.name"
+  
+  resources:
+    limits:
+      cpu: "8"
+      memory: 16Gi
+      nvidia.com/gpu: "1"
+    requests:
+      cpu: "4"
+      memory: 8Gi
+      nvidia.com/gpu: "1"
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+  host:
+    domain: "{{ .Name }}.{{ .Namespace }}.{{ .Domain }}"
+  tls:
+    secretName: "{{ .Name }}-tls-secret"
+```
