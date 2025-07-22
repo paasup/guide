@@ -1536,8 +1536,8 @@ inferenceService:
 ingress:
   annotations:
     cert-manager.io/cluster-issuer: "root-ca-issuer"
-  host:
-    domain: "{{ .Name }}.{{ .Namespace }}.{{ .Domain }}"
+  hosts: 
+    - host: "{{ .Name }}-kserve.{{ .Namespace }}.{{ .Domain }}"
   tls:
     secretName: "{{ .Name }}-tls-secret"
 ```
