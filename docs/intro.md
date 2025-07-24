@@ -1531,7 +1531,7 @@ inferenceService:
       - --backend=vllm
       - --model_name=$model.name
       - --dtype=float16
-    storageUri: "pvc://$model.volume/$model.name"
+    storageUri: "$model.volume"
   
   resources:
     limits:
