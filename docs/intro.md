@@ -937,10 +937,10 @@ persistence:
     - ReadWriteOnce
   storageClass: ""
   selector: {}
-  annotations: {}$extraEnvVars
+  annotations: {}
 extraEnvVars:
   - name: OPENAI_API_KEY
-    value: ""
+    value: "$extraEnvVars"
   - name: OAUTH_CLIENT_ID
     value: $KEYCLOAK_CLIENT_ID
   - name: OAUTH_CLIENT_SECRET
