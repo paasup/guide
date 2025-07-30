@@ -1500,7 +1500,7 @@ nimService:
     - name: NIM_PEFT_SOURCE
       value: http://nemo-entity-store.nemo:8000
     - name: NIM_SERVED_MODEL_NAME
-      value: "$nimService.servModelName"
+      value: "$nimService.modelName"
     - name: NIM_MODEL_NAME
       value: "$nimService.modelName"
     - name: NIM_PEFT_REFRESH_INTERVAL
