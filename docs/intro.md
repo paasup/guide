@@ -1498,7 +1498,7 @@ nimService:
 
   env:
     - name: NIM_PEFT_SOURCE
-      value: http://nemo-entity-store:8000
+      value: http://nemo-entity-store.nemo:8000
     - name: NIM_SERVED_MODEL_NAME
       value: "$nimService.servModelName"
     - name: NIM_MODEL_NAME
