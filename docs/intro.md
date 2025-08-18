@@ -906,6 +906,58 @@ postgresql:
       storageClass: ""
 ```
 
+## flowise/6.0.0
+
+flowise 카탈로그:
+
+```yaml
+global:
+  storageClass: "longhorn"
+
+image:
+  registry: docker.io
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: longhorn
+
+resources: {}
+
+worker:
+  enabled: true
+  replicaCount: 1
+  resources: {}
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+  hosts:
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - /
+  tls:
+    - hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
+
+postgresql:
+  enabled: true
+  auth:
+    existingSecret: "$INFISICAL_SECRET"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+redis:
+  enabled: true
+```
+
 ## open-webui/0.5.4
 
 open-webui 카탈로그:
