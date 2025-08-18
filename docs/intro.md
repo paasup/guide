@@ -123,7 +123,7 @@ server:
       konghq.com/protocol: https
 ``` -->
 
-## Gitea
+## gitea/6.0.3-2
 
 Gitea 일반 카탈로그:
 
@@ -226,7 +226,7 @@ postgresql:
     size: 5Gi
 ```
 
-## MLflow
+## mlflow/2.1.0-1
 
 Mlflow 카탈로그:
 
@@ -280,7 +280,7 @@ externalS3:
   serveArtifacts: true
 ```
 
-## Kubeflow
+## kubeflow/1.10.0
 
 Kubeflow 카탈로그:
 
@@ -300,7 +300,7 @@ spec:
       persistentvolumeclaims: "12"
 ```
 
-## Rancher
+## Rancher/2.10.1-1
 
 Rancher 카탈로그:
 
@@ -344,7 +344,7 @@ preinstallHook: true
 newPassword: "$PASSWORD_KEY"
 ```
 
-## rancher-monitoring-crd
+## rancher-monitoring-crd/104.1.2
 
 rancher-monitoring-crd 카탈로그:
 
@@ -352,7 +352,7 @@ rancher-monitoring-crd 카탈로그:
 ---
 ```
 
-## rancher-monitoring
+## rancher-monitoring/104.1.2
 
 rancher-monitoring 카탈로그:
 
@@ -417,7 +417,7 @@ rke2IngressNginx:
   enabled: true
 ```
 
-## spark-operator
+## spark-operator/2.0.2
 
 spark-operator 카탈로그:
 
@@ -466,7 +466,7 @@ spark:
   jobNamespaces: []
 ```
 
-## qdrant
+## qdrant/1.12.4
 
 qdrant 카탈로그:
 
@@ -520,7 +520,7 @@ dip:
   mainPath: dashboard      
 ```
 
-## langflow-ide
+## langflow-ide/0.1.0
 
 langflow-ide 카탈로그:
 
@@ -618,7 +618,7 @@ postgresql:
       storageClass: ""
 ```
 
-## superset
+## superset/0.13.5-1
 
 superset 카탈로그:
 
@@ -807,7 +807,7 @@ redis:
       size: 8Gi
 ```
 
-## ollama
+## ollama/1.12.2
 
 ollama 카탈로그:
 
@@ -864,7 +864,7 @@ ingress:
       secretName: "{{ .Name }}-tls-secret"
 ```
 
-## flowise
+## flowise/3.10.2
 
 flowise 카탈로그:
 
@@ -906,7 +906,7 @@ postgresql:
       storageClass: ""
 ```
 
-## open-webui
+## open-webui/0.5.4
 
 open-webui 카탈로그:
 
@@ -976,7 +976,7 @@ volumes:
       secretName: keycloak-tls
 ```
 
-## vllm
+## vllm/0.0.11
 
 vllm 카탈로그:
 
@@ -1039,7 +1039,7 @@ routerSpec:
           - "{{ .Name }}.{{ .Domain }}"
 ```
 
-## langfuse
+## langfuse/1.0.0-rc.2-1
 
 langfuse 카탈로그:
 
@@ -1142,7 +1142,7 @@ s3:
     value: "$s3.secretAccessKey.value"
 ```
 
-## postgresql-ha
+## postgresql-ha/11.9.4-1
 
 postgresql-ha 카탈로그:
 
@@ -1191,7 +1191,7 @@ volumePermissions:
     runAsUser: 0
 ```
 
-## airflow
+## airflow/1.16.0
 
 airflow 카탈로그:
 
@@ -1287,7 +1287,7 @@ data:
   metadataSecretName: "$INFISICAL_SECRET"
 ```
 
-## litellm
+## litellm/0.4.4
 
 litellm 카탈로그:
 
@@ -1318,7 +1318,7 @@ dip:
   mainPath: ui        
 ```
 
-## unitycatalog
+## unitycatalog/0.2.0
 
 unitycatalog 카탈로그:
 
@@ -1402,7 +1402,7 @@ postgresql:
     storageClassName: ""
 ```
 
-## nemo
+## nemo/25.4.0
 
 nemo 카탈로그:
 
@@ -1486,7 +1486,7 @@ virtualService:
   enabled: false
 ```
 
-## nim
+## nim/25.4.0
 
 nim 카탈로그:
 
@@ -1518,7 +1518,7 @@ imagePullSecrets:
     password: "$imagePullSecrets.password"
 ```
 
-## kserve
+## kserve/0.1.0
 
 kserve 카탈로그:
 
