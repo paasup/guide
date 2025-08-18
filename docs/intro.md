@@ -1603,3 +1603,126 @@ ingress:
   tls:
     secretName: "{{ .Name }}-tls-secret"
 ```
+
+## ragflow/0.20.1
+
+ragflow 카탈로그:
+
+```yaml
+env:
+  DOC_ENGINE: infinity
+
+  MYSQL_PASSWORD: "$env.mysqlPassword"
+  MYSQL_DBNAME: rag_flow
+
+  MINIO_ROOT_USER: rag_flow
+  MINIO_PASSWORD: "$env.minioPassword"
+
+  REDIS_PASSWORD: "$env.redisPassword"
+
+  RAGFLOW_IMAGE: infiniflow/ragflow:v0.20.1-slim
+
+  TIMEZONE: "Asia/Seoul"
+
+  DOC_BULK_SIZE: 4
+
+  EMBEDDING_BATCH_SIZE: 16
+
+ragflow:
+
+  service_conf:
+    oauth:
+      oidc:
+        display_name: "KEYCLOAK"
+        client_id: "$KEYCLOAK_CLIENT_ID"
+        client_secret: "$KEYCLOAK_CLIENT_SECRET"
+        issuer: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
+        scope: "openid email profile"
+        redirect_uri: "https://{{ .Name }}.{{ .Domain }}/v1/user/oauth/callback/oidc"
+
+  llm_factories:
+
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+  api:
+    service:
+      enabled: true
+      type: ClusterIP
+
+infinity:
+  image:
+    repository: infiniflow/infinity
+    tag: v0.6.0-dev5
+  storage:
+    className:
+    capacity: 5Gi
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+
+minio:
+  image:
+    repository: quay.io/minio/minio
+    tag: RELEASE.2023-12-20T01-00-02Z
+  storage:
+    className:
+    capacity: 5Gi
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+
+mysql:
+  image:
+    repository: mysql
+    tag: 8.0.39
+  storage:
+    className:
+    capacity: 5Gi
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+
+redis:
+  image:
+    repository: valkey/valkey
+    tag: 8
+  storage:
+    className:
+    capacity: 5Gi
+  persistence:
+    enabled: true
+  deployment:
+    strategy:
+    resources:
+  service:
+    type: ClusterIP
+
+
+ingress:
+  enabled: true
+  className: "kong"
+  annotations: 
+    cert-manager.io/cluster-issuer: root-ca-issuer
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+    konghq.com/https-redirect-status-code: '301'
+    konghq.com/protocols: https
+  hosts:
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: "{{ .Name }}-tls-secret"
+     hosts:
+       - "{{ .Name }}.{{ .Domain }}"
+```
