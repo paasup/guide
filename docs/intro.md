@@ -1628,6 +1628,8 @@ env:
 
   EMBEDDING_BATCH_SIZE: 16
 
+  REQUESTS_CA_BUNDLE: /tmp/ca.crt
+
 ragflow:
 
   service_conf:
@@ -1641,6 +1643,17 @@ ragflow:
         redirect_uri: "https://{{ .Name }}.{{ .Domain }}/v1/user/oauth/callback/oidc"
 
   llm_factories:
+
+  volumes:
+    - name: keycloak-tls
+      secret:
+        secretName: keycloak-tls
+
+  volumeMounts:
+    - name: keycloak-tls
+      mountPath: /tmp/ca.crt
+      subPath: ca.crt
+      readOnly: true  
 
   deployment:
     strategy:
