@@ -1629,6 +1629,7 @@ env:
   EMBEDDING_BATCH_SIZE: 16
 
   REQUESTS_CA_BUNDLE: /tmp/ca.crt
+  SSL_CERT_FILE: /tmp/ca.crt
 
 ragflow:
 
