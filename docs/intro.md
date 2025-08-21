@@ -624,6 +624,12 @@ superset 카탈로그:
 
 ```yaml
 configOverrides:
+  mapbox: |
+    MAPBOX_API_KEY = '$configOverrides.mapbox' 
+    ENABLE_PROXY_FIX = True
+    FEATURE_FLAGS = {
+      "DYNAMIC_PLUGINS": True
+    }
   secret: |
     SECRET_KEY = '$configOverrides.secret'
   my_override: |
