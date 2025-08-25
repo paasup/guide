@@ -1824,15 +1824,12 @@ starrocksFESpec:
   tolerations: []
   
   config: |
-    # enable shared data, set storage type, set endpoint
     run_mode = shared_data
     cloud_native_storage_type = S3
     aws_s3_endpoint = $starrocksFESpec.config.endpoint
 
-    # set the path in MinIO
     aws_s3_path = $starrocksFESpec.config.path
 
-    # credentials for MinIO object read/write
     aws_s3_access_key = $starrocksFESpec.config.accesskey
     aws_s3_secret_key = $starrocksFESpec.config.secretkey
     aws_s3_use_instance_profile = false
