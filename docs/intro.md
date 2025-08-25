@@ -1746,3 +1746,122 @@ ingress:
      hosts:
        - "{{ .Name }}.{{ .Domain }}"
 ```
+
+## starrocks-operator/0.11.0
+
+starrocks-operator 카탈로그:
+
+```yaml
+timeZone: Asia/Seoul
+
+image:
+  repository: starrocks/operator
+  tag: "v1.11.0"
+  pullPolicy: IfNotPresent
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 400Mi
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+tolerations: []
+
+affinity: {}
+
+webhook:
+  enabled: true
+  port: 9443
+  certManager:
+    enabled: false
+
+metrics:
+  enabled: true
+  port: 8080
+  serviceMonitor:
+    enabled: false
+```
+
+## starrocks/0.11.0
+
+starrocks 카탈로그:
+
+```yaml
+initPassword:
+  enabled: true
+  isInstall: false
+  password: ""
+  passwordSecret: "$INFISICAL_SECRET"
+
+timeZone: Asia/Seoul
+
+starrocksCluster:
+  enabledBe: false
+  enabledCn: true
+
+starrocksFESpec:
+  replicas: 3
+  runAsNonRoot: "false"
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
+  storageSpec:
+    name: fe
+    storageClassName: "longhorn"
+    storageSize: 10Gi
+    logStorageSize: 5Gi
+  
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  
+  config: |
+    # enable shared data, set storage type, set endpoint
+    run_mode = shared_data
+    cloud_native_storage_type = S3
+    aws_s3_endpoint = $starrocksFESpec.config.endpoint
+
+    # set the path in MinIO
+    aws_s3_path = $starrocksFESpec.config.path
+
+    # credentials for MinIO object read/write
+    aws_s3_access_key = $starrocksFESpec.config.accesskey
+    aws_s3_secret_key = $starrocksFESpec.config.secretkey
+    aws_s3_use_instance_profile = false
+    aws_s3_use_aws_sdk_default_behavior = false
+
+    enable_load_volume_from_conf = true
+
+
+starrocksCnSpec:
+  replicas: 3
+  runAsNonRoot: "false"
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+  storageSpec:
+    name: be 
+    storageClassName: "longhorn"
+    storageSize: 15Gi
+    logStorageSize: 10Gi
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  autoScalingPolicy: {}
+
+
+starrocksFeProxySpec:
+  enabled: true
+  resolver: "rke2-coredns-rke2-coredns.kube-system.svc.cluster.local"
+  service:
+    type: ClusterIP
+```
