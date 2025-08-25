@@ -1794,7 +1794,6 @@ starrocks 카탈로그:
 ```yaml
 initPassword:
   enabled: true
-  isInstall: false
   password: ""
   passwordSecret: "$INFISICAL_SECRET"
 
