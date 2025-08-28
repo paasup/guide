@@ -712,7 +712,10 @@ configOverrides:
 
 bootstrapScript: |
   #!/bin/bash
+  apt update
+  apt install -y pkg-config build-essential default-libmysqlclient-dev libpq-dev
   pip install sqlalchemy-drill psycopg2-binary Authlib
+  pip install mysqlclient
 
 image:
   repository: apachesuperset.docker.scarf.sh/apache/superset
