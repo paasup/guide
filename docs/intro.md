@@ -1863,3 +1863,147 @@ starrocksFeProxySpec:
   service:
     type: ClusterIP
 ```
+
+## strimzi-kafka-operator/0.47.0
+
+kafka operator 카탈로그:
+
+```yaml
+defaultImageRegistry: "quay.io"
+defaultImageRepository: "strimzi"
+defaultImageTag: "0.47.0"
+
+replicas: 1
+watchNamespaces: []
+watchAnyNamespace: true
+
+logLevel: INFO
+logConfiguration: ""
+
+fullReconciliationIntervalMs: 120000
+operationTimeoutMs: 300000
+
+resources:
+  limits:
+    memory: 384Mi
+    cpu: 1000m
+  requests:
+    memory: 384Mi
+    cpu: 200m
+
+extraEnvs: []    
+```
+
+## kafka/32.4.3
+
+kafka 카탈로그:
+
+```yaml
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  defaultStorageClass: ""
+
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 4.0.0-debian-12-r10
+
+controller:
+  replicaCount: 3
+  controllerOnly: false
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: ""
+  logPersistence:
+    enabled: false
+    size: 8Gi
+    storageClass: ""
+  resources: {}
+  resourcesPreset: "small"
+  
+broker:
+  replicaCount: 0
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: ""
+  logPersistence:
+    enabled: true
+    size: 8Gi
+    storageClass: ""
+  resources: {}
+  resourcesPreset: "small"
+
+listeners:
+  client:
+    containerPort: 9092
+    protocol: SASL_PLAINTEXT
+  controller:
+    containerPort: 9093
+    protocol: SASL_PLAINTEXT
+  interbroker:
+    containerPort: 9094
+    protocol: SASL_PLAINTEXT
+
+sasl:
+  enabledMechanisms: PLAIN,SCRAM-SHA-256,SCRAM-SHA-512
+  client:
+    users: ["$sasl.client.user"]
+    passwords: "$sasl.client.password"
+
+service:
+  type: ClusterIP
+  ports:
+    client: 9092
+
+metrics:
+  jmx:
+    enabled: false
+```
+
+## kafka-ui/1.5.1
+
+kafka ui 카탈로그:
+
+```yaml
+image:
+  registry: ghcr.io
+  repository: kafbat/kafka-ui
+  pullPolicy: IfNotPresent
+yamlApplicationConfig:
+  kafka:
+    clusters:
+    - name: kafka-cluster
+      bootstrapServers: SASL_PLAINTEXT://$kafka_cluster_namespace.$kafka_cluster_namespace.svc.cluster.local:9092
+      properties:
+        security.protocol: SASL_PLAINTEXT
+        sasl.mechanism: SCRAM-SHA-512        
+        sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="$yamlApplicationConfig.username" password="$yamlApplicationConfig.password";
+  auth:
+    type: disable
+  management:
+    health:
+      ldap:
+        enabled: false
+
+env:
+  - name: SERVER_MAX_HTTP_HEADER_SIZE
+    value: "32768"        
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "root-ca-issuer"
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+    kubernetes.io/ingress.class: kong
+    konghq.com/protocols: https
+    konghq.com/https-redirect-status-code: "301"
+    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
+  host: "{{ .Name }}.{{ .Domain }}"
+  tls:
+    enabled: true
+    secretName: "{{ .Name }}-tls-secret"
+```
