@@ -1989,7 +1989,7 @@ yamlApplicationConfig:
         enabled: false
 
 env:
-  - name: SERVER_MAX_HTTP_HEADER_SIZE
+  - name: SERVER_MAX_HTTP_REQUEST_HEADER_SIZE
     value: "32768"        
 
 ingress:
