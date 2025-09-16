@@ -1214,8 +1214,13 @@ postgresql:
   username: postgres
   existingSecret: "$INFISICAL_SECRET"
 
-  maxConnections: "100"
-  sharedPreloadLibraries: "repmgr, pgaudit, pg_stat_statements"
+  maxConnections: "200"
+  sharedPreloadLibraries: "repmgr, pgaudit, pg_stat_statements, pgoutput"
+
+  extendedConf: |-
+    wal_level = logical
+    max_replication_slots = 4
+    max_wal_senders = 4  
 
   replicaCount: 1
 
@@ -2006,4 +2011,89 @@ ingress:
   tls:
     enabled: true
     secretName: "{{ .Name }}-tls-secret"
+```
+
+## kafka-connect/1.0.0
+
+kafka connect 카탈로그:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: "{{ .Name }}"
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: kafka
+  annotations:
+    strimzi.io/use-connector-resources: 'true'
+spec:
+  image: paasup/kafka-connect:0.1
+  replicas: 1
+  bootstrapServers: "$kafka_cluster_namespace.$kafka_cluster_namespace.svc.cluster.local:9092"
+  config:
+    group.id: connect-cluster
+    offset.storage.topic: connect-offsets
+    config.storage.topic: connect-configs
+    status.storage.topic: connect-status
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    plugin.path: /opt/kafka/plugins
+  authentication: 
+    type: plain
+    username: $authentication.username
+    passwordSecret:
+        secretName: "$INFISICAL_SECRET"  
+        password: password
+  logging:
+    type: inline
+    loggers:
+      rootLogger.level: INFO
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: debezium-postgres-source
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 1
+  config:
+    database.hostname: "$database.host"
+    database.port: "5432"
+    database.user: "$database.user"
+    database.password: "$database.password"
+    database.dbname: "$database.db"
+    table.include.list: "$database.table.include"
+    plugin.name: pgoutput
+    slot.name: debezium_slot
+    publication.autocreate.mode: filtered
+    topic.prefix: pg    
+    
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: s3-sink
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+spec:
+  class: io.confluent.connect.s3.S3SinkConnector
+  tasksMax: 1
+  config:
+    topics: "$config.topics"
+    store.url: "$s3.url"
+    s3.region: us-east-1
+    aws.access.key.id: "$s3.accesskey"
+    aws.secret.access.key: "$s3.secretkey"
+    s3.bucket.name: "$s3.bucket"
+    s3.part.size: 5242880
+    flush.size: 3
+    format.class: io.confluent.connect.s3.format.json.JsonFormat
+    storage.class: io.confluent.connect.s3.storage.S3Storage
+    schema.compatibility: NONE
 ```
