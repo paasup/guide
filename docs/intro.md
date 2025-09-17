@@ -1817,8 +1817,11 @@ starrocksFESpec:
     type: ClusterIP
   resources:
     requests:
-      cpu: 1
+      cpu: 300m
       memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 4Gi  
   storageSpec:
     name: fe
     storageClassName: "longhorn"
@@ -1849,8 +1852,11 @@ starrocksCnSpec:
   runAsNonRoot: "false"
   resources:
     requests:
-      cpu: 1
+      cpu: 300m
       memory: 2Gi
+    limits:
+      cpu: 2
+      memory: 4Gi  
   storageSpec:
     name: be 
     storageClassName: "longhorn"
