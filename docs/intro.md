@@ -2102,4 +2102,10 @@ spec:
     format.class: io.confluent.connect.s3.format.json.JsonFormat
     storage.class: io.confluent.connect.s3.storage.S3Storage
     schema.compatibility: NONE
+
+{{if .ShowIf}}
+{{if eq (index .ShowIf "$test1") "true"}}
+---
+{{end}}
+{{end}}
 ```
