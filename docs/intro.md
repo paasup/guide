@@ -2323,7 +2323,7 @@ spec:
     database.dbname: "$database.db"
     table.include.list: "$database.table.include"
     plugin.name: pgoutput
-    slot.name: "{{ .Name }}_debezium_slot"
+    slot.name: "{{ replaceDot .Name }}_debezium_slot"
     publication.autocreate.mode: filtered
     topic.prefix: "{{ .ClusterProjectName }}"
     producer.override.security.protocol: "SASL_PLAINTEXT"
