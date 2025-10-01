@@ -2019,64 +2019,6 @@ ingress:
     secretName: "{{ .Name }}-tls-secret"
 ```
 
-## kafka-connector/1.0.0
-
-kafka connector 카탈로그:
-
-```yaml
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaConnector
-metadata:
-  name: debezium-postgres-source
-  namespace: $kafka_cluster_namespace
-  labels:
-    strimzi.io/cluster: "{{ .Name }}"
-spec:
-  class: io.debezium.connector.postgresql.PostgresConnector
-  tasksMax: 1
-  config:
-    database.hostname: "$database.host"
-    database.port: "5432"
-    database.user: "$database.user"
-    database.password: "$database.password"
-    database.dbname: "$database.db"
-    table.include.list: "$database.table.include"
-    plugin.name: pgoutput
-    slot.name: debezium_slot
-    publication.autocreate.mode: filtered
-    topic.prefix: pg    
-    
----
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaConnector
-metadata:
-  name: s3-sink
-  namespace: $kafka_cluster_namespace
-  labels:
-    strimzi.io/cluster: "{{ .Name }}"
-spec:
-  class: io.confluent.connect.s3.S3SinkConnector
-  tasksMax: 1
-  config:
-    topics: "$config.topics"
-    store.url: "$s3.url"
-    s3.region: us-east-1
-    aws.access.key.id: "$s3.accesskey"
-    aws.secret.access.key: "$s3.secretkey"
-    s3.bucket.name: "$s3.bucket"
-    s3.part.size: 5242880
-    flush.size: 3
-    format.class: io.confluent.connect.s3.format.json.JsonFormat
-    storage.class: io.confluent.connect.s3.storage.S3Storage
-    schema.compatibility: NONE
-
-{{if .ShowIf}}
-{{if eq (index .ShowIf "$test1") "true"}}
----
-{{end}}
-{{end}}
-```
-
 ## kafka-cluster/1.0.0
 
 kafka cluster 카탈로그:
@@ -2192,7 +2134,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: 'true'
 spec:
-  image: paasup/kafka-connect:0.2
+  image: paasup/kafka-connect:0.1
   replicas: 1
   bootstrapServers: "kafka-cluster-kafka-tls-bootstrap.{{ .Namespace }}.svc.cluster.local:9093"
   config:
@@ -2247,7 +2189,7 @@ spec:
         operations:
           - Read
           - Write
-          - Describe
+          - Describe     
 
 ---
 apiVersion: kafka.strimzi.io/v1beta2
@@ -2309,7 +2251,7 @@ kafka user 카탈로그:
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
-  name: service-account-$kafka_cluster_namespace-common
+  name: "service-account-kafka-{{ .Name }}-common"
   labels:
     strimzi.io/cluster: $kafka_cluster_namespace
 spec:
@@ -2334,6 +2276,7 @@ spec:
           - Write
           - Describe
 
+{{- $clusterCatalog := . -}}
 {{range index .QuestionsMap "$topicName"}}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
@@ -2341,15 +2284,92 @@ kind: KafkaTopic
 metadata:
   labels:
     strimzi.io/cluster: $kafka_cluster_namespace
-  name: "{{ .Name }}"
+  name: "{{replaceDot .}}"
   namespace: $kafka_cluster_namespace
 spec:
   partitions: 1
   replicas: 3
-  topicName: "{{.}}"
+  topicName: "{{ $clusterCatalog.ClusterProjectName }}.{{.}}"
   config:
     cleanup.policy: compact
     retention.ms: 604800000
     segment.bytes: 1073741824
+{{end}}
+```
+
+## kafka-connector/1.0.0
+
+kafka connector 카탈로그:
+
+```yaml
+{{if .ShowIf}}
+{{if eq (index .ShowIf "postgresql.source") "true"}}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: "{{ .Name }}-kafka-postgresql"
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 1
+  config:
+    database.hostname: "$database.host"
+    database.port: "5432"
+    database.user: "$database.user"
+    database.password: "$database.password"
+    database.dbname: "$database.db"
+    table.include.list: "$database.table.include"
+    plugin.name: pgoutput
+    slot.name: "{{ .Name }}_debezium_slot"
+    publication.autocreate.mode: filtered
+    topic.prefix: "{{ .ClusterProjectName }}"
+    producer.override.security.protocol: "SASL_PLAINTEXT"
+    producer.override.sasl.mechanism: "OAUTHBEARER"
+    producer.override.sasl.jaas.config: |
+      org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
+        oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
+        oauth.client.id="{{ .ClusterName }}-kafka-$kafka_name-common"
+        oauth.client.secret="$KAFKA_SECRET"
+        oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
+        oauth.ssl.truststore.password="changeit";
+{{end}}
+
+{{if eq (index .ShowIf "s3.target") "true"}}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: "{{ .Name }}-kafka-s3"
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+spec:
+  class: io.confluent.connect.s3.S3SinkConnector
+  tasksMax: 1
+  config:
+    topics: "{{ .ClusterProjectName }}.$config.topics"
+    store.url: "$s3.url"
+    s3.region: us-east-1
+    aws.access.key.id: "$s3.accesskey"
+    aws.secret.access.key: "$s3.secretkey"
+    s3.bucket.name: "$s3.bucket"
+    s3.part.size: 5242880
+    flush.size: 3
+    format.class: io.confluent.connect.s3.format.json.JsonFormat
+    storage.class: io.confluent.connect.s3.storage.S3Storage
+    schema.compatibility: NONE
+    consumer.override.security.protocol: "SASL_PLAINTEXT"
+    consumer.override.sasl.mechanism: "OAUTHBEARER"
+    consumer.override.sasl.jaas.config: |
+      org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
+        oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
+        oauth.client.id="{{ .ClusterName }}-kafka-$kafka_name-common"
+        oauth.client.secret="$KAFKA_SECRET"
+        oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
+        oauth.ssl.truststore.password="changeit";    
+{{end}}
 {{end}}
 ```
