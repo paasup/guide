@@ -1907,7 +1907,7 @@ extraEnvs: []
 
 ## kafka/32.4.3
 
-kafka 카탈로그:
+kafka helm 카탈로그:
 
 ```yaml
 global:
@@ -2019,44 +2019,11 @@ ingress:
     secretName: "{{ .Name }}-tls-secret"
 ```
 
-## kafka-connect/1.0.0
+## kafka-connector/1.0.0
 
-kafka connect 카탈로그:
+kafka connector 카탈로그:
 
 ```yaml
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaConnect
-metadata:
-  name: "{{ .Name }}"
-  namespace: $kafka_cluster_namespace
-  labels:
-    strimzi.io/cluster: kafka
-  annotations:
-    strimzi.io/use-connector-resources: 'true'
-spec:
-  image: paasup/kafka-connect:0.1
-  replicas: 1
-  bootstrapServers: "$kafka_cluster_namespace.$kafka_cluster_namespace.svc.cluster.local:9092"
-  config:
-    group.id: connect-cluster
-    offset.storage.topic: connect-offsets
-    config.storage.topic: connect-configs
-    status.storage.topic: connect-status
-    key.converter: org.apache.kafka.connect.json.JsonConverter
-    value.converter: org.apache.kafka.connect.json.JsonConverter
-    plugin.path: /opt/kafka/plugins
-  authentication: 
-    type: plain
-    username: $authentication.username
-    passwordSecret:
-        secretName: "$INFISICAL_SECRET"  
-        password: password
-  logging:
-    type: inline
-    loggers:
-      rootLogger.level: INFO
-
----
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaConnector
 metadata:
@@ -2107,5 +2074,282 @@ spec:
 {{if eq (index .ShowIf "$test1") "true"}}
 ---
 {{end}}
+{{end}}
+```
+
+## kafka-cluster/1.0.0
+
+kafka cluster 카탈로그:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: controller
+  namespace: "{{ .Namespace }}"
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+spec:
+  replicas: 3
+  roles:
+    - controller
+  storage:
+    type: jbod
+    volumes:
+      - id: 0
+        type: persistent-claim
+        size: 5Gi
+        kraftMetadata: shared
+        class: longhorn
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: broker
+  namespace: "{{ .Namespace }}"
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+spec:
+  replicas: 3
+  roles:
+    - broker
+  storage:
+    type: jbod
+    volumes:
+      - id: 0
+        type: persistent-claim
+        size: 5Gi
+        class: longhorn
+        kraftMetadata: shared
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: "{{ .Name }}"
+  namespace: "{{ .Namespace }}"
+  annotations:
+    strimzi.io/node-pools: enabled
+    strimzi.io/kraft: enabled
+spec:
+  kafka:
+    version: 4.0.0
+    metadataVersion: "4.0"
+    template:
+      kafkaContainer:
+        env:
+        - name: KAFKA_OPTS
+          value: "-Duser.timezone=Asia/Seoul"
+    listeners:
+      - name: tls
+        type: cluster-ip
+        port: 9093
+        tls: false
+        authentication:
+          type: oauth
+          clientId: "$KEYCLOAK_CLIENT_ID"
+          clientSecret:
+            key: client-secret
+            secretName: kafka-cluster-oauth-secret
+          checkIssuer: true
+          checkAccessTokenType: true
+          accessTokenIsJwt: true
+          checkAudience: false
+          enableOauthBearer: true
+          validIssuerUri: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM
+          jwksEndpointUri: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/certs
+          userNameClaim: preferred_username
+          customClaimCheck: '''$KEYCLOAK_CLIENT_ID'' in @.realm_access.roles'
+          tlsTrustedCertificates:
+            - secretName: keycloak-tls
+              certificate: ca.crt
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      auto.create.topics.enable: false
+      num.partitions: 3
+      delete.topic.enable: true
+    authorization:
+      type: simple
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: INFO
+  entityOperator:
+    topicOperator: { }
+    userOperator: { }
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: "{{ .Name }}"
+  namespace: "{{ .Namespace }}"
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+  annotations:
+    strimzi.io/use-connector-resources: 'true'
+spec:
+  image: paasup/kafka-connect:0.2
+  replicas: 1
+  bootstrapServers: "kafka-cluster-kafka-tls-bootstrap.{{ .Namespace }}.svc.cluster.local:9093"
+  config:
+    group.id: "{{ .Name }}-default-connect"
+    offset.storage.topic: "{{ .Name }}.connect-offsets"
+    config.storage.topic: "{{ .Name }}.connect-configs"
+    status.storage.topic: "{{ .Name }}.connect-status"
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    plugin.path: /opt/kafka/plugins
+    topic.creation.enable: "true"
+  authentication:
+    type: oauth
+    tokenEndpointUri: $KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token
+    clientId: "$KEYCLOAK_CLIENT_ID-kafka-connect"
+    clientSecret:
+      secretName: kafka-connect-oauth-secret
+      key: client-secret
+    tlsTrustedCertificates:
+      - secretName: keycloak-tls
+        pattern: "ca.crt"
+  logging:
+    type: inline
+    loggers:
+      rootLogger.level: INFO
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: service-account-$KEYCLOAK_CLIENT_ID-kafka-connect
+  namespace: "{{ .Namespace }}"
+  labels:
+    strimzi.io/cluster: "{{ .Name }}"
+spec:
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: "*"
+          patternType: literal
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+      - resource:
+          type: group
+          name: "*"
+          patternType: literal
+        operations:
+          - Read
+          - Write
+          - Describe
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: kafka-cluster
+  name: "{{ .Name }}-connect-offsets"
+  namespace: "{{ .Namespace }}"
+spec:
+  partitions: 1
+  replicas: 3
+  topicName: "{{ .Name }}.connect-offsets"
+  config:
+    cleanup.policy: compact
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: kafka-cluster
+  name: "{{ .Name }}-connect-configs"
+  namespace: "{{ .Namespace }}"
+spec:
+  partitions: 1
+  replicas: 3
+  topicName: "{{ .Name }}.connect-configs"
+  config:
+    cleanup.policy: compact
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: kafka-cluster
+  name: "{{ .Name }}-connect-status"
+  namespace: "{{ .Namespace }}"
+spec:
+  partitions: 1
+  replicas: 3
+  topicName: "{{ .Name }}.connect-status"
+  config:
+    cleanup.policy: compact
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+```
+
+## kafka/1.0.0
+
+kafka user 카탈로그:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: service-account-$kafka_cluster_namespace-common
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+spec:
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: "{{ .ClusterProjectName }}."
+          patternType: prefix
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+      - resource:
+          type: group
+          name: "{{ .ClusterProjectName }}-"
+          patternType: prefix
+        operations:
+          - Read
+          - Write
+          - Describe
+
+{{range index .QuestionsMap "$topicName"}}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+  name: "{{ .Name }}"
+  namespace: $kafka_cluster_namespace
+spec:
+  partitions: 1
+  replicas: 3
+  topicName: "{{.}}"
+  config:
+    cleanup.policy: compact
+    retention.ms: 604800000
+    segment.bytes: 1073741824
 {{end}}
 ```
