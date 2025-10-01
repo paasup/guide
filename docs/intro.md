@@ -2331,8 +2331,8 @@ spec:
     producer.override.sasl.jaas.config: |
       org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
         oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
-        oauth.client.id="{{ .ClusterName }}-kafka-$kafka_name-common"
-        oauth.client.secret="$KAFKA_SECRET"
+        oauth.client.id="$KAFKA_CLIENT_ID"
+        oauth.client.secret="$KAFKA_CLIENT_SECRET"
         oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
         oauth.ssl.truststore.password="changeit";
 {{end}}
@@ -2366,8 +2366,8 @@ spec:
     consumer.override.sasl.jaas.config: |
       org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
         oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token"
-        oauth.client.id="{{ .ClusterName }}-kafka-$kafka_name-common"
-        oauth.client.secret="$KAFKA_SECRET"
+        oauth.client.id="$KAFKA_CLIENT_ID"
+        oauth.client.secret="$KAFKA_CLIENT_SECRET"
         oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
         oauth.ssl.truststore.password="changeit";    
 {{end}}
