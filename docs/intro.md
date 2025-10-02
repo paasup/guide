@@ -2219,6 +2219,36 @@ spec:
 
 ---
 apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: "service-account-{{ .Namespace }}-kafka-ui"
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: "{{ .Namespace }}"
+spec:
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: "*"
+          patternType: literal
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+      - resource:
+          type: group
+          name: "*"
+          patternType: literal
+        operations:
+          - Read
+          - Write
+          - Describe
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
   labels:
