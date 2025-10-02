@@ -2102,7 +2102,7 @@ spec:
           userNameClaim: preferred_username
           customClaimCheck: '''$KEYCLOAK_CLIENT_ID'' in @.realm_access.roles'
           tlsTrustedCertificates:
-            - secretName: keycloak-tls
+            - secretName: root-ca-secret
               certificate: ca.crt
     config:
       offsets.topic.replication.factor: 3
@@ -2154,7 +2154,7 @@ spec:
       secretName: kafka-connect-oauth-secret
       key: client-secret
     tlsTrustedCertificates:
-      - secretName: keycloak-tls
+      - secretName: root-ca-secret
         pattern: "ca.crt"
   logging:
     type: inline
@@ -2251,7 +2251,7 @@ kafka user 카탈로그:
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
-  name: "service-account-kafka-{{ .Name }}-common"
+  name: "service-account-{{ .ClusterName }}-$kafka_cluster_namespace-common"
   labels:
     strimzi.io/cluster: $kafka_cluster_namespace
 spec:
