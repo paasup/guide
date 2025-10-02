@@ -1980,8 +1980,9 @@ kafka ui 카탈로그:
 
 ```yaml
 image:
-  registry: ghcr.io
-  repository: kafbat/kafka-ui
+  registry: docker.io
+  repository: wbsong111/kafka-ui
+  tag: "v1.3.0"
   pullPolicy: IfNotPresent
 yamlApplicationConfig:
   kafka:
@@ -1990,10 +1991,30 @@ yamlApplicationConfig:
       bootstrapServers: SASL_PLAINTEXT://$kafka_cluster_namespace.$kafka_cluster_namespace.svc.cluster.local:9092
       properties:
         security.protocol: SASL_PLAINTEXT
-        sasl.mechanism: SCRAM-SHA-512        
-        sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="$yamlApplicationConfig.username" password="$yamlApplicationConfig.password";
+        sasl.mechanism: OAUTHBEARER
+        sasl.jaas.config: |
+          org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required 
+          oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token" 
+          oauth.client.id="$KEYCLOAK_CLIENT_ID" 
+          oauth.client.secret="$KEYCLOAK_CLIENT_SECRET"
+          oauth.ssl.truststore.location="/etc/kafka/secrets/truststore.jks"
+          oauth.ssl.truststore.password="kafka";
+        sasl.login.callback.handler.class: "io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler"
   auth:
-    type: disable
+    type: OAUTH2
+    oauth2:
+      client:
+        keycloak:
+          clientId: $KEYCLOAK_CLIENT_ID
+          clientSecret: $KEYCLOAK_CLIENT_SECRET
+          client-name: keycloak
+          provider: kecloak
+          scope: openid
+          issuer-uri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
+          user-name-attribute: preferred_username
+          custom-params:
+            type: oauth 
+            roles-field: realm_roles
   management:
     health:
       ldap:
@@ -2001,7 +2022,12 @@ yamlApplicationConfig:
 
 env:
   - name: SERVER_MAX_HTTP_REQUEST_HEADER_SIZE
-    value: "32768"        
+    value: "32768" 
+
+envs:
+  config:
+    JAVA_OPTS: "-Djavax.net.ssl.trustStore=/etc/kafka/secrets/truststore.jks -Djavax.net.ssl.trustStorePassword=kafka"
+        
 
 ingress:
   enabled: true
