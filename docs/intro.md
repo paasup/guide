@@ -1988,46 +1988,35 @@ yamlApplicationConfig:
   kafka:
     clusters:
     - name: kafka-cluster
-      bootstrapServers: SASL_PLAINTEXT://$kafka_cluster_namespace.$kafka_cluster_namespace.svc.cluster.local:9092
+      bootstrapServers: SASL_PLAINTEXT://kafka-cluster-kafka-tls-bootstrap.$kafka_cluster_namespace.svc.cluster.local:9093
       properties:
         security.protocol: SASL_PLAINTEXT
         sasl.mechanism: OAUTHBEARER
         sasl.jaas.config: |
           org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required 
           oauth.token.endpoint.uri="$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token" 
-          oauth.client.id="$KEYCLOAK_CLIENT_ID" 
-          oauth.client.secret="$KEYCLOAK_CLIENT_SECRET"
+          oauth.client.id="$KAFKA_CLIENT_ID" 
+          oauth.client.secret="$KAFKA_CLIENT_SECRET"
           oauth.ssl.truststore.location="/etc/kafka/secrets/truststore.jks"
           oauth.ssl.truststore.password="kafka";
         sasl.login.callback.handler.class: "io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler"
   auth:
-    type: OAUTH2
-    oauth2:
-      client:
-        keycloak:
-          clientId: $KEYCLOAK_CLIENT_ID
-          clientSecret: $KEYCLOAK_CLIENT_SECRET
-          client-name: keycloak
-          provider: kecloak
-          scope: openid
-          issuer-uri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
-          user-name-attribute: preferred_username
-          custom-params:
-            type: oauth 
-            roles-field: realm_roles
+    type: disabled
+
   management:
     health:
       ldap:
         enabled: false
 
-env:
-  - name: SERVER_MAX_HTTP_REQUEST_HEADER_SIZE
-    value: "32768" 
+volumes:
+  - name: truststore
+    secret:
+      secretName: truststore
 
-envs:
-  config:
-    JAVA_OPTS: "-Djavax.net.ssl.trustStore=/etc/kafka/secrets/truststore.jks -Djavax.net.ssl.trustStorePassword=kafka"
-        
+volumeMounts:
+  - name: truststore
+    mountPath: /etc/kafka/secrets
+    readOnly: true 
 
 ingress:
   enabled: true
@@ -2036,9 +2025,6 @@ ingress:
     cert-manager.io/duration: 8760h
     cert-manager.io/renew-before: 720h
     kubernetes.io/ingress.class: kong
-    konghq.com/protocols: https
-    konghq.com/https-redirect-status-code: "301"
-    konghq.com/plugins: oidc-plugin, keycloak-authz-plugin
   host: "{{ .Name }}.{{ .Domain }}"
   tls:
     enabled: true
@@ -2128,7 +2114,7 @@ spec:
           userNameClaim: preferred_username
           customClaimCheck: '''$KEYCLOAK_CLIENT_ID'' in @.realm_access.roles'
           tlsTrustedCertificates:
-            - secretName: root-ca-secret
+            - secretName: keycloak-tls
               certificate: ca.crt
     config:
       offsets.topic.replication.factor: 3
@@ -2180,7 +2166,7 @@ spec:
       secretName: kafka-connect-oauth-secret
       key: client-secret
     tlsTrustedCertificates:
-      - secretName: root-ca-secret
+      - secretName: keycloak-tls
         pattern: "ca.crt"
   logging:
     type: inline
