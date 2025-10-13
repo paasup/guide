@@ -2168,6 +2168,20 @@ spec:
     tlsTrustedCertificates:
       - secretName: keycloak-tls
         pattern: "ca.crt"
+
+  template:
+    connectContainer:
+      volumeMounts:
+        - name: truststore-volume
+          mountPath: /mnt/truststore/truststore.jks
+          subPath: truststore.jks
+          readOnly: true
+    pod:
+      volumes:
+        - name: truststore-volume
+          secret:
+            secretName: truststore
+
   logging:
     type: inline
     loggers:
@@ -2376,7 +2390,7 @@ spec:
         oauth.client.id="$KAFKA_CLIENT_ID"
         oauth.client.secret="$KAFKA_CLIENT_SECRET"
         oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
-        oauth.ssl.truststore.password="changeit";
+        oauth.ssl.truststore.password="kafka";
 {{end}}
 
 {{if eq (index .ShowIf "s3.target") "true"}}
@@ -2411,7 +2425,7 @@ spec:
         oauth.client.id="$KAFKA_CLIENT_ID"
         oauth.client.secret="$KAFKA_CLIENT_SECRET"
         oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
-        oauth.ssl.truststore.password="changeit";    
+        oauth.ssl.truststore.password="kafka";    
 {{end}}
 {{end}}
 ```
