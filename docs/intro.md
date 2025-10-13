@@ -2222,7 +2222,7 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
   name: "service-account-{{ .Namespace }}-kafka-ui"
-  namespace: kafka
+  namespace: "{{ .Namespace }}"
   labels:
     strimzi.io/cluster: "{{ .Namespace }}"
 spec:
