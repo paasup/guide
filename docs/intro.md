@@ -2247,13 +2247,13 @@ metadata:
   name: "{{replaceDotToHypen .}}"
   namespace: $kafka_cluster_namespace
 spec:
-  partitions: 1
+  partitions: "$topic.partition"
   replicas: 3
   topicName: "{{ $clusterCatalog.ClusterProjectName }}.{{.}}"
   config:
     cleanup.policy: compact
-    retention.ms: 604800000
-    segment.bytes: 1073741824
+    retention.bytes: "$topic.retention"
+    segment.bytes: "$topic.segment"
 {{end}}
 ```
 
@@ -2330,6 +2330,34 @@ spec:
         oauth.client.secret="$KAFKA_CLIENT_SECRET"
         oauth.ssl.truststore.location="/mnt/truststore/truststore.jks" 
         oauth.ssl.truststore.password="kafka";    
+{{end}}
+
+{{if eq (index .ShowIf "starrocks.target") "true"}}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: "{{ .Name }}-kafka-starrocks"
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+spec:
+  class: com.starrocks.connector.kafka.StarRocksSingConnector
+  tasksMax: 6
+  config:
+    topics: "{{ .ClusterProjectName }}.$star.config.topics"
+    starrocks.http.url: kube-starrocks-fe-service.{{.ClusterProjectName}}.svc.cluster.local:8030
+    starrocks.database.name: "$star.database.name"
+    starrocks.username: "$star.username"
+    starrocks.password: "$star.password"
+    sink.properties.strip_outer_array: true
+    connect.timeoutms: "30000"
+    starrocks.topic2table.map: "$star.topic2table"
+    transforms: addfield,unwrap
+    tarnsforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForkDebeziumRecord
+    transform.unwrap.type: io.debezium.transforms.ExtractNewRecordState
+    transform.unwarp.drop.tombstones: true
+    transforms.unwarp.delete.handling.mode: rewrite 
 {{end}}
 {{end}}
 ```
