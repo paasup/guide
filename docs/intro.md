@@ -2283,6 +2283,7 @@ spec:
     database.dbname: "$database.db"
     table.include.list: "$database.table.include"
     plugin.name: pgoutput
+    snapshot.mode: "initial"
     slot.name: "$database.slot"
     publication.autocreate.mode: filtered
     topic.prefix: "{{ .ClusterProjectName }}"
