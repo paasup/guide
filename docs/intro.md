@@ -2247,7 +2247,7 @@ metadata:
   name: "{{replaceDotUnderToHypen .}}"
   namespace: $kafka_cluster_namespace
 spec:
-  partitions: "$topic.partition"
+  partitions: $topic.partition
   replicas: 3
   topicName: "{{ $clusterCatalog.ClusterProjectName }}.{{.}}"
   config:
