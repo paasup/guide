@@ -2244,7 +2244,7 @@ kind: KafkaTopic
 metadata:
   labels:
     strimzi.io/cluster: $kafka_cluster_namespace
-  name: "{{replaceDotToHypen .}}"
+  name: "{{replaceDotUnderToHypen .}}"
   namespace: $kafka_cluster_namespace
 spec:
   partitions: "$topic.partition"
