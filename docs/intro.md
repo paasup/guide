@@ -2283,7 +2283,7 @@ spec:
     database.dbname: "$database.db"
     table.include.list: "$database.table.include"
     plugin.name: pgoutput
-    slot.name: "{{ replaceHypenToUnder .Name }}_debezium_slot"
+    slot.name: "$database.slot"
     publication.autocreate.mode: filtered
     topic.prefix: "{{ .ClusterProjectName }}"
     producer.override.security.protocol: "SASL_PLAINTEXT"
