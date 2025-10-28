@@ -2333,7 +2333,7 @@ spec:
         oauth.ssl.truststore.password="kafka";    
 {{end}}
 
-{{if eq (index .ShowIf "starrocks.target") "true"}}
+{{if eq (index .ShowIf "star.target") "true"}}
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaConnector
