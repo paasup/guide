@@ -2343,7 +2343,7 @@ metadata:
   labels:
     strimzi.io/cluster: $kafka_cluster_namespace
 spec:
-  class: com.starrocks.connector.kafka.StarRocksSingConnector
+  class: com.starrocks.connector.kafka.StarRocksSinkConnector
   tasksMax: 6
   config:
     topics: "{{ .ClusterProjectName }}.$star.config.topics"
