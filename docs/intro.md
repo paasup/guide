@@ -2355,7 +2355,7 @@ spec:
     connect.timeoutms: "30000"
     starrocks.topic2table.map: "$star.topic2table"
     transforms: addfield,unwrap
-    tarnsforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForDebeziumRecord
+    transforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForDebeziumRecord
     transforms.unwrap.type: io.debezium.transforms.ExtractNewRecordState
     transforms.unwarp.drop.tombstones: true
     transforms.unwarp.delete.handling.mode: rewrite 
