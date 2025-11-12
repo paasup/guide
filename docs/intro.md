@@ -2274,7 +2274,7 @@ metadata:
     strimzi.io/cluster: $kafka_cluster_namespace
 spec:
   class: io.debezium.connector.postgresql.PostgresConnector
-  tasksMax: 1
+  tasksMax: 6
   config:
     database.hostname: "$database.host"
     database.port: "5432"
@@ -2309,7 +2309,7 @@ metadata:
     strimzi.io/cluster: $kafka_cluster_namespace
 spec:
   class: io.confluent.connect.s3.S3SinkConnector
-  tasksMax: 1
+  tasksMax: 6
   config:
     topics: "{{ .ClusterProjectName }}.$config.topics"
     store.url: "$s3.url"
