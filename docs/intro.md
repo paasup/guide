@@ -2080,7 +2080,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: 'true'
 spec:
-  image: paasup/kafka-connect:0.1
+  image: paasup/kafka-connect:0.2
   replicas: 1
   bootstrapServers: "kafka-cluster-kafka-tls-bootstrap.{{ .Namespace }}.svc.cluster.local:9093"
   config:
@@ -2347,7 +2347,7 @@ spec:
   tasksMax: 6
   config:
     topics: "{{ .ClusterProjectName }}.$star.config.topics"
-    starrocks.http.url: kube-starrocks-fe-service.{{.ClusterProjectName}}.svc.cluster.local:8030
+    starrocks.http.url: kube-starrocks-fe-service.$star.namespace.svc.cluster.local:8030
     starrocks.database.name: "$star.database.name"
     starrocks.username: "$star.username"
     starrocks.password: "$star.password"
@@ -2355,10 +2355,37 @@ spec:
     connect.timeoutms: "30000"
     starrocks.topic2table.map: "$star.topic2table"
     transforms: addfield,unwrap
-    tarnsforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForkDebeziumRecord
+    tarnsforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForDebeziumRecord
     transform.unwrap.type: io.debezium.transforms.ExtractNewRecordState
     transform.unwarp.drop.tombstones: true
     transforms.unwarp.delete.handling.mode: rewrite 
+{{end}}
+
+{{if eq (index .ShowIf "starjson.target") "true"}}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: "{{ .Name }}-kafka-starrocks"
+  namespace: $kafka_cluster_namespace
+  labels:
+    strimzi.io/cluster: $kafka_cluster_namespace
+spec:
+  class: com.starrocks.connector.kafka.StarRocksSinkConnector
+  tasksMax: 6
+  config:
+    topics: "{{ .ClusterProjectName }}.$starjson.config.topics"
+    starrocks.http.url: kube-starrocks-fe-service.$starjson.namespace.svc.cluster.local:8030
+    starrocks.database.name: "$starjson.database.name"
+    starrocks.username: "$starjson.username"
+    starrocks.password: "$starjson.password"
+    sink.properties.strip_outer_array: true
+    connect.timeoutms: "30000"
+    starrocks.topic2table.map: "$starjson.topic2table"
+    key.converter: "org.apache.kafka.connect.json.JsonConverter"
+    value.converter: "org.apache.kafka.connect.json.JsonConverter"
+    key.converter.schemas.enable: "true"
+    value.converter.schemas.enable: "false"
 {{end}}
 {{end}}
 ```
