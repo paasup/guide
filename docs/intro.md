@@ -2356,8 +2356,8 @@ spec:
     starrocks.topic2table.map: "$star.topic2table"
     transforms: addfield,unwrap
     tarnsforms.addfield.type: com.starrocks.connector.kafka.transforms.AddOpFieldForDebeziumRecord
-    transform.unwrap.type: io.debezium.transforms.ExtractNewRecordState
-    transform.unwarp.drop.tombstones: true
+    transforms.unwrap.type: io.debezium.transforms.ExtractNewRecordState
+    transforms.unwarp.drop.tombstones: true
     transforms.unwarp.delete.handling.mode: rewrite 
 {{end}}
 
