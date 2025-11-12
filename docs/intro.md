@@ -1986,7 +1986,7 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: 5Gi
+        size: 50Gi
         kraftMetadata: shared
         class: longhorn
 ---
@@ -2006,7 +2006,7 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: 5Gi
+        size: 50Gi
         class: longhorn
         kraftMetadata: shared
 ---
