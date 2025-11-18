@@ -802,10 +802,10 @@ dip:
 ```yaml
 # small
 resources:
-  limits:
+  requests:
     cpu: 1000m
     memory: 2Gi
-  requests:
+  limits:
     cpu: 2000m
     memory: 4Gi
 
@@ -815,10 +815,10 @@ persistence:
 
 # medium
 resources:
-  limits:
+  requests:
     cpu: 2000m
     memory: 4Gi
-  requests:
+  limits:
     cpu: 4000m
     memory: 8Gi
 
@@ -828,10 +828,10 @@ persistence:
 
 # large
 resources:
-  limits:
+  requests:
     cpu: 4000m
     memory: 8Gi
-  requests:
+  limits:
     cpu: 8000m
     memory: 16Gi
 
