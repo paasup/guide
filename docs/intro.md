@@ -129,10 +129,6 @@ Gitea 일반 카탈로그:
 
 DB 내장
 
-아래 항목은 사이트에 따라 수정이 필요합니다.
-
-- password
-
 ```yaml
 global:
   imageRegistry: ""
@@ -226,6 +222,78 @@ postgresql:
     size: 5Gi
 ```
 
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+persistence:
+  size: 10Gi
+  storageClass: "longhorn"
+
+postgresql:
+  persistence:
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+persistence:
+  size: 100Gi
+  storageClass: "longhorn"
+
+postgresql:
+  persistence:
+    size: 20Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+persistence:
+  size: 500Gi
+  storageClass: "longhorn"
+
+postgresql:
+  persistence:
+    size: 100Gi
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+```
+
 ## mlflow/2.1.0-1
 
 Mlflow 카탈로그:
@@ -280,6 +348,102 @@ externalS3:
   serveArtifacts: true
 ```
 
+쿼터
+```yaml
+# small
+tracking:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi  
+run:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi   
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi     
+    persistence:
+      storageClass: ""
+      size: 5Gi
+
+# medium
+tracking:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi  
+run:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi   
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi     
+    persistence:
+      storageClass: ""
+      size: 20Gi
+
+# large
+tracking:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi  
+run:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi   
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi     
+    persistence:
+      storageClass: ""
+      size: 100Gi
+```
+
 ## kubeflow/1.10.0
 
 Kubeflow 카탈로그:
@@ -298,6 +462,18 @@ spec:
       cpu: "16"
       memory: 32Gi
       persistentvolumeclaims: "12"
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
 ```
 
 ## Rancher/2.10.1-1
@@ -342,6 +518,36 @@ extraEnv:
 preinstallHook: true
 
 newPassword: "$PASSWORD_KEY"
+```
+
+쿼터
+```yaml
+# small
+resources: 
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+
+# medium
+resources: 
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+
+# large
+resources: 
+  requests:
+    cpu: 4000m
+    memory: 8Gi
+  limits:
+    cpu: 8000m
+    memory: 16Gi
 ```
 
 ## rancher-monitoring-crd/104.1.2
@@ -417,6 +623,18 @@ rke2IngressNginx:
   enabled: true
 ```
 
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
 ## spark-operator/2.0.2
 
 spark-operator 카탈로그:
@@ -464,6 +682,66 @@ webhook:
 
 spark:
   jobNamespaces: []
+```
+
+쿼터
+```yaml
+# small
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 300Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+webhook:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
+# medium
+controller:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+webhook:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+# large
+controller:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+webhook:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
 ```
 
 ## qdrant/1.12.4
@@ -518,6 +796,48 @@ ingress:
 
 dip:
   mainPath: dashboard      
+```
+
+쿼터
+```yaml
+# small
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+
+persistence:
+  size: 10Gi
+  storageClassName: ""    
+
+# medium
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 4000m
+    memory: 8Gi
+
+persistence:
+  size: 100Gi
+  storageClassName: ""      
+
+# large
+resources:
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+  requests:
+    cpu: 8000m
+    memory: 16Gi
+
+persistence:
+  size: 1Ti
+  storageClassName: ""      
 ```
 
 ## langflow-ide/0.1.0
@@ -616,6 +936,102 @@ postgresql:
     persistence:
       size: 5Gi
       storageClass: ""
+```
+
+쿼터
+```yaml
+# small
+langflow:
+  backend:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+  frontend:
+    resources:
+      requests:
+        cpu: 300m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+postgresql:
+  primary:
+    persistence:
+      size: 5Gi
+      storageClass: "longhorn"
+    resources:
+      requests: 
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+# medium
+langflow:
+  backend:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+  frontend:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+postgresql:
+  primary:
+    persistence:
+      size: 20Gi
+      storageClass: "longhorn"
+    resources:
+      requests: 
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+# large
+langflow:
+  backend:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi
+  frontend:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+postgresql:
+  primary:
+    persistence:
+      size: 100Gi
+      storageClass: "longhorn"
+    resources:
+      requests: 
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
 ```
 
 ## superset/0.13.5-1
@@ -815,6 +1231,150 @@ redis:
       size: 8Gi
 ```
 
+쿼터
+```yaml
+# small
+supersetNode:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+supersetWorker:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 8Gi
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 8Gi
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# medium
+supersetNode:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+supersetWorker:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 50Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 20Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+# large
+supersetNode:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+supersetWorker:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 200Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 100Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1Gi
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+```
+
 ## ollama/1.12.2
 
 ollama 카탈로그:
@@ -870,6 +1430,55 @@ ingress:
     - hosts:
         - "{{ .Name }}.{{ .Domain }}"
       secretName: "{{ .Name }}-tls-secret"
+```
+
+쿼터
+```yaml
+# small
+persistentVolume:
+  enabled: true
+  size: 30Gi
+  storageClass: longhorn
+
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+
+# medium
+persistentVolume:
+  enabled: true
+  size: 100Gi
+  storageClass: longhorn
+
+resources:
+  requests:
+    cpu: 4000m
+    memory: 8Gi
+    nvidia.com/gpu: "1"
+  limits:
+    cpu: 8000m
+    memory: 16Gi
+    nvidia.com/gpu: "1"
+
+# large
+persistentVolume:
+  enabled: true
+  size: 500Gi
+  storageClass: longhorn
+
+resources:
+  requests:
+    cpu: 8000m
+    memory: 16Gi
+    nvidia.com/gpu: "2"
+  limits:
+    cpu: 16000m
+    memory: 32Gi
+    nvidia.com/gpu: "2"
 ```
 
 ## flowise/3.10.2
@@ -966,6 +1575,114 @@ redis:
   enabled: true
 ```
 
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: longhorn
+worker:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 5Gi
+    resources:
+      requests:
+        cpu: 250m 
+        memory: 512Mi
+      limits: 
+        cpu: 500m
+        memory: 1Gi
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: longhorn
+worker:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 20Gi
+    resources:
+      requests:
+        cpu: 500m 
+        memory: 1Gi
+      limits: 
+        cpu: 1000m
+        memory: 2Gi
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+persistence:
+  enabled: true
+  size: 50Gi
+  storageClass: longhorn
+worker:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 100Gi
+    resources:
+      requests:
+        cpu: 1000m 
+        memory: 2Gi
+      limits: 
+        cpu: 2000m
+        memory: 4Gi
+```
+
 ## open-webui/0.5.4
 
 open-webui 카탈로그:
@@ -1036,6 +1753,54 @@ volumes:
       secretName: keycloak-tls
 ```
 
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+persistence:
+  enabled: true
+  size: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+persistence:
+  enabled: true
+  size: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+```
+
 ## vllm/0.0.11
 
 vllm 카탈로그:
@@ -1097,6 +1862,18 @@ routerSpec:
       - secretName: "{{ .Name }}-tls-secret"
         hosts:
           - "{{ .Name }}.{{ .Domain }}"
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
 ```
 
 ## langfuse/1.0.0-rc.2-1
@@ -1202,6 +1979,216 @@ s3:
     value: "$s3.secretAccessKey.value"
 ```
 
+쿼터
+```yaml
+# small
+langfuse:
+  web:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi    
+  worker:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi     
+
+redis:
+  primary:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi     
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 10Gi
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi     
+    
+clickhouse:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi   
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: ""
+  zookeeper:
+    enabled: true
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 375m
+        memory: 384Mi
+
+# medium
+langfuse:
+  web:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi    
+  worker:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi     
+
+redis:
+  primary:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi     
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 50Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi     
+    
+clickhouse:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi   
+  persistence:
+    enabled: true
+    size: 50Gi
+    storageClass: ""
+  zookeeper:
+    enabled: true
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 750m
+        memory: 768Mi
+
+# large
+langfuse:
+  web:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi    
+  worker:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi     
+
+redis:
+  primary:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi     
+    persistence:
+      enabled: true
+      size: 100Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 200Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi     
+    
+clickhouse:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi   
+  persistence:
+    enabled: true
+    size: 500Gi
+    storageClass: ""
+  zookeeper:
+    enabled: true
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi
+```
+
 ## postgresql-ha/11.9.4-1
 
 postgresql-ha 카탈로그:
@@ -1254,6 +2241,87 @@ volumePermissions:
   enabled: true
   podSecurityContext:
     runAsUser: 0
+```
+
+쿼터
+```yaml
+# small
+postgresql:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+pgpool:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: ""
+
+# medium
+postgresql:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+pgpool:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+
+persistence:
+  enabled: true
+  size: 100Gi
+  storageClass: ""
+
+# large
+postgresql:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+
+pgpool:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+
+persistence:
+  enabled: true
+  size: 500Gi
+  storageClass: ""
 ```
 
 ## airflow/1.16.0
@@ -1352,6 +2420,201 @@ data:
   metadataSecretName: "$INFISICAL_SECRET"
 ```
 
+쿼터
+```yaml
+# small
+worker:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+webserver:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+dags:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClassName: "longhorn"
+
+logs:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: longhorn
+redis:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClassName: "longhorn"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "longhorn"
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+# medium
+worker:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 4000m
+      memory: 4Gi
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+webserver:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+dags:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: "longhorn"
+
+logs:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: longhorn
+redis:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: "longhorn"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: "longhorn"
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+# large
+worker:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 8000m
+      memory: 8Gi
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 4000m
+      memory: 4Gi
+webserver:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+dags:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: "longhorn"
+
+logs:
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClassName: longhorn
+redis:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: "longhorn"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 200Gi
+      storageClass: "longhorn"
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+```
+
 ## litellm/0.4.4
 
 litellm 카탈로그:
@@ -1381,6 +2644,75 @@ ingress:
 
 dip:
   mainPath: ui        
+```
+
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi    
+    persistence:
+      storageClass: ""
+      size: 5Gi
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi    
+    persistence:
+      storageClass: ""
+      size: 20Gi
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi    
+    persistence:
+      storageClass: ""
+      size: 100Gi
 ```
 
 ## unitycatalog/0.2.0
@@ -1467,6 +2799,93 @@ postgresql:
     storageClassName: ""
 ```
 
+쿼터
+```yaml
+# small
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: "longhorn"
+  statefulset:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi    
+postgresql:
+  primary:
+    persistence:
+      storageClassName: "longhorn"
+      size: 20Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi       
+
+# medium
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 100Gi
+      storageClassName: "longhorn"
+  statefulset:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi    
+postgresql:
+  primary:
+    persistence:
+      storageClassName: "longhorn"
+      size: 200Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi       
+
+# large
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 1Ti
+      storageClassName: "longhorn"
+  statefulset:
+    resources:
+      requests:
+        cpu: 4000m
+        memory: 8Gi
+      limits:
+        cpu: 8000m
+        memory: 16Gi    
+postgresql:
+  primary:
+    persistence:
+      storageClassName: "longhorn"
+      size: 2Ti
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi       
+```
+
 ## nemo/25.4.0
 
 nemo 카탈로그:
@@ -1551,6 +2970,633 @@ virtualService:
   enabled: false
 ```
 
+쿼터
+```yaml
+# small
+data-store:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi  
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 1Gi
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi        
+
+customizer:
+  enabled: true
+  modelsStorage:
+    enabled: true
+    size: 20Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 5Gi
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi        
+
+evaluator:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi   
+  argoWorkflows:
+    enabled: true
+    crds:
+      install: false   
+    controller:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi        
+    server:
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+  milvus:
+    standalone:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi      
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 10Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 5Gi
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi      
+
+guardrails:
+  enabled: true
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi  
+
+entity-store:
+  enabled: true
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 5Gi
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi      
+
+nemo-operator:
+  enabled: true
+  controllerManager:
+    kubeRbacProxy:
+      resources:
+        requests:
+          cpu: 5m
+          memory: 64Mi
+        limits:
+          cpu: 500m
+          memory: 128Mi
+    manager:
+      resources:
+        requests:
+          cpu: 512m
+          memory: 1Gi
+        limits:
+          cpu: 1024m
+          memory: 2Gi
+
+nim-operator:
+  enabled: true
+  operator:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+deployment-management:
+  enabled: true
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi  
+
+nim-proxy:
+  enabled: true
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+          
+volcano:
+  enabled: true
+  custom:
+    admission_enable: true
+    admission_replicas: 1
+    controller_enable: true
+    controller_replicas: 1
+    scheduler_enable: true
+    scheduler_replicas: 1
+    admission_resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 300Mi
+    scheduler_resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    controller_resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# medium
+data-store:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi  
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 10Gi
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi        
+
+customizer:
+  enabled: true
+  modelsStorage:
+    enabled: true
+    size: 100Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 20Gi
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi        
+
+evaluator:
+  enabled: true
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi   
+  argoWorkflows:
+    enabled: true
+    crds:
+      install: false   
+    controller:
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi        
+    server:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+  milvus:
+    standalone:
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi      
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 50Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 20Gi
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi      
+
+guardrails:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi  
+
+entity-store:
+  enabled: true
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 20Gi
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi      
+
+nemo-operator:
+  enabled: true
+  controllerManager:
+    kubeRbacProxy:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 250m
+          memory: 256Mi
+    manager:
+      resources:
+        requests:
+          cpu: 1024m
+          memory: 2Gi
+        limits:
+          cpu: 2048m
+          memory: 4Gi
+
+nim-operator:
+  enabled: true
+  operator:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+deployment-management:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi  
+
+nim-proxy:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+          
+volcano:
+  enabled: true
+  custom:
+    admission_enable: true
+    admission_replicas: 1
+    controller_enable: true
+    controller_replicas: 1
+    scheduler_enable: true
+    scheduler_replicas: 1
+    admission_resources:
+      requests:
+        cpu: 300m
+        memory: 300Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    scheduler_resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+    controller_resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+# large
+data-store:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi  
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 100Gi
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi        
+
+customizer:
+  enabled: true
+  modelsStorage:
+    enabled: true
+    size: 500Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 100Gi
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi        
+
+evaluator:
+  enabled: true
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+    limits:
+      cpu: 8000m
+      memory: 16Gi   
+  argoWorkflows:
+    enabled: true
+    crds:
+      install: false   
+    controller:
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 4Gi
+        limits:
+          cpu: 4000m
+          memory: 8Gi        
+    server:
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi
+  milvus:
+    standalone:
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 4Gi
+        limits:
+          cpu: 4000m
+          memory: 8Gi      
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 200Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 100Gi
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi      
+
+guardrails:
+  enabled: true
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi  
+
+entity-store:
+  enabled: true
+  postgresql:
+    primary:
+      persistence:
+        storageClass: "longhorn"
+        size: 100Gi
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi      
+
+nemo-operator:
+  enabled: true
+  controllerManager:
+    kubeRbacProxy:
+      resources:
+        requests:
+          cpu: 250m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+    manager:
+      resources:
+        requests:
+          cpu: 2048m
+          memory: 4Gi
+        limits:
+          cpu: 4096m
+          memory: 8Gi
+
+nim-operator:
+  enabled: true
+  operator:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1Gi
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+
+deployment-management:
+  enabled: true
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi  
+
+nim-proxy:
+  enabled: true
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+          
+volcano:
+  enabled: true
+  custom:
+    admission_enable: true
+    admission_replicas: 1
+    controller_enable: true
+    controller_replicas: 1
+    scheduler_enable: true
+    scheduler_replicas: 1
+    admission_resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+    scheduler_resources:
+      requests:
+        cpu: 1000m
+        memory: 1Gi
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+    controller_resources:
+      requests:
+        cpu: 1000m
+        memory: 1Gi
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+```
+
 ## nim/25.4.0
 
 nim 카탈로그:
@@ -1581,6 +3627,57 @@ imagePullSecrets:
     registry: nvcr.io
     username: "$oauthtoken"
     password: "$imagePullSecrets.password"
+```
+
+쿼터
+```yaml
+# small
+nimService:
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+      nvidia.com/gpu: 1
+    limits:
+      cpu: 8000m
+      memory: 16Gi
+      nvidia.com/gpu: 1
+  storage:
+    pvc:
+      storageClass: longhorn
+      size: 20Gi
+
+# medium
+nimService:
+  resources:
+    requests:
+      cpu: 8000m
+      memory: 16Gi
+      nvidia.com/gpu: 2
+    limits:
+      cpu: 16000m
+      memory: 32Gi
+      nvidia.com/gpu: 2
+  storage:
+    pvc:
+      storageClass: longhorn
+      size: 100Gi
+
+# large
+nimService:
+  resources:
+    requests:
+      cpu: 16000m
+      memory: 32Gi
+      nvidia.com/gpu: 4
+    limits:
+      cpu: 32000m
+      memory: 64Gi
+      nvidia.com/gpu: 4
+  storage:
+    pvc:
+      storageClass: longhorn
+      size: 500Gi
 ```
 
 ## kserve/0.1.0
@@ -1616,6 +3713,46 @@ ingress:
   tls:
     secretName: "{{ .Name }}-tls-secret"
 ```
+
+쿼터
+```yaml
+# small
+inferenceService:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+      nvidia.com/gpu: "1"
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+      nvidia.com/gpu: "1"
+
+# medium
+inferenceService:
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+      nvidia.com/gpu: "1"
+    limits:
+      cpu: 8000m
+      memory: 16Gi
+      nvidia.com/gpu: "2"
+
+# large
+inferenceService:
+  resources:
+    requests:
+      cpu: 8000m
+      memory: 16Gi
+      nvidia.com/gpu: "2"
+    limits:
+      cpu: 16000m
+      memory: 32Gi
+      nvidia.com/gpu: "4"
+```
+
 
 ## ragflow/0.20.1
 
@@ -1754,6 +3891,198 @@ ingress:
        - "{{ .Name }}.{{ .Domain }}"
 ```
 
+쿼터
+```yaml
+# small
+ragflow:
+  deployment:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+infinity:
+  storage:
+    className: "longhorn"
+    capacity: 5Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+minio:
+  storage:
+    className: "longhorn"
+    capacity: 5Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+mysql:
+  storage:
+    className: "longhorn"
+    capacity: 5Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+redis:
+  storage:
+    className: "longhorn"
+    capacity: 5Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+
+# medium
+ragflow:
+  deployment:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+infinity:
+  storage:
+    className: "longhorn"
+    capacity: 20Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+minio:
+  storage:
+    className: "longhorn"
+    capacity: 50Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+mysql:
+  storage:
+    className: "longhorn"
+    capacity: 20Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+
+redis:
+  storage:
+    className: "longhorn"
+    capacity: 10Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+# large
+ragflow:
+  deployment:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi
+
+infinity:
+  storage:
+    className: "longhorn"
+    capacity: 100Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 4Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi
+
+minio:
+  storage:
+    className: "longhorn"
+    capacity: 200Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+mysql:
+  storage:
+    className: "longhorn"
+    capacity: 100Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+
+redis:
+  storage:
+    className: "longhorn"
+    capacity: 50Gi
+  deployment:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+```
+
 ## starrocks-operator/0.11.0
 
 starrocks-operator 카탈로그:
@@ -1792,6 +4121,39 @@ metrics:
   port: 8080
   serviceMonitor:
     enabled: false
+```
+
+쿼터
+```yaml
+# small
+starrocksOperator:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi  
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+# medium
+starrocksOperator:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi  
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+# large
+starrocksOperator:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi  
+    limits:
+      cpu: 4000m
+      memory: 8Gi
 ```
 
 ## starrocks/0.11.0
@@ -1875,6 +4237,156 @@ starrocksFeProxySpec:
     type: ClusterIP
 ```
 
+쿼터
+```yaml
+# small
+starrocksCluster:
+  enabledBe: false
+  enabledCn: true
+
+starrocksFESpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  storageSpec:
+    name: fe
+    storageClassName: "longhorn"
+    storageSize: 10Gi
+    logStorageSize: 5Gi
+
+starrocksCnSpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+  storageSpec:
+    name: cn
+    storageClassName: "longhorn"
+    storageSize: 100Gi
+    logStorageSize: 20Gi
+    spillStorageSize: 10Gi
+  autoScalingPolicy:
+    minReplicas: 1
+    maxReplicas: 10
+
+starrocksFeProxySpec:
+  enabled: true
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+# medium
+starrocksCluster:
+  enabledBe: false
+  enabledCn: true
+
+starrocksFESpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+  storageSpec:
+    name: fe
+    storageClassName: "longhorn"
+    storageSize: 50Gi
+    logStorageSize: 20Gi
+
+starrocksCnSpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+    limits:
+      cpu: 8000m
+      memory: 16Gi
+  storageSpec:
+    name: cn
+    storageClassName: "longhorn"
+    storageSize: 1Ti
+    logStorageSize: 100Gi
+    spillStorageSize: 50Gi
+  autoScalingPolicy:
+    minReplicas: 1
+    maxReplicas: 10
+
+starrocksFeProxySpec:
+  enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+# large
+starrocksCluster:
+  enabledBe: false
+  enabledCn: true
+
+starrocksFESpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+    limits:
+      cpu: 8000m
+      memory: 16Gi
+  storageSpec:
+    name: fe
+    storageClassName: "longhorn"
+    storageSize: 200Gi
+    logStorageSize: 100Gi
+
+starrocksCnSpec:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 8000m
+      memory: 16Gi
+    limits:
+      cpu: 16000m
+      memory: 32Gi
+  storageSpec:
+    name: cn
+    storageClassName: "longhorn"
+    storageSize: 10Ti
+    logStorageSize: 500Gi
+    spillStorageSize: 200Gi
+  autoScalingPolicy:
+    minReplicas: 1
+    maxReplicas: 10
+
+starrocksFeProxySpec:
+  enabled: true
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+```
+
 ## strimzi-kafka-operator/0.47.0
 
 kafka operator 카탈로그:
@@ -1903,6 +4415,36 @@ resources:
     cpu: 200m
 
 extraEnvs: []    
+```
+
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
 ```
 
 ## kafka-ui/1.5.1
@@ -1963,6 +4505,36 @@ ingress:
   tls:
     enabled: true
     secretName: "{{ .Name }}-tls-secret"
+```
+
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+# medium
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
+# large
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
 ```
 
 ## kafka-cluster/1.0.0
@@ -2203,6 +4775,18 @@ spec:
     segment.bytes: 1073741824
 ```
 
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
 ## kafka/1.0.0
 
 kafka user 카탈로그:
@@ -2255,6 +4839,18 @@ spec:
     retention.bytes: "$topic.retention"
     segment.bytes: "$topic.segment"
 {{end}}
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
 ```
 
 ## kafka-connector/1.0.0
@@ -2388,4 +4984,16 @@ spec:
     value.converter.schemas.enable: "false"
 {{end}}
 {{end}}
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
 ```
