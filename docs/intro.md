@@ -129,6 +129,12 @@ Gitea 일반 카탈로그:
 
 DB 내장
 
+- [x] 관리자배포
+- [ ] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/user/oauth2/keycloak/callback)
+- [x] 공개관리
+
 ```yaml
 global:
   imageRegistry: ""
@@ -300,9 +306,11 @@ Mlflow 카탈로그:
 
 외부 minio 사용할 때
 
-아래 항목은 사이트에 따라 수정이 필요합니다.
-
-- password
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 tracking:
@@ -447,6 +455,12 @@ postgresql:
 ## kubeflow/1.10.0
 
 Kubeflow 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/oauth2/callback)
+- [ ] 공개관리
 
 ```yaml
 apiVersion: kubeflow.org/v1
@@ -639,6 +653,12 @@ rke2IngressNginx:
 
 spark-operator 카탈로그:
 
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 image:
   registry: docker.io
@@ -748,6 +768,12 @@ webhook:
 
 qdrant 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [x] 공개관리
+
 ```yaml
 images:
   repository: docker.io/qdrant/qdrant
@@ -843,6 +869,12 @@ persistence:
 ## langflow-ide/0.1.0
 
 langflow-ide 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 langflow:
@@ -1037,6 +1069,12 @@ postgresql:
 ## superset/0.13.5-1
 
 superset 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 (/oauth-authorized/keycloak)
+- [x] 공개관리
 
 ```yaml
 configOverrides:
@@ -1379,6 +1417,12 @@ redis:
 
 ollama 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 image:
   repository: ollama/ollama
@@ -1485,6 +1529,12 @@ resources:
 
 flowise 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 image:
   registry: docker.io
@@ -1526,6 +1576,12 @@ postgresql:
 ## flowise/6.0.0
 
 flowise 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 global:
@@ -1686,6 +1742,12 @@ postgresql:
 ## open-webui/0.5.4
 
 open-webui 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 (/oauth/oidc/callback)
+- [ ] 공개관리
 
 ```yaml
 ollama:
@@ -1879,6 +1941,12 @@ routerSpec:
 ## langfuse/1.0.0-rc.2-1
 
 langfuse 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/api/auth/callback/keycloak/*)
+- [ ] 공개관리
 
 ```yaml
 global:
@@ -2197,6 +2265,12 @@ clickhouse:
 
 postgresql-ha 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 global:
   imageRegistry: ""
@@ -2331,6 +2405,7 @@ persistence:
 ## airflow/1.16.0
 
 airflow 카탈로그:
+
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
 - [ ] 테넌트사용
@@ -2628,6 +2703,12 @@ postgresql:
 
 litellm 카탈로그:
 
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 masterkey: "$masterkey"
 
@@ -2727,6 +2808,12 @@ postgresql:
 ## unitycatalog/0.2.0
 
 unitycatalog 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 ()
+- [ ] 공개관리
 
 ```yaml
 storage:
@@ -2898,6 +2985,12 @@ postgresql:
 ## nemo/25.4.0
 
 nemo 카탈로그:
+
+- [x] 관리자배포
+- [ ] 클러스터단독배포
+- [x] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 ngcAPIKey: "$ngcAPIKey"
@@ -3610,6 +3703,12 @@ volcano:
 
 nim 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 nimService:
   name: "{{ .Name }}"
@@ -3693,6 +3792,12 @@ nimService:
 
 kserve 카탈로그:
 
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 inferenceService:
   name: "{{ .Name }}"
@@ -3766,6 +3871,12 @@ inferenceService:
 ## ragflow/0.20.1
 
 ragflow 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 (/v1/user/oauth/callback/oidc)
+- [ ] 공개관리
 
 ```yaml
 fullnameOverride: "{{ .Name }}"
@@ -4098,6 +4209,12 @@ redis:
 
 starrocks-operator 카탈로그:
 
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 timeZone: Asia/Seoul
 
@@ -4170,6 +4287,12 @@ starrocksOperator:
 ## starrocks/0.11.0
 
 starrocks 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 initPassword:
@@ -4402,6 +4525,12 @@ starrocksFeProxySpec:
 
 kafka operator 카탈로그:
 
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
 ```yaml
 defaultImageRegistry: "quay.io"
 defaultImageRepository: "strimzi"
@@ -4461,6 +4590,12 @@ resources:
 ## kafka-ui/1.5.1
 
 kafka ui 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 image:
@@ -4551,6 +4686,12 @@ resources:
 ## kafka-cluster/1.0.0
 
 kafka cluster 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 ()
+- [ ] 공개관리
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -4800,7 +4941,13 @@ spec:
 
 ## kafka/1.0.0
 
-kafka user 카탈로그:
+kafka user/topic 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 ()
+- [ ] 공개관리
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -4867,6 +5014,12 @@ spec:
 ## kafka-connector/1.0.0
 
 kafka connector 카탈로그:
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
 
 ```yaml
 {{if .ShowIf}}
