@@ -1881,6 +1881,10 @@ routerSpec:
 langfuse 카탈로그:
 
 ```yaml
+global:
+  security:
+    allowInsecureImages: true
+
 langfuse:
   logging:
     level: info
@@ -2045,10 +2049,10 @@ clickhouse:
     resources:
       requests:
         cpu: 250m
-        memory: 512Mi
+        memory: 384Mi
       limits:
         cpu: 375m
-        memory: 384Mi
+        memory: 512Mi
 
 # medium
 langfuse:
@@ -3759,6 +3763,8 @@ inferenceService:
 ragflow 카탈로그:
 
 ```yaml
+fullnameOverride: "{{ .Name }}"
+
 env:
   DOC_ENGINE: infinity
 
