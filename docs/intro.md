@@ -135,6 +135,8 @@ DB 내장
 - [x] keycloak사용 (/user/oauth2/keycloak/callback)
 - [x] 공개관리
 
+/img/gitea.svg
+
 ```yaml
 global:
   imageRegistry: ""
@@ -312,6 +314,8 @@ Mlflow 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/mlflow.svg
+
 ```yaml
 tracking:
   auth:
@@ -462,6 +466,8 @@ Kubeflow 카탈로그:
 - [x] keycloak사용 (/oauth2/callback)
 - [ ] 공개관리
 
+/img/kubeflow.svg
+
 ```yaml
 apiVersion: kubeflow.org/v1
 kind: Profile
@@ -493,6 +499,14 @@ spec:
 ## Rancher/2.10.1-1
 
 Rancher 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/verify-auth)
+- [ ] 공개관리
+
+/img/rancher.svg
 
 ```yaml
 hostname: "{{ .Name }}.{{ .Domain }}"
@@ -568,6 +582,14 @@ resources:
 
 rancher-monitoring-crd 카탈로그:
 
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
+/img/prometheus.svg
+
 ```yaml
 ---
 ```
@@ -575,6 +597,14 @@ rancher-monitoring-crd 카탈로그:
 ## rancher-monitoring/104.1.2
 
 rancher-monitoring 카탈로그:
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용
+- [ ] 공개관리
+
+/img/prometheus.svg
 
 ```yaml
 global:
@@ -658,6 +688,8 @@ spark-operator 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/spark.svg
 
 ```yaml
 image:
@@ -774,6 +806,8 @@ qdrant 카탈로그:
 - [ ] keycloak사용
 - [x] 공개관리
 
+/img/qdrant.svg
+
 ```yaml
 images:
   repository: docker.io/qdrant/qdrant
@@ -875,6 +909,8 @@ langflow-ide 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/langflow.svg
 
 ```yaml
 langflow:
@@ -1075,6 +1111,8 @@ superset 카탈로그:
 - [ ] 테넌트사용
 - [x] keycloak사용 (/oauth-authorized/keycloak)
 - [x] 공개관리
+
+/img/superset.svg
 
 ```yaml
 configOverrides:
@@ -1423,6 +1461,8 @@ ollama 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/ollama.svg
+
 ```yaml
 image:
   repository: ollama/ollama
@@ -1535,6 +1575,8 @@ flowise 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/flowise.svg
+
 ```yaml
 image:
   registry: docker.io
@@ -1582,6 +1624,8 @@ flowise 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/flowise.svg
 
 ```yaml
 global:
@@ -1748,6 +1792,8 @@ open-webui 카탈로그:
 - [ ] 테넌트사용
 - [x] keycloak사용 (/oauth/oidc/callback)
 - [ ] 공개관리
+
+/img/open-webui.svg
 
 ```yaml
 ollama:
@@ -1947,6 +1993,8 @@ langfuse 카탈로그:
 - [x] 테넌트사용
 - [x] keycloak사용 (/api/auth/callback/keycloak/*)
 - [ ] 공개관리
+
+/img/langfuse.svg
 
 ```yaml
 global:
@@ -2271,6 +2319,8 @@ postgresql-ha 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/postgresql.svg
+
 ```yaml
 global:
   imageRegistry: ""
@@ -2411,6 +2461,8 @@ airflow 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/airflow.svg
 
 ```yaml
 ingress:
@@ -2709,6 +2761,8 @@ litellm 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/litellm.png
+
 ```yaml
 masterkey: "$masterkey"
 
@@ -2814,6 +2868,8 @@ unitycatalog 카탈로그:
 - [ ] 테넌트사용
 - [x] keycloak사용 ()
 - [ ] 공개관리
+
+/img/unitycatalog.svg
 
 ```yaml
 storage:
@@ -2991,6 +3047,8 @@ nemo 카탈로그:
 - [x] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/nemo.svg
 
 ```yaml
 ngcAPIKey: "$ngcAPIKey"
@@ -3709,6 +3767,8 @@ nim 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/nemo.svg
+
 ```yaml
 nimService:
   name: "{{ .Name }}"
@@ -3798,6 +3858,8 @@ kserve 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/kserve.svg
+
 ```yaml
 inferenceService:
   name: "{{ .Name }}"
@@ -3877,6 +3939,8 @@ ragflow 카탈로그:
 - [ ] 테넌트사용
 - [x] keycloak사용 (/v1/user/oauth/callback/oidc)
 - [ ] 공개관리
+
+/img/ragflow.svg
 
 ```yaml
 fullnameOverride: "{{ .Name }}"
@@ -4215,6 +4279,8 @@ starrocks-operator 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/starrocks.svg
+
 ```yaml
 timeZone: Asia/Seoul
 
@@ -4293,6 +4359,8 @@ starrocks 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/starrocks.svg
 
 ```yaml
 initPassword:
@@ -4531,6 +4599,8 @@ kafka operator 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
+/img/kafka.svg
+
 ```yaml
 defaultImageRegistry: "quay.io"
 defaultImageRepository: "strimzi"
@@ -4596,6 +4666,8 @@ kafka ui 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/kafka.svg
 
 ```yaml
 image:
@@ -4692,6 +4764,8 @@ kafka cluster 카탈로그:
 - [ ] 테넌트사용
 - [x] keycloak사용 ()
 - [ ] 공개관리
+
+/img/kafka.svg
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -4949,6 +5023,8 @@ kafka user/topic 카탈로그:
 - [x] keycloak사용 ()
 - [ ] 공개관리
 
+/img/kafka.svg
+
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
@@ -5020,6 +5096,8 @@ kafka connector 카탈로그:
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
+
+/img/kafka.svg
 
 ```yaml
 {{if .ShowIf}}
