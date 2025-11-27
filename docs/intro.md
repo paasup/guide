@@ -127,7 +127,9 @@ server:
 
 Gitea 일반 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/gitea.svg
 
 - [x] 관리자배포
 - [ ] 클러스터단독배포
@@ -135,7 +137,7 @@ Gitea 일반 카탈로그:
 - [x] keycloak사용 (/user/oauth2/keycloak/callback)
 - [x] 공개관리
 
-/img/gitea.svg
+
 
 ```yaml
 global:
@@ -321,7 +323,9 @@ postgresql:
 
 Mlflow 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/mlflow.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -329,7 +333,7 @@ Mlflow 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/mlflow.svg
+
 
 ```yaml
 tracking:
@@ -490,7 +494,9 @@ postgresql:
 
 Kubeflow 카탈로그:
 
-- directory
+directory 방식배포
+
+/img/kubeflow.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -498,7 +504,7 @@ Kubeflow 카탈로그:
 - [x] keycloak사용 (/oauth2/callback)
 - [ ] 공개관리
 
-/img/kubeflow.svg
+
 
 ```yaml
 apiVersion: kubeflow.org/v1
@@ -542,13 +548,17 @@ spec:
 
 Rancher 카탈로그:
 
+helm 방식배포
+
+/img/rancher.svg
+
 - [x] 관리자배포
 - [x] 클러스터단독배포
 - [x] 테넌트사용
 - [x] keycloak사용 (/verify-auth)
 - [ ] 공개관리
 
-/img/rancher.svg
+
 
 ```yaml
 hostname: "{{ .Name }}.{{ .Domain }}"
@@ -634,13 +644,17 @@ resources:
 
 rancher-monitoring-crd 카탈로그:
 
+helm 방식배포
+
+/img/prometheus.svg
+
 - [x] 관리자배포
 - [x] 클러스터단독배포
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/prometheus.svg
+
 
 ```yaml
 ---
@@ -650,13 +664,16 @@ rancher-monitoring-crd 카탈로그:
 
 rancher-monitoring 카탈로그:
 
+helm 방식배포
+
+/img/prometheus.svg
+
 - [x] 관리자배포
 - [x] 클러스터단독배포
 - [ ] 테넌트사용
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/prometheus.svg
 
 ```yaml
 global:
@@ -745,7 +762,9 @@ rke2IngressNginx:
 
 spark-operator 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/spark.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -753,7 +772,7 @@ spark-operator 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/spark.svg
+
 
 ```yaml
 image:
@@ -874,7 +893,9 @@ webhook:
 
 qdrant 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/qdrant.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -882,7 +903,7 @@ qdrant 카탈로그:
 - [ ] keycloak사용
 - [x] 공개관리
 
-/img/qdrant.svg
+
 
 ```yaml
 images:
@@ -990,7 +1011,9 @@ persistence:
 
 langflow-ide 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/langflow.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -998,7 +1021,7 @@ langflow-ide 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/langflow.svg
+
 
 ```yaml
 langflow:
@@ -1209,7 +1232,9 @@ postgresql:
 
 superset 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/superset.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1217,7 +1242,7 @@ superset 카탈로그:
 - [x] keycloak사용 (/oauth-authorized/keycloak)
 - [x] 공개관리
 
-/img/superset.svg
+
 
 ```yaml
 configOverrides:
@@ -1584,7 +1609,9 @@ redis:
 
 ollama 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/ollama.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1592,7 +1619,7 @@ ollama 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/ollama.svg
+
 
 ```yaml
 image:
@@ -1706,7 +1733,9 @@ persistentVolume:
 
 flowise 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/flowise.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1714,7 +1743,7 @@ flowise 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/flowise.svg
+
 
 ```yaml
 image:
@@ -1758,7 +1787,9 @@ postgresql:
 
 flowise 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/flowise.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1766,7 +1797,7 @@ flowise 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/flowise.svg
+
 
 ```yaml
 global:
@@ -1946,7 +1977,9 @@ postgresql:
 
 open-webui 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/open-webui.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1954,7 +1987,7 @@ open-webui 카탈로그:
 - [x] keycloak사용 (/oauth/oidc/callback)
 - [ ] 공개관리
 
-/img/open-webui.svg
+
 
 ```yaml
 ollama:
@@ -2168,7 +2201,9 @@ routerSpec:
 
 langfuse 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/langfuse.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -2176,7 +2211,7 @@ langfuse 카탈로그:
 - [x] keycloak사용 (/api/auth/callback/keycloak/*)
 - [ ] 공개관리
 
-/img/langfuse.svg
+
 
 ```yaml
 global:
@@ -2526,7 +2561,9 @@ clickhouse:
 
 postgresql-ha 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/postgresql.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -2534,7 +2571,7 @@ postgresql-ha 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/postgresql.svg
+
 
 ```yaml
 global:
@@ -2674,7 +2711,9 @@ persistence:
 
 airflow 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/airflow.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -2682,7 +2721,7 @@ airflow 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/airflow.svg
+
 
 ```yaml
 ingress:
@@ -2999,7 +3038,9 @@ postgresql:
 
 litellm 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/litellm.png
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -3007,7 +3048,7 @@ litellm 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/litellm.png
+
 
 ```yaml
 masterkey: "$masterkey"
@@ -3124,7 +3165,9 @@ postgresql:
 
 unitycatalog 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/unitycatalog.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -3132,7 +3175,7 @@ unitycatalog 카탈로그:
 - [x] keycloak사용 ()
 - [ ] 공개관리
 
-/img/unitycatalog.svg
+
 
 ```yaml
 storage:
@@ -3323,7 +3366,9 @@ postgresql:
 
 nemo 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/nemo.svg
 
 - [x] 관리자배포
 - [ ] 클러스터단독배포
@@ -3331,7 +3376,7 @@ nemo 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/nemo.svg
+
 
 ```yaml
 ngcAPIKey: "$ngcAPIKey"
@@ -4104,7 +4149,9 @@ entity-store:
 
 nim 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/nemo.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4112,7 +4159,7 @@ nim 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/nemo.svg
+
 
 ```yaml
 nimService:
@@ -4209,7 +4256,9 @@ nimService:
 
 kserve 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/kserve.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4217,7 +4266,7 @@ kserve 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/kserve.svg
+
 
 ```yaml
 inferenceService:
@@ -4302,7 +4351,9 @@ inferenceService:
 
 ragflow 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/ragflow.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4310,7 +4361,7 @@ ragflow 카탈로그:
 - [x] keycloak사용 (/v1/user/oauth/callback/oidc)
 - [ ] 공개관리
 
-/img/ragflow.svg
+
 
 ```yaml
 fullnameOverride: "{{ .Name }}"
@@ -4673,7 +4724,9 @@ redis:
 
 starrocks-operator 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/starrocks.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -4681,7 +4734,7 @@ starrocks-operator 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/starrocks.svg
+
 
 ```yaml
 timeZone: Asia/Seoul
@@ -4766,7 +4819,9 @@ starrocksOperator:
 
 starrocks 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/starrocks.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4774,7 +4829,7 @@ starrocks 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/starrocks.svg
+
 
 ```yaml
 initPassword:
@@ -5025,7 +5080,9 @@ starrocksCnSpec:
 
 kafka operator 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/kafka.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -5033,7 +5090,7 @@ kafka operator 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/kafka.svg
+
 
 ```yaml
 defaultImageRegistry: "quay.io"
@@ -5105,7 +5162,9 @@ resources:
 
 kafka ui 카탈로그:
 
-- helm
+helm 방식배포
+
+/img/kafka.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -5113,7 +5172,7 @@ kafka ui 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/kafka.svg
+
 
 ```yaml
 image:
@@ -5215,7 +5274,9 @@ resources:
 
 kafka cluster 카탈로그:
 
-- directory
+directory 방식배포
+
+/img/kafka.svg
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -5223,7 +5284,7 @@ kafka cluster 카탈로그:
 - [x] keycloak사용 ()
 - [ ] 공개관리
 
-/img/kafka.svg
+
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -5485,7 +5546,9 @@ spec:
 
 kafka user/topic 카탈로그:
 
-- directory
+directory 방식배포
+
+/img/kafka.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -5493,7 +5556,7 @@ kafka user/topic 카탈로그:
 - [x] keycloak사용 ()
 - [ ] 공개관리
 
-/img/kafka.svg
+
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -5571,7 +5634,9 @@ spec:
 
 kafka connector 카탈로그:
 
-- directory
+directory 방식배포
+
+/img/kafka.svg
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -5579,7 +5644,7 @@ kafka connector 카탈로그:
 - [ ] keycloak사용
 - [ ] 공개관리
 
-/img/kafka.svg
+
 
 ```yaml
 {{if .ShowIf}}
