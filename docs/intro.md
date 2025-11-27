@@ -127,7 +127,7 @@ server:
 
 Gitea 일반 카탈로그:
 
-DB 내장
+- helm
 
 - [x] 관리자배포
 - [ ] 클러스터단독배포
@@ -240,13 +240,8 @@ resources:
   limits:
     cpu: 1000m
     memory: 2Gi
-persistence:
-  size: 10Gi
-  storageClass: "longhorn"
 
 postgresql:
-  persistence:
-    size: 5Gi
   resources:
     requests:
       cpu: 250m
@@ -263,13 +258,8 @@ resources:
   limits:
     cpu: 2000m
     memory: 4Gi
-persistence:
-  size: 100Gi
-  storageClass: "longhorn"
 
 postgresql:
-  persistence:
-    size: 20Gi
   resources:
     requests:
       cpu: 500m
@@ -286,13 +276,8 @@ resources:
   limits:
     cpu: 4000m
     memory: 8Gi
-persistence:
-  size: 500Gi
-  storageClass: "longhorn"
 
 postgresql:
-  persistence:
-    size: 100Gi
   resources:
     requests:
       cpu: 1000m
@@ -302,11 +287,41 @@ postgresql:
       memory: 4Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+persistence:
+  size: 10Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 5Gi
+
+# medium
+persistence:
+  size: 100Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 20Gi
+
+# large
+persistence:
+  size: 500Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 100Gi
+```
+
 ## mlflow/2.1.0-1
 
 Mlflow 카탈로그:
 
-외부 minio 사용할 때
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -389,9 +404,6 @@ postgresql:
       limits:
         cpu: 500m
         memory: 1Gi     
-    persistence:
-      storageClass: ""
-      size: 5Gi
 
 # medium
 tracking:
@@ -420,9 +432,6 @@ postgresql:
       limits:
         cpu: 1000m
         memory: 2Gi     
-    persistence:
-      storageClass: ""
-      size: 20Gi
 
 # large
 tracking:
@@ -451,6 +460,27 @@ postgresql:
       limits:
         cpu: 2000m
         memory: 4Gi     
+```
+
+볼륨 쿼터
+```yaml
+# small
+postgresql:
+  primary:
+    persistence:
+      storageClass: ""
+      size: 5Gi
+
+# medium
+postgresql:
+  primary:
+    persistence:
+      storageClass: ""
+      size: 20Gi
+
+# large
+postgresql:
+  primary:
     persistence:
       storageClass: ""
       size: 100Gi
@@ -459,6 +489,8 @@ postgresql:
 ## kubeflow/1.10.0
 
 Kubeflow 카탈로그:
+
+- directory
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -491,6 +523,16 @@ spec:
 
 # medium
 
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
 
 # large
 
@@ -576,6 +618,16 @@ resources:
   limits:
     cpu: 8000m
     memory: 16Gi
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
 ```
 
 ## rancher-monitoring-crd/104.1.2
@@ -679,9 +731,21 @@ rke2IngressNginx:
 
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## spark-operator/2.0.2
 
 spark-operator 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -796,9 +860,21 @@ webhook:
       memory: 1Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## qdrant/1.12.4
 
 qdrant 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -868,10 +944,7 @@ resources:
   limits:
     cpu: 2000m
     memory: 4Gi
-
-persistence:
-  size: 10Gi
-  storageClassName: ""    
+  
 
 # medium
 resources:
@@ -880,11 +953,7 @@ resources:
     memory: 4Gi
   limits:
     cpu: 4000m
-    memory: 8Gi
-
-persistence:
-  size: 100Gi
-  storageClassName: ""      
+    memory: 8Gi   
 
 # large
 resources:
@@ -893,9 +962,26 @@ resources:
     memory: 8Gi
   limits:
     cpu: 8000m
-    memory: 16Gi
+    memory: 16Gi  
+```
 
+볼륨 쿼터
+```yaml
+# small
 persistence:
+  accessModes: ["ReadWriteOnce"]
+  size: 10Gi
+  storageClassName: ""    
+
+# medium
+persistence:
+  accessModes: ["ReadWriteOnce"]
+  size: 100Gi
+  storageClassName: ""    
+
+# large
+persistence:
+  accessModes: ["ReadWriteOnce"]
   size: 1Ti
   storageClassName: ""      
 ```
@@ -903,6 +989,8 @@ persistence:
 ## langflow-ide/0.1.0
 
 langflow-ide 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1028,9 +1116,6 @@ langflow:
         memory: 1Gi
 postgresql:
   primary:
-    persistence:
-      size: 5Gi
-      storageClass: "longhorn"
     resources:
       requests: 
         cpu: 250m
@@ -1059,9 +1144,6 @@ langflow:
         memory: 2Gi
 postgresql:
   primary:
-    persistence:
-      size: 20Gi
-      storageClass: "longhorn"
     resources:
       requests: 
         cpu: 500m
@@ -1090,9 +1172,6 @@ langflow:
         memory: 4Gi
 postgresql:
   primary:
-    persistence:
-      size: 100Gi
-      storageClass: "longhorn"
     resources:
       requests: 
         cpu: 1000m
@@ -1102,9 +1181,35 @@ postgresql:
         memory: 4Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+postgresql:
+  primary:
+    persistence:
+      size: 5Gi
+      storageClass: ""
+
+# medium
+postgresql:
+  primary:
+    persistence:
+      size: 20Gi
+      storageClass: ""
+
+# large
+postgresql:
+  primary:
+    persistence:
+      size: 100Gi
+      storageClass: ""
+```
+
 ## superset/0.13.5-1
 
 superset 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1330,10 +1435,6 @@ supersetWorker:
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 8Gi
     resources:
       requests:
         cpu: 250m
@@ -1344,10 +1445,6 @@ postgresql:
 
 redis:
   master:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 8Gi
     resources:
       requests:
         cpu: 200m
@@ -1377,10 +1474,6 @@ supersetWorker:
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 50Gi
     resources:
       requests:
         cpu: 500m
@@ -1391,10 +1484,6 @@ postgresql:
 
 redis:
   master:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 20Gi
     resources:
       requests:
         cpu: 500m
@@ -1424,10 +1513,6 @@ supersetWorker:
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 200Gi
     resources:
       requests:
         cpu: 1000m
@@ -1438,10 +1523,6 @@ postgresql:
 
 redis:
   master:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 100Gi
     resources:
       requests:
         cpu: 1000m
@@ -1451,9 +1532,59 @@ redis:
         memory: 2Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 8Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 8Gi
+
+# medium
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 50Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 20Gi
+
+# large
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 200Gi
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 100Gi
+```
+
 ## ollama/1.12.2
 
 ollama 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1519,11 +1650,6 @@ ingress:
 쿼터
 ```yaml
 # small
-persistentVolume:
-  enabled: true
-  size: 30Gi
-  storageClass: longhorn
-
 resources:
   requests:
     cpu: 2000m
@@ -1533,11 +1659,6 @@ resources:
     memory: 8Gi
 
 # medium
-persistentVolume:
-  enabled: true
-  size: 100Gi
-  storageClass: longhorn
-
 resources:
   requests:
     cpu: 4000m
@@ -1549,11 +1670,6 @@ resources:
     nvidia.com/gpu: "1"
 
 # large
-persistentVolume:
-  enabled: true
-  size: 500Gi
-  storageClass: longhorn
-
 resources:
   requests:
     cpu: 8000m
@@ -1565,9 +1681,32 @@ resources:
     nvidia.com/gpu: "2"
 ```
 
+볼륨 쿼터
+```yaml
+# small
+persistentVolume:
+  enabled: true
+  size: 30Gi
+  storageClass: ""
+
+# medium
+persistentVolume:
+  enabled: true
+  size: 50Gi
+  storageClass: ""
+
+# large
+persistentVolume:
+  enabled: true
+  size: 500Gi
+  storageClass: ""
+```
+
 ## flowise/3.10.2
 
 flowise 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1618,6 +1757,8 @@ postgresql:
 ## flowise/6.0.0
 
 flowise 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1685,10 +1826,6 @@ resources:
   limits:
     cpu: 1000m
     memory: 2Gi
-persistence:
-  enabled: true
-  size: 2Gi
-  storageClass: longhorn
 worker:
   resources:
     requests:
@@ -1700,10 +1837,6 @@ worker:
 postgresql:
   enabled: true
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 5Gi
     resources:
       requests:
         cpu: 250m 
@@ -1720,10 +1853,6 @@ resources:
   limits:
     cpu: 2000m
     memory: 4Gi
-persistence:
-  enabled: true
-  size: 10Gi
-  storageClass: longhorn
 worker:
   resources:
     requests:
@@ -1735,10 +1864,6 @@ worker:
 postgresql:
   enabled: true
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 20Gi
     resources:
       requests:
         cpu: 500m 
@@ -1755,10 +1880,6 @@ resources:
   limits:
     cpu: 4000m
     memory: 8Gi
-persistence:
-  enabled: true
-  size: 50Gi
-  storageClass: longhorn
 worker:
   resources:
     requests:
@@ -1770,10 +1891,6 @@ worker:
 postgresql:
   enabled: true
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 100Gi
     resources:
       requests:
         cpu: 1000m 
@@ -1783,9 +1900,53 @@ postgresql:
         memory: 4Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: ""
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 5Gi
+
+# medium
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: ""
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 20Gi
+
+# large
+persistence:
+  enabled: true
+  size: 50Gi
+  storageClass: ""
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 100Gi
+```
+
 ## open-webui/0.5.4
 
 open-webui 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -1871,12 +2032,6 @@ resources:
   limits:
     cpu: 1000m
     memory: 2Gi
-persistence:
-  enabled: true
-  size: 2Gi
-  accessModes:
-    - ReadWriteOnce
-  storageClass: ""
 
 # medium
 resources:
@@ -1886,12 +2041,6 @@ resources:
   limits:
     cpu: 2000m
     memory: 4Gi
-persistence:
-  enabled: true
-  size: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  storageClass: ""
 
 # large
 resources:
@@ -1901,6 +2050,27 @@ resources:
   limits:
     cpu: 4000m
     memory: 8Gi
+```
+
+볼륨 쿼터
+```yaml
+# small
+persistence:
+  enabled: true
+  size: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+# medium
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+# large
 persistence:
   enabled: true
   size: 50Gi
@@ -1984,9 +2154,21 @@ routerSpec:
 
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## langfuse/1.0.0-rc.2-1
 
 langfuse 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -2129,17 +2311,9 @@ redis:
       limits:
         cpu: 200m
         memory: 256Mi     
-    persistence:
-      enabled: true
-      size: 8Gi
-      storageClass: ""
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 10Gi
     resources:
       requests:
         cpu: 250m
@@ -2156,10 +2330,6 @@ clickhouse:
     limits:
       cpu: 1000m
       memory: 2Gi   
-  persistence:
-    enabled: true
-    size: 8Gi
-    storageClass: ""
   zookeeper:
     enabled: true
     resources:
@@ -2168,7 +2338,8 @@ clickhouse:
         memory: 384Mi
       limits:
         cpu: 375m
-        memory: 512Mi
+        memory: 512Mi    
+  
 
 # medium
 langfuse:
@@ -2198,17 +2369,9 @@ redis:
       limits:
         cpu: 500m
         memory: 512Mi     
-    persistence:
-      enabled: true
-      size: 20Gi
-      storageClass: ""
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 50Gi
     resources:
       requests:
         cpu: 500m
@@ -2225,10 +2388,6 @@ clickhouse:
     limits:
       cpu: 2000m
       memory: 4Gi   
-  persistence:
-    enabled: true
-    size: 50Gi
-    storageClass: ""
   zookeeper:
     enabled: true
     resources:
@@ -2237,7 +2396,7 @@ clickhouse:
         memory: 512Mi
       limits:
         cpu: 750m
-        memory: 768Mi
+        memory: 768Mi  
 
 # large
 langfuse:
@@ -2267,17 +2426,9 @@ redis:
       limits:
         cpu: 1000m
         memory: 1Gi     
-    persistence:
-      enabled: true
-      size: 100Gi
-      storageClass: ""
 
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      storageClass: "longhorn"
-      size: 200Gi
     resources:
       requests:
         cpu: 1000m
@@ -2294,10 +2445,6 @@ clickhouse:
     limits:
       cpu: 4000m
       memory: 8Gi   
-  persistence:
-    enabled: true
-    size: 500Gi
-    storageClass: ""
   zookeeper:
     enabled: true
     resources:
@@ -2309,9 +2456,77 @@ clickhouse:
         memory: 8Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+redis:
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 10Gi   
+    
+clickhouse:
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: "" 
+  
+# medium
+redis:
+  primary:   
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 50Gi 
+    
+clickhouse: 
+  persistence:
+    enabled: true
+    size: 50Gi
+    storageClass: ""
+
+# large
+redis:
+  primary:   
+    persistence:
+      enabled: true
+      size: 100Gi
+      storageClass: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 200Gi   
+    
+clickhouse:  
+  persistence:
+    enabled: true
+    size: 500Gi
+    storageClass: ""
+```
+
 ## postgresql-ha/11.9.4-1
 
 postgresql-ha 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -2393,12 +2608,6 @@ pgpool:
       cpu: 200m
       memory: 256Mi
 
-
-persistence:
-  enabled: true
-  size: 20Gi
-  storageClass: ""
-
 # medium
 postgresql:
   replicaCount: 3
@@ -2419,12 +2628,6 @@ pgpool:
       cpu: 500m
       memory: 512Mi
 
-
-persistence:
-  enabled: true
-  size: 100Gi
-  storageClass: ""
-
 # large
 postgresql:
   replicaCount: 3
@@ -2444,8 +2647,23 @@ pgpool:
     limits:
       cpu: 1000m
       memory: 1Gi
+```
 
+볼륨 쿼터
+```yaml
+# small
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: ""
 
+# medium
+persistence:
+  enabled: true
+  size: 50Gi
+  storageClass: ""
+
+# large
 persistence:
   enabled: true
   size: 500Gi
@@ -2455,6 +2673,8 @@ persistence:
 ## airflow/1.16.0
 
 airflow 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -2581,26 +2801,12 @@ webserver:
   resources:
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
     limits:
       cpu: 500m
-      memory: 512Mi
-dags:
-  persistence:
-    enabled: true
-    size: 1Gi
-    storageClassName: "longhorn"
+      memory: 1Gi
 
-logs:
-  persistence:
-    enabled: true
-    size: 5Gi
-    storageClassName: longhorn
 redis:
-  persistence:
-    enabled: true
-    size: 1Gi
-    storageClassName: "longhorn"
   resources:
     requests:
       cpu: 100m
@@ -2610,10 +2816,6 @@ redis:
       memory: 256Mi
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClass: "longhorn"
     resources:
       requests:
         cpu: 250m
@@ -2649,22 +2851,8 @@ webserver:
     limits:
       cpu: 1000m
       memory: 1Gi
-dags:
-  persistence:
-    enabled: true
-    size: 5Gi
-    storageClassName: "longhorn"
 
-logs:
-  persistence:
-    enabled: true
-    size: 20Gi
-    storageClassName: longhorn
 redis:
-  persistence:
-    enabled: true
-    size: 5Gi
-    storageClassName: "longhorn"
   resources:
     requests:
       cpu: 200m
@@ -2674,10 +2862,6 @@ redis:
       memory: 512Mi
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      size: 50Gi
-      storageClass: "longhorn"
     resources:
       requests:
         cpu: 500m
@@ -2713,22 +2897,8 @@ webserver:
     limits:
       cpu: 2000m
       memory: 2Gi
-dags:
-  persistence:
-    enabled: true
-    size: 20Gi
-    storageClassName: "longhorn"
 
-logs:
-  persistence:
-    enabled: true
-    size: 100Gi
-    storageClassName: longhorn
 redis:
-  persistence:
-    enabled: true
-    size: 20Gi
-    storageClassName: "longhorn"
   resources:
     requests:
       cpu: 500m
@@ -2738,10 +2908,6 @@ redis:
       memory: 1Gi
 postgresql:
   primary:
-    persistence:
-      enabled: true
-      size: 200Gi
-      storageClass: "longhorn"
     resources:
       requests:
         cpu: 1000m
@@ -2751,9 +2917,89 @@ postgresql:
         memory: 4Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+dags:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClassName: ""
+
+logs:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: ""
+redis:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClassName: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: ""
+
+# medium
+dags:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: ""
+
+logs:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: ""
+redis:
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: ""
+  
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: ""
+
+# large
+dags:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: ""
+
+logs:
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClassName: ""
+redis:
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClassName: ""
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 200Gi
+      storageClass: ""
+```
+
 ## litellm/0.4.4
 
 litellm 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -2810,9 +3056,6 @@ postgresql:
       limits:
         cpu: 500m
         memory: 1Gi    
-    persistence:
-      storageClass: ""
-      size: 5Gi
 
 # medium
 resources:
@@ -2832,9 +3075,6 @@ postgresql:
       limits:
         cpu: 1000m
         memory: 2Gi    
-    persistence:
-      storageClass: ""
-      size: 20Gi
 
 # large
 resources:
@@ -2854,6 +3094,27 @@ postgresql:
       limits:
         cpu: 2000m
         memory: 4Gi    
+```
+
+볼륨 쿼터
+```yaml
+# small
+postgresql:
+  primary:
+    persistence:
+      storageClass: ""
+      size: 5Gi
+
+# medium
+postgresql:
+  primary:
+    persistence:
+      storageClass: ""
+      size: 20Gi
+
+# large
+postgresql:
+  primary:
     persistence:
       storageClass: ""
       size: 100Gi
@@ -2862,6 +3123,8 @@ postgresql:
 ## unitycatalog/0.2.0
 
 unitycatalog 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -2955,11 +3218,6 @@ postgresql:
 ```yaml
 # small
 server:
-  config:
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClassName: "longhorn"
   statefulset:
     resources:
       requests:
@@ -2970,24 +3228,16 @@ server:
         memory: 4Gi    
 postgresql:
   primary:
-    persistence:
-      storageClassName: "longhorn"
-      size: 20Gi
     resources:
       requests:
         cpu: 500m
         memory: 1Gi
       limits:
         cpu: 1000m
-        memory: 2Gi       
+        memory: 2Gi            
 
 # medium
 server:
-  config:
-    persistence:
-      enabled: true
-      size: 100Gi
-      storageClassName: "longhorn"
   statefulset:
     resources:
       requests:
@@ -2998,24 +3248,16 @@ server:
         memory: 8Gi    
 postgresql:
   primary:
-    persistence:
-      storageClassName: "longhorn"
-      size: 200Gi
     resources:
       requests:
         cpu: 1000m
         memory: 2Gi
       limits:
         cpu: 2000m
-        memory: 4Gi       
+        memory: 4Gi            
 
 # large
 server:
-  config:
-    persistence:
-      enabled: true
-      size: 1Ti
-      storageClassName: "longhorn"
   statefulset:
     resources:
       requests:
@@ -3026,21 +3268,62 @@ server:
         memory: 16Gi    
 postgresql:
   primary:
-    persistence:
-      storageClassName: "longhorn"
-      size: 2Ti
     resources:
       requests:
         cpu: 2000m
         memory: 4Gi
       limits:
         cpu: 4000m
-        memory: 8Gi       
+        memory: 8Gi            
+```
+
+볼륨 쿼터
+```yaml
+# small
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: ""
+postgresql:
+  primary:
+    persistence:
+      storageClassName: ""
+      size: 20Gi     
+
+# medium
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 100Gi
+      storageClassName: ""
+postgresql:
+  primary:
+    persistence:
+      storageClassName: ""
+      size: 200Gi     
+
+# large
+server:
+  config:
+    persistence:
+      enabled: true
+      size: 1Ti
+      storageClassName: ""
+postgresql:
+  primary:
+    persistence:
+      storageClassName: ""
+      size: 2Ti
 ```
 
 ## nemo/25.4.0
 
 nemo 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [ ] 클러스터단독배포
@@ -3135,10 +3418,6 @@ virtualService:
 # small
 data-store:
   enabled: true
-  persistence:
-    enabled: true
-    size: 1Gi
-    storageClass: ""
   resources:
     requests:
       cpu: 200m
@@ -3148,9 +3427,6 @@ data-store:
       memory: 1Gi  
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 1Gi
       resources:
         requests:
           cpu: 250m
@@ -3161,15 +3437,8 @@ data-store:
 
 customizer:
   enabled: true
-  modelsStorage:
-    enabled: true
-    size: 20Gi
-    storageClassName: ""
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 5Gi
       resources:
         requests:
           cpu: 250m
@@ -3216,15 +3485,8 @@ evaluator:
         limits:
           cpu: 1000m
           memory: 2Gi      
-      persistence:
-        persistentVolumeClaim:
-          storageClass: ""
-          size: 10Gi
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 5Gi
       resources:
         requests:
           cpu: 250m
@@ -3247,9 +3509,6 @@ entity-store:
   enabled: true
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 5Gi
       resources:
         requests:
           cpu: 250m
@@ -3343,10 +3602,6 @@ volcano:
 # medium
 data-store:
   enabled: true
-  persistence:
-    enabled: true
-    size: 10Gi
-    storageClass: ""
   resources:
     requests:
       cpu: 500m
@@ -3356,9 +3611,6 @@ data-store:
       memory: 2Gi  
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 10Gi
       resources:
         requests:
           cpu: 500m
@@ -3369,15 +3621,8 @@ data-store:
 
 customizer:
   enabled: true
-  modelsStorage:
-    enabled: true
-    size: 100Gi
-    storageClassName: ""
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 20Gi
       resources:
         requests:
           cpu: 500m
@@ -3424,15 +3669,8 @@ evaluator:
         limits:
           cpu: 2000m
           memory: 4Gi      
-      persistence:
-        persistentVolumeClaim:
-          storageClass: ""
-          size: 50Gi
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 20Gi
       resources:
         requests:
           cpu: 500m
@@ -3455,9 +3693,6 @@ entity-store:
   enabled: true
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 20Gi
       resources:
         requests:
           cpu: 500m
@@ -3551,10 +3786,6 @@ volcano:
 # large
 data-store:
   enabled: true
-  persistence:
-    enabled: true
-    size: 100Gi
-    storageClass: ""
   resources:
     requests:
       cpu: 1000m
@@ -3564,9 +3795,6 @@ data-store:
       memory: 4Gi  
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 100Gi
       resources:
         requests:
           cpu: 1000m
@@ -3577,15 +3805,8 @@ data-store:
 
 customizer:
   enabled: true
-  modelsStorage:
-    enabled: true
-    size: 500Gi
-    storageClassName: ""
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 100Gi
       resources:
         requests:
           cpu: 1000m
@@ -3632,15 +3853,8 @@ evaluator:
         limits:
           cpu: 4000m
           memory: 8Gi      
-      persistence:
-        persistentVolumeClaim:
-          storageClass: ""
-          size: 200Gi
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 100Gi
       resources:
         requests:
           cpu: 1000m
@@ -3663,9 +3877,6 @@ entity-store:
   enabled: true
   postgresql:
     primary:
-      persistence:
-        storageClass: "longhorn"
-        size: 100Gi
       resources:
         requests:
           cpu: 1000m
@@ -3757,9 +3968,143 @@ volcano:
         memory: 2Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+data-store:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 1Gi
+
+customizer:
+  modelsStorage:
+    enabled: true
+    size: 20Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 5Gi
+
+evaluator:
+  milvus:
+    standalone:
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 10Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 5Gi
+
+entity-store:
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 5Gi
+
+# medium
+data-store:
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 10Gi
+
+customizer:
+  modelsStorage:
+    enabled: true
+    size: 100Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 20Gi
+        
+evaluator:
+  milvus:
+    standalone:
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 50Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 20Gi
+
+entity-store:
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 20Gi
+
+# large
+data-store:
+  persistence:
+    size: 100Gi
+    storageClass: ""
+   
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 100Gi
+
+customizer:
+  modelsStorage:
+    enabled: true
+    size: 500Gi
+    storageClassName: ""
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 100Gi
+
+evaluator:
+  milvus:
+    standalone:
+      persistence:
+        persistentVolumeClaim:
+          storageClass: ""
+          size: 200Gi
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 100Gi
+           
+entity-store:
+  postgresql:
+    primary:
+      persistence:
+        storageClass: ""
+        size: 100Gi      
+```
+
 ## nim/25.4.0
 
 nim 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -3810,10 +4155,6 @@ nimService:
       cpu: 8000m
       memory: 16Gi
       nvidia.com/gpu: 1
-  storage:
-    pvc:
-      storageClass: longhorn
-      size: 20Gi
 
 # medium
 nimService:
@@ -3826,10 +4167,6 @@ nimService:
       cpu: 16000m
       memory: 32Gi
       nvidia.com/gpu: 2
-  storage:
-    pvc:
-      storageClass: longhorn
-      size: 100Gi
 
 # large
 nimService:
@@ -3842,15 +4179,37 @@ nimService:
       cpu: 32000m
       memory: 64Gi
       nvidia.com/gpu: 4
+```
+
+볼륨 쿼터
+```yaml
+# small
+nimService:
   storage:
     pvc:
-      storageClass: longhorn
+      storageClass: ""
+      size: 20Gi
+
+# medium
+nimService:
+  storage:
+    pvc:
+      storageClass: ""
+      size: 100Gi
+
+# large
+nimService:
+  storage:
+    pvc:
+      storageClass: ""
       size: 500Gi
 ```
 
 ## kserve/0.1.0
 
 kserve 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -3929,10 +4288,21 @@ inferenceService:
       nvidia.com/gpu: "4"
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
 
 ## ragflow/0.20.1
 
 ragflow 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4091,9 +4461,6 @@ ragflow:
         memory: 2Gi
 
 infinity:
-  storage:
-    className: "longhorn"
-    capacity: 5Gi
   deployment:
     resources:
       requests:
@@ -4104,9 +4471,6 @@ infinity:
         memory: 2Gi
 
 minio:
-  storage:
-    className: "longhorn"
-    capacity: 5Gi
   deployment:
     resources:
       requests:
@@ -4117,9 +4481,6 @@ minio:
         memory: 1Gi
 
 mysql:
-  storage:
-    className: "longhorn"
-    capacity: 5Gi
   deployment:
     resources:
       requests:
@@ -4130,9 +4491,6 @@ mysql:
         memory: 1Gi
 
 redis:
-  storage:
-    className: "longhorn"
-    capacity: 5Gi
   deployment:
     resources:
       requests:
@@ -4154,9 +4512,6 @@ ragflow:
         memory: 4Gi
 
 infinity:
-  storage:
-    className: "longhorn"
-    capacity: 20Gi
   deployment:
     resources:
       requests:
@@ -4167,9 +4522,6 @@ infinity:
         memory: 4Gi
 
 minio:
-  storage:
-    className: "longhorn"
-    capacity: 50Gi
   deployment:
     resources:
       requests:
@@ -4180,9 +4532,6 @@ minio:
         memory: 2Gi
 
 mysql:
-  storage:
-    className: "longhorn"
-    capacity: 20Gi
   deployment:
     resources:
       requests:
@@ -4193,9 +4542,6 @@ mysql:
         memory: 2Gi
 
 redis:
-  storage:
-    className: "longhorn"
-    capacity: 10Gi
   deployment:
     resources:
       requests:
@@ -4217,9 +4563,6 @@ ragflow:
         memory: 8Gi
 
 infinity:
-  storage:
-    className: "longhorn"
-    capacity: 100Gi
   deployment:
     resources:
       requests:
@@ -4230,9 +4573,6 @@ infinity:
         memory: 8Gi
 
 minio:
-  storage:
-    className: "longhorn"
-    capacity: 200Gi
   deployment:
     resources:
       requests:
@@ -4243,9 +4583,6 @@ minio:
         memory: 4Gi
 
 mysql:
-  storage:
-    className: "longhorn"
-    capacity: 100Gi
   deployment:
     resources:
       requests:
@@ -4256,9 +4593,6 @@ mysql:
         memory: 4Gi
 
 redis:
-  storage:
-    className: "longhorn"
-    capacity: 50Gi
   deployment:
     resources:
       requests:
@@ -4269,9 +4603,77 @@ redis:
         memory: 2Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+infinity:
+  storage:
+    className: ""
+    capacity: 5Gi
+
+minio:
+  storage:
+    className: ""
+    capacity: 5Gi
+
+mysql:
+  storage:
+    className: ""
+    capacity: 5Gi
+
+redis:
+  storage:
+    className: ""
+    capacity: 5Gi
+
+# medium
+infinity:
+  storage:
+    className: ""
+    capacity: 20Gi
+
+minio:
+  storage:
+    className: ""
+    capacity: 50Gi
+
+mysql:
+  storage:
+    className: ""
+    capacity: 20Gi
+
+redis:
+  storage:
+    className: ""
+    capacity: 10Gi
+
+# large
+infinity:
+  storage:
+    className: ""
+    capacity: 100Gi
+
+minio:
+  storage:
+    className: ""
+    capacity: 200Gi
+
+mysql:
+  storage:
+    className: ""
+    capacity: 100Gi
+
+redis:
+  storage:
+    className: ""
+    capacity: 50Gi
+```
+
 ## starrocks-operator/0.11.0
 
 starrocks-operator 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -4350,9 +4752,21 @@ starrocksOperator:
       memory: 8Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## starrocks/0.11.0
 
 starrocks 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4455,11 +4869,6 @@ starrocksFESpec:
     limits:
       cpu: 2000m
       memory: 4Gi
-  storageSpec:
-    name: fe
-    storageClassName: "longhorn"
-    storageSize: 10Gi
-    logStorageSize: 5Gi
 
 starrocksCnSpec:
   replicas: 3
@@ -4470,12 +4879,6 @@ starrocksCnSpec:
     limits:
       cpu: 4000m
       memory: 8Gi
-  storageSpec:
-    name: cn
-    storageClassName: "longhorn"
-    storageSize: 100Gi
-    logStorageSize: 20Gi
-    spillStorageSize: 10Gi
   autoScalingPolicy:
     minReplicas: 1
     maxReplicas: 10
@@ -4504,11 +4907,6 @@ starrocksFESpec:
     limits:
       cpu: 4000m
       memory: 8Gi
-  storageSpec:
-    name: fe
-    storageClassName: "longhorn"
-    storageSize: 50Gi
-    logStorageSize: 20Gi
 
 starrocksCnSpec:
   replicas: 3
@@ -4519,12 +4917,6 @@ starrocksCnSpec:
     limits:
       cpu: 8000m
       memory: 16Gi
-  storageSpec:
-    name: cn
-    storageClassName: "longhorn"
-    storageSize: 1Ti
-    logStorageSize: 100Gi
-    spillStorageSize: 50Gi
   autoScalingPolicy:
     minReplicas: 1
     maxReplicas: 10
@@ -4553,11 +4945,6 @@ starrocksFESpec:
     limits:
       cpu: 8000m
       memory: 16Gi
-  storageSpec:
-    name: fe
-    storageClassName: "longhorn"
-    storageSize: 200Gi
-    logStorageSize: 100Gi
 
 starrocksCnSpec:
   replicas: 3
@@ -4568,12 +4955,6 @@ starrocksCnSpec:
     limits:
       cpu: 16000m
       memory: 32Gi
-  storageSpec:
-    name: cn
-    storageClassName: "longhorn"
-    storageSize: 10Ti
-    logStorageSize: 500Gi
-    spillStorageSize: 200Gi
   autoScalingPolicy:
     minReplicas: 1
     maxReplicas: 10
@@ -4589,9 +4970,62 @@ starrocksFeProxySpec:
       memory: 8Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+starrocksFESpec:
+  storageSpec:
+    name: fe
+    storageClassName: ""
+    storageSize: 10Gi
+    logStorageSize: 5Gi
+
+starrocksCnSpec:
+  storageSpec:
+    name: cn
+    storageClassName: ""
+    storageSize: 100Gi
+    logStorageSize: 20Gi
+    spillStorageSize: 10Gi
+
+# medium
+starrocksFESpec:
+  storageSpec:
+    name: fe
+    storageClassName: ""
+    storageSize: 50Gi
+    logStorageSize: 20Gi
+
+starrocksCnSpec:
+  storageSpec:
+    name: cn
+    storageClassName: ""
+    storageSize: 1Ti
+    logStorageSize: 100Gi
+    spillStorageSize: 50Gi
+
+# large
+starrocksFESpec:
+  storageSpec:
+    name: fe
+    storageClassName: ""
+    storageSize: 200Gi
+    logStorageSize: 100Gi
+
+starrocksCnSpec:
+  storageSpec:
+    name: cn
+    storageClassName: ""
+    storageSize: 10Ti
+    logStorageSize: 500Gi
+    spillStorageSize: 200Gi
+```
+
 ## strimzi-kafka-operator/0.47.0
 
 kafka operator 카탈로그:
+
+- helm
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -4657,9 +5091,21 @@ resources:
     memory: 8Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## kafka-ui/1.5.1
 
 kafka ui 카탈로그:
+
+- helm
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -4755,9 +5201,21 @@ resources:
     memory: 4Gi
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## kafka-cluster/1.0.0
 
 kafka cluster 카탈로그:
+
+- directory
 
 - [x] 관리자배포
 - [x] 클러스터단독배포
@@ -5013,9 +5471,21 @@ spec:
 
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## kafka/1.0.0
 
 kafka user/topic 카탈로그:
+
+- directory
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -5087,9 +5557,21 @@ spec:
 
 ```
 
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
 ## kafka-connector/1.0.0
 
 kafka connector 카탈로그:
+
+- directory
 
 - [ ] 관리자배포
 - [ ] 클러스터단독배포
@@ -5235,6 +5717,16 @@ spec:
 
 # medium
 
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
 
 # large
 
