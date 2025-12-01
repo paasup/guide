@@ -5542,6 +5542,232 @@ spec:
 
 ```
 
+## kafka-cluster/0.1.0
+
+kafka cluster 카탈로그:
+
+helm 방식배포
+
+/img/kafka.svg
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [x] keycloak사용 ()
+- [ ] 공개관리
+
+
+
+```yaml
+kafka:
+  version: "4.0.0"
+  metadataVersion: "4.0"
+  timezone: "Asia/Seoul"
+
+controller:
+  replicas: 3
+  storage:
+    size: 50Gi
+    class: longhorn
+  resources: {}
+
+broker:
+  replicas: 3
+  storage:
+    size: 50Gi
+    class: longhorn
+  resources: {}
+
+config:
+  offsetsTopicReplicationFactor: 3
+  transactionStateLogReplicationFactor: 3
+  transactionStateLogMinIsr: 2
+  defaultReplicationFactor: 3
+  minInsyncReplicas: 2
+  autoCreateTopicsEnable: false
+  numPartitions: 3
+  deleteTopicEnable: true
+
+oauth:
+  enabled: true
+  keycloakUrl: "$KEYCLOAK_URL"
+  keycloakRealm: "$KEYCLOAK_REALM"
+  keycloakClientId: "$KEYCLOAK_CLIENT_ID"
+
+kafkaConnect:
+  enabled: true
+  image: paasup/kafka-connect:0.2
+  replicas: 1
+
+entityOperator:
+  topicOperator: {}
+  userOperator: {}
+
+connectTopics:
+  partitions: 1
+  replicas: 3
+  config:
+    cleanupPolicy: compact
+    retentionMs: 604800000
+    segmentBytes: 1073741824
+
+logging:
+  kafka:
+    rootLoggerLevel: INFO
+  connect:
+    rootLoggerLevel: INFO
+```
+
+쿼터
+```yaml
+# small
+controller:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+broker:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+entityOperator:
+  topicOperator:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+  userOperator:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m      
+        memory: 256Mi
+
+# medium
+controller:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+broker:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+
+entityOperator:
+  topicOperator:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  userOperator:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m      
+        memory: 512Mi
+
+# large
+ontroller:
+  resources:
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+
+broker:
+  resources:
+    requests:
+      cpu: 4000m
+      memory: 8Gi
+    limits:
+      cpu: 8000m
+      memory: 16Gi
+
+entityOperator:
+  topicOperator:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+  userOperator:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m      
+        memory: 1Gi
+```
+
+볼륨 쿼터
+```yaml
+# small
+controller:
+  storage:
+    size: 5Gi
+    class: ""
+
+broker:
+  storage:
+    size: 20Gi
+    class: ""
+
+# medium
+controller:
+  storage:
+    size: 10Gi
+    class: ""
+
+broker:
+  storage:
+    size: 50Gi
+    class: ""
+
+# large
+controller:
+  storage:
+    size: 20Gi
+    class: ""
+
+broker:
+  storage:
+    size: 100Gi
+    class: ""
+```
+
 ## kafka/1.0.0
 
 kafka user/topic 카탈로그:
