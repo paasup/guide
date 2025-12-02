@@ -5695,7 +5695,7 @@ entityOperator:
         memory: 512Mi
 
 # large
-ontroller:
+controller:
   resources:
     requests:
       cpu: 2000m
