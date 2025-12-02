@@ -404,7 +404,7 @@ gitea:
       SSL_MODE: disable
     session:
       PROVIDER: postgres
-      PROVIDER_CONFIG: user=gitea password=gitea host={{ .Name }}-postgresql port=5432 dbname=gitea_session sslmode=disable
+      PROVIDER_CONFIG: user=gitea password=gitea host={{ .Name }}-postgresql port=5432 dbname=gitea sslmode=disable
       COOKIE_NAME: i_hate_gitea  
     service:
       DEFAULT_ALLOW_CREATE_ORGANIZATION: true
