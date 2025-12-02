@@ -411,12 +411,12 @@ gitea:
       DEFAULT_ALLOW_CREATE_ORGANIZATION: true
     repository:
       DEFAULT_BRANCH: master
-    oauth:
-      - name: keycloak
-        provider: "openidConnect"
-        key: "$KEYCLOAK_CLIENT_ID" 
-        secret: "$KEYCLOAK_CLIENT_SECRET"
-        autoDiscoverUrl: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"      
+  oauth:
+    - name: keycloak
+      provider: "openidConnect"
+      key: "$KEYCLOAK_CLIENT_ID" 
+      secret: "$KEYCLOAK_CLIENT_SECRET"
+      autoDiscoverUrl: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"      
 
 postgresql:
   enabled: true
