@@ -401,7 +401,6 @@ gitea:
       USER: gitea
       PASSWD: gitea
       CHARSET: utf8
-      SCHEMA: gitea
       SSL_MODE: disable
     session:
       PROVIDER: postgres
