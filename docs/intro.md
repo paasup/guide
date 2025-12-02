@@ -319,6 +319,204 @@ postgresql:
     size: 100Gi
 ```
 
+## gitea/12.4.0
+
+Gitea 일반 카탈로그:
+
+helm 방식배포
+
+/img/gitea.svg
+
+- [x] 관리자배포
+- [ ] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/user/oauth2/keycloak/callback)
+- [x] 공개관리
+
+
+
+```yaml
+global:
+  imageRegistry: ""
+
+ingress:
+  enabled: true
+  annotations:
+    konghq.com/protocols: https
+    konghq.com/https-redirect-status-code: "301"
+    cert-manager.io/cluster-issuer: "root-ca-issuer" 
+    cert-manager.io/duration: 8760h  
+    cert-manager.io/renew-before: 720h
+  hosts:
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        host: "{{ .Name }}.{{ .Domain }}"
+      secretName: "{{ .Name }}-tls-secret"
+
+extraVolumes:
+ - name: keycloak-tls
+   secret:
+     secretName: keycloak-tls
+
+
+extraContainerVolumeMounts:
+  - name: keycloak-tls
+    mountPath: /etc/ssl/certs/ca.crt
+    subPath: ca.crt
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 300Mi
+  limits:
+    cpu: 300m
+    memory: 500Mi
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: "longhorn"
+
+gitea:
+  admin:   
+    username: sudouser
+    password: ""
+    email: "gitea@local.domain"
+    existingSecret: "$INFISICAL_SECRET"
+  config:
+    APP_NAME: paasup git
+    RUN_MODE: prod
+    server:
+      ROOT_URL: "https://{{ .Name }}.{{ .Domain }}"
+    database:
+      DB_TYPE: postgres
+      HOST: "{{ .Name }}-postgresql:5432"
+      NAME: gitea
+      USER: gitea
+      PASSWD: gitea
+      CHARSET: utf8
+      SCHEMA: gitea
+      SSL_MODE: disable
+    session:
+      PROVIDER: postgres
+      PROVIDER_CONFIG: user=gitea password=gitea host={{ .Name }}-postgresql port=5432 dbname=gitea_session sslmode=disable
+      COOKIE_NAME: i_hate_gitea  
+    service:
+      DEFAULT_ALLOW_CREATE_ORGANIZATION: true
+    repository:
+      DEFAULT_BRANCH: master
+    oauth:
+      - name: keycloak
+        provider: "openidConnect"
+        key: "$KEYCLOAK_CLIENT_ID" 
+        secret: "$KEYCLOAK_CLIENT_SECRET"
+        autoDiscoverUrl: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"      
+
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      postgresqlDatabase: gitea
+      postgresqlUsername: gitea
+      postgresqlPassword: gitea
+      servicePort: 5432
+  persistence:
+    size: 5Gi
+```
+
+쿼터
+```yaml
+# small
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+
+postgresql:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+# medium
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+
+postgresql:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+# large
+resources:
+  requests:
+    cpu: 2000m
+    memory: 4Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+
+postgresql:
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+```
+
+볼륨 쿼터
+```yaml
+# small
+persistence:
+  size: 10Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 5Gi
+
+# medium
+persistence:
+  size: 100Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 20Gi
+
+# large
+persistence:
+  size: 500Gi
+  storageClass: ""
+
+postgresql:
+  persistence:
+    size: 100Gi
+```
+
 ## mlflow/2.1.0-1
 
 Mlflow 카탈로그:
@@ -5738,34 +5936,34 @@ entityOperator:
 controller:
   storage:
     size: 5Gi
-    class: ""
+    class: "longhorn"
 
 broker:
   storage:
     size: 20Gi
-    class: ""
+    class: "longhorn"
 
 # medium
 controller:
   storage:
     size: 10Gi
-    class: ""
+    class: "longhorn"
 
 broker:
   storage:
     size: 50Gi
-    class: ""
+    class: "longhorn"
 
 # large
 controller:
   storage:
     size: 20Gi
-    class: ""
+    class: "longhorn"
 
 broker:
   storage:
     size: 100Gi
-    class: ""
+    class: "longhorn"
 ```
 
 ## kafka/1.0.0
