@@ -418,16 +418,26 @@ gitea:
       secret: "$KEYCLOAK_CLIENT_SECRET"
       autoDiscoverUrl: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"      
 
+postgresql-ha:
+  enabled: false
+valkey:
+  enabled: false
+valkey-cluster:
+  enabled: false
 postgresql:
   enabled: true
   global:
     postgresql:
-      postgresqlDatabase: gitea
-      postgresqlUsername: gitea
-      postgresqlPassword: gitea
-      servicePort: 5432
-  persistence:
-    size: 5Gi
+      auth:
+        password: gitea
+        database: gitea
+        username: gitea
+      service:
+        ports:
+          postgresql: 5432
+  primary:
+    persistence:
+      size: 10Gi          
 ```
 
 쿼터
@@ -495,8 +505,9 @@ persistence:
   storageClass: ""
 
 postgresql:
-  persistence:
-    size: 5Gi
+  primary:
+    persistence:
+      size: 5Gi  
 
 # medium
 persistence:
@@ -504,8 +515,9 @@ persistence:
   storageClass: ""
 
 postgresql:
-  persistence:
-    size: 20Gi
+  primary:
+    persistence:
+      size: 20Gi  
 
 # large
 persistence:
@@ -513,8 +525,9 @@ persistence:
   storageClass: ""
 
 postgresql:
-  persistence:
-    size: 100Gi
+  primary:
+    persistence:
+      size: 100Gi  
 ```
 
 ## mlflow/2.1.0-1
