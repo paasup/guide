@@ -368,6 +368,11 @@ extraContainerVolumeMounts:
     mountPath: /etc/ssl/certs/ca.crt
     subPath: ca.crt
 
+extraInitVolumeMounts:
+  - name: keycloak-tls
+    mountPath: /etc/ssl/certs/ca.crt
+    subPath: ca.crt    
+
 replicaCount: 1
 
 resources:
