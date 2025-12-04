@@ -5485,7 +5485,7 @@ resources:
 
 ```
 
-## kafka-cluster/1.0.0
+## kafka-cluster/0.5.0
 
 kafka cluster 카탈로그:
 
@@ -5757,7 +5757,7 @@ spec:
 
 ```
 
-## kafka-cluster/0.1.0
+## kafka-cluster/1.0.0
 
 kafka cluster 카탈로그:
 
