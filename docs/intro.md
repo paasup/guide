@@ -5784,14 +5784,26 @@ controller:
   storage:
     size: 50Gi
     class: longhorn
-  resources: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 2Gi
 
 broker:
   replicas: 3
   storage:
     size: 50Gi
     class: longhorn
-  resources: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 2Gi
 
 config:
   offsetsTopicReplicationFactor: 3
@@ -5815,8 +5827,22 @@ kafkaConnect:
   replicas: 1
 
 entityOperator:
-  topicOperator: {}
-  userOperator: {}
+  topicOperator:
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
+  userOperator:
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
 
 connectTopics:
   partitions: 1
