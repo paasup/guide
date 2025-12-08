@@ -6263,3 +6263,106 @@ spec:
 # large
 
 ```
+
+## lakekeeper/0.8.1
+
+lakekeeper 카탈로그:
+
+helm 방식배포
+
+/img/lakekeeper.svg
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용
+- [ ] 공개관리
+
+```yaml
+catalog:
+  resources: {}
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/issuer: root-ca-issuer
+      cert-manager.io/duration: 8760h
+      cert-manager.io/renew-before: 720h
+      konghq.com/https-redirect-status-code: '301'
+      konghq.com/protocols: https
+
+    host: "{{ .Name }}.{{ .Domain }}"
+    ingressClassName: "kong"
+    tls:
+      enabled: true
+      secretName: "{{ .Name }}-tls-secret"
+
+  extraEnv:
+  - name: SSL_CERT_FILE
+    value: "/tmp/ca.crt"
+  extraVolumeMounts:
+  - name: keycloak-tls
+    mountPath: "/tmp/ca.crt"
+    subPath: ca.crt
+    readOnly: true
+  extraVolumes:
+  - name: keycloak-tls
+    secret:
+      secretName: keycloak-tls
+
+postgresql:
+  storage:
+    className:
+    requestedSize: 5Gi
+  resources: {}
+
+
+auth:
+ oauth2:
+    providerUri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
+    audience: "lakekeeper"
+    ui:
+      clientID: "$KEYCLOAK_CLIENT_ID"
+      scopes: "lakekeeper"
+authz:
+  backend: "openfga"
+  openfga:
+    apiKey: "$authz.openfga.apikey"
+    
+internalOpenFGA: true
+openfga:
+  resources: {}
+  playground:
+    enabled: true
+  authn:
+    method: "preshared"
+    preshared:
+      keys: ["$authz.openfga.apikey"]
+  postgresql:
+    primary:
+      resources: {}
+      persistence:
+        storageClass: ""
+        size: 8Gi
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
