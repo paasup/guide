@@ -6275,7 +6275,7 @@ helm 방식배포
 - [x] 관리자배포
 - [x] 클러스터단독배포
 - [x] 테넌트사용
-- [x] keycloak사용
+- [x] keycloak사용 (/ui/callback)
 - [ ] 공개관리
 
 ```yaml
