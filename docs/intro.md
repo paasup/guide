@@ -6284,7 +6284,7 @@ catalog:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/issuer: root-ca-issuer
+      cert-manager.io/cluster-issuer: root-ca-issuer
       cert-manager.io/duration: 8760h
       cert-manager.io/renew-before: 720h
       konghq.com/https-redirect-status-code: '301'
