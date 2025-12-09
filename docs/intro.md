@@ -6321,7 +6321,7 @@ auth:
     providerUri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
     audience: "lakekeeper"
     ui:
-      clientID: "$KEYCLOAK_CLIENT_ID"
+      clientID: "{{ .ClusterName }}-{{ .Name }}"
       scopes: "lakekeeper"
 authz:
   backend: "openfga"
