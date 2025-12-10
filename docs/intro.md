@@ -6319,7 +6319,7 @@ postgresql:
 auth:
  oauth2:
     providerUri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
-    audience: "lakekeeper"
+    audience: "{{ .ClusterName }}-{{ .Name }}"
     ui:
       clientID: "{{ .ClusterName }}-{{ .Name }}"
       scopes: "lakekeeper"
