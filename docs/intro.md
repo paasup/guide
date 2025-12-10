@@ -6322,7 +6322,7 @@ auth:
     audience: "{{ .ClusterName }}-{{ .Name }}"
     ui:
       clientID: "{{ .ClusterName }}-{{ .Name }}"
-      scopes: "lakekeeper"
+      scopes: "{{ .ClusterName }}-{{ .Name }}"
 authz:
   backend: "openfga"
   openfga:
