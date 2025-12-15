@@ -6319,10 +6319,10 @@ postgresql:
 auth:
  oauth2:
     providerUri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM"
-    audience: "{{ .ClusterName }}-{{ .Name }}"
+    audience: "lakekeeper"
     ui:
       clientID: "{{ .ClusterName }}-{{ .Name }}"
-      scopes: "{{ .ClusterName }}-{{ .Name }}"
+      scopes: "lakekeeper"
 authz:
   backend: "openfga"
   openfga:
