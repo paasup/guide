@@ -5820,6 +5820,7 @@ oauth:
   keycloakUrl: "$KEYCLOAK_URL"
   keycloakRealm: "$KEYCLOAK_REALM"
   keycloakClientId: "$KEYCLOAK_CLIENT_ID"
+  tlsSecretName: "keycloak-tls"
 
 kafkaConnect:
   enabled: true
