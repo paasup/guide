@@ -5815,6 +5815,11 @@ config:
   numPartitions: 3
   deleteTopicEnable: true
 
+internalListener:
+  enabled: true
+  port: 9094
+  tls: true
+
 oauth:
   enabled: true
   keycloakUrl: "$KEYCLOAK_URL"
