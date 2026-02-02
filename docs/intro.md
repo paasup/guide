@@ -6372,3 +6372,109 @@ openfga:
 # large
 
 ```
+
+## flink-kubernetes-operator/1.13.0
+
+flink-kubernetes-operator 카탈로그:
+
+helm 방식배포
+
+/img/flink.svg
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용 ()
+- [ ] 공개관리
+
+```yaml
+watchNamespaces: []
+
+image:
+  repository: ghcr.io/apache/flink-kubernetes-operator
+  pullPolicy: IfNotPresent
+  tag: "b40c553"
+  digest: ""
+
+imagePullSecrets: []
+
+replicas: 1
+
+strategy:
+  type: Recreate
+
+operatorPod:
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+  webhook:
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "256Mi"
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+
+defaultConfiguration:
+  create: true
+  append: true
+  flink-conf.yaml: |+
+    # Flink Config Overrides
+    kubernetes.operator.metrics.reporter.slf4j.factory.class: org.apache.flink.metrics.slf4j.Slf4jReporterFactory
+    kubernetes.operator.metrics.reporter.slf4j.interval: 5 MINUTE
+
+    kubernetes.operator.reconcile.interval: 15 s
+    kubernetes.operator.observer.progress-check.interval: 5 s
+  log4j-operator.properties: |+
+    # Flink Operator Logging Overrides
+    # rootLogger.level = DEBUG
+    # logger.operator.name= org.apache.flink.kubernetes.operator
+    # logger.operator.level = DEBUG
+  log4j-console.properties: |+
+    # Flink Deployment Logging Overrides
+    # rootLogger.level = DEBUG
+
+jvmArgs:
+  webhook: ""
+  operator: ""
+  logConfig: "-Dlog4j.configurationFile=/opt/flink/conf/log4j-operator.properties"
+
+tls:
+  create: false
+  secretName: flink-operator-cert
+  secretKeyRef:
+    name: operator-certificate-password
+    key: password
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
