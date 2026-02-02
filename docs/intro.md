@@ -6478,3 +6478,128 @@ tls:
 # large
 
 ```
+
+## flink-sql-gateway/0.1.0
+
+flink-sql-gateway 카탈로그:
+
+helm 방식배포
+
+/img/flink.svg
+
+- [ ] 관리자배포
+- [ ] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용 ()
+- [ ] 공개관리
+
+```yaml
+global:
+  namespace: "{{ .Namespace }}"
+  image:
+    repository: wbsong111/flink-sql
+    tag: 2.0.1
+    pullPolicy: IfNotPresent
+
+
+sessionCluster:
+  flinkVersion: v2_0
+  jobManager:
+    resources:
+      memory: 2048m
+      cpu: 1
+  taskManager:
+    resources:
+      memory: 4096m
+      cpu: 2
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "4"
+    env.java.opts.jobmanager: "-Djavax.net.ssl.trustStore=/opt/flink/certs/ca.p12 -Djavax.net.ssl.trustStoreType=PKCS12 -Djavax.net.ssl.trustStorePassword=YOUR_TRUSTSTORE_PASSWORD"
+    env.java.opts.taskmanager: "-Djavax.net.ssl.trustStore=/opt/flink/certs/ca.p12 -Djavax.net.ssl.trustStoreType=PKCS12 -Djavax.net.ssl.trustStorePassword=YOUR_TRUSTSTORE_PASSWORD"
+    table.exec.resource.default-parallelism: "2"
+    
+    fs.s3.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    fs.s3a.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    
+    fs.s3a.endpoint: "$sessioncluster.s3a.endpoint"
+    fs.s3a.path.style.access: "true"
+
+  env:
+    - name: TRUSTSTORE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: truststore-secret
+          key: ca.password
+  volumeMounts:
+    - name: truststore-certs
+      mountPath: /opt/flink/certs
+      readOnly: true
+  volumes:
+    - name: truststore-certs
+      secret:
+        secretName: truststore-secret
+
+sqlGateway:
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 0.5
+    limits:
+      memory: 2Gi
+      cpu: 1
+  flinkConfiguration:
+    env.java.opts: "-Djavax.net.ssl.trustStore=/opt/flink/certs/ca.p12 -Djavax.net.ssl.trustStoreType=PKCS12 -Djavax.net.ssl.trustStorePassword=YOUR_TRUSTSTORE_PASSWORD"
+  env:
+    - name: TRUSTSTORE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: truststore-secret
+          key: ca.password
+  volumeMounts:
+    - name: truststore-certs
+      mountPath: /opt/flink/certs
+      readOnly: true
+  volumes:
+    - name: truststore-certs
+      secret:
+        secretName: truststore-secret
+
+sqlClient:
+   enabled: true
+   env:
+     - name: TRUSTSTORE_PASSWORD
+       valueFrom:
+         secretKeyRef:
+           name: truststore-secret
+           key: ca.password
+   volumeMounts:
+     - name: truststore-certs
+       mountPath: /opt/flink/certs
+       readOnly: true
+   volumes:
+     - name: truststore-certs
+       secret:
+         secretName: truststore-secret
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
