@@ -6497,7 +6497,7 @@ helm 방식배포
 global:
   namespace: "{{ .Namespace }}"
   image:
-    repository: wbsong111/flink-sql
+    repository: paasup/flink-sql
     tag: 2.0.1
     pullPolicy: IfNotPresent
 
