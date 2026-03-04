@@ -6769,6 +6769,9 @@ airflow:
       enabled: true
       storageClassName: ""
       size: 1Gi
+  data:
+    metadataConnection:
+      pass: "$airflow.mysql.password"       
 
 opensearch:
   opensearchJavaOpts: "-Xmx1g -Xms1g"
