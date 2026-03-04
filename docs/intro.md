@@ -6603,3 +6603,228 @@ sqlClient:
 # large
 
 ```
+
+
+
+## openmetadata/1.12.1
+
+openmetadata 카탈로그:
+
+helm 방식배포
+
+/img/openmetadata.svg
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [x] 테넌트사용
+- [x] keycloak사용 (/callback)
+- [ ] 공개관리
+
+```yaml
+openmetadata:
+  config:
+    authorizer:
+      className: "org.openmetadata.service.security.DefaultAuthorizer"
+      containerRequestFilter: "org.openmetadata.service.security.JwtFilter"
+      initialAdmins:
+      - "admin"
+      - "paasup"
+      principalDomain: "{{ .Domain }}"
+      allowedDomains:
+      - "{{ .Domain }}"
+
+    authentication:
+      provider: "basic"
+      callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
+      authority: "https://{{ .Name }}.{{ .Domain }}"
+      publicKeys:
+      - "https://{{ .Name }}.{{ .Domain }}/api/v1/system/config/jwks"
+
+      clientType: confidential
+      provider: "custom-oidc"
+      publicKeys:
+      - "https://{{ .Name }}.{{ .Domain }}/api/v1/system/config/jwks"
+      - "https://$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/certs"
+      clientId: "open-metadata"
+      callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
+      jwtPrincipalClaims:
+        - "email"
+        - "preferred_username"
+        - "sub"
+      oidcConfiguration:
+        enabled: true
+        oidcType: "Keycloak"
+        clientId:
+          secretRef: oidc-secrets
+          secretKey: openmetadata-oidc-client-id
+        clientSecret:
+          secretRef: oidc-secrets
+          secretKey: openmetadata-oidc-client-secret
+        discoveryUri: "https://$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"
+        serverUrl: "https://{{ .Name }}.{{ .Domain }}"
+        callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
+        tokenValidity: "3600"
+        sessionExpiry: "604800"
+
+
+ingress:
+  enabled: true
+  className: "kong"
+  annotations:
+    cert-manager.io/cluster-issuer: root-ca-issuer
+    cert-manager.io/duration: 8760h
+    cert-manager.io/renew-before: 720h
+    konghq.com/protocols: https
+    konghq.com/https-redirect-status-code: "301"
+  hosts:
+    - host: "{{ .Name }}.{{ .Domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: openmetadata-tls
+      hosts:
+        - "{{ .Name }}.{{ .Domain }}"
+
+extraVolumes:
+  - name: java-truststore
+    secret:
+      secretName: java-truststore
+
+extraVolumeMounts:
+  - name: java-truststore
+    mountPath: /etc/ssl/java
+    readOnly: true
+
+resources: {}
+
+extraEnvs:
+  - name: OPENMETADATA_OPTS
+    value: >
+      -Djavax.net.ssl.trustStore=/etc/ssl/java/cacerts
+      -Djavax.net.ssl.trustStorePassword=changeit
+  - name: LOG_LEVEL
+    value: "INFO"
+  - name: "OPENMETADATA_PUBLIC_URL"
+    value: "https://{{ .Name }}.{{ .Domain }}"
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
+
+## openmetadata-dependencies/1.12.1
+
+openmetadata-dependencies 카탈로그:
+
+helm 방식배포
+
+/img/openmetadata.svg
+
+- [x] 관리자배포
+- [x] 클러스터단독배포
+- [ ] 테넌트사용
+- [ ] keycloak사용 ()
+- [ ] 공개관리
+
+```yaml
+airflow:
+  workers:
+    replicas: 2
+    resources: {}
+  scheduler:
+    resources: {}
+  webserver:
+    resources: {}
+  apiServer:
+    resources: {}
+  triggerer:
+    resources: {}
+  dags:
+    persistence:
+      enabled: true
+      storageClassName: ""
+      accessMode: ReadWriteMany
+      size: 1Gi
+  logs:
+    persistence:
+      enabled: true
+      storageClassName: ""
+      size: 1Gi
+
+opensearch:
+  opensearchJavaOpts: "-Xmx1g -Xms1g"
+  persistence:
+    size: 30Gi
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256M"
+    limits:
+      cpu: "2000m"
+      memory: "2048M"
+
+mysql:
+  enabled: true
+  primary:
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "512Mi"
+      limits:
+        cpu: "750m"
+        memory: "768Mi"
+    persistence:
+      size: 50Gi
+  initdbScripts:
+    init_openmetadata_db_scripts.sql: |
+      CREATE DATABASE openmetadata_db;
+      CREATE USER 'openmetadata_user'@'%' IDENTIFIED BY '$openmetadata.mysql.password';
+      GRANT ALL PRIVILEGES ON openmetadata_db.* TO 'openmetadata_user'@'%' WITH GRANT OPTION;
+      commit;
+    init_airflow_db_scripts.sql: |
+      CREATE DATABASE airflow_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+      CREATE USER 'airflow_user'@'%' IDENTIFIED BY '$airflow.mysql.password';
+      GRANT ALL PRIVILEGES ON airflow_db.* TO 'airflow_user'@'%' WITH GRANT OPTION;
+      commit;
+```
+
+쿼터
+```yaml
+# small
+
+
+# medium
+
+
+# large
+
+```
+
+볼륨 쿼터
+```yaml
+# small
+
+# medium
+
+# large
+
+```
