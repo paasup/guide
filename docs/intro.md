@@ -6665,7 +6665,10 @@ openmetadata:
         callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
         tokenValidity: "3600"
         sessionExpiry: "604800"
-
+    pipelineServiceClientConfig:
+      metadataApiEndpoint: "http://{{ .Name }}.{{ .Domain }}:8585/api"
+      airflow:
+        apiEndpoint: "http://{{ .Namespace }}-api-server:8080"
 
 ingress:
   enabled: true
