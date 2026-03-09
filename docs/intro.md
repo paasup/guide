@@ -6666,7 +6666,7 @@ openmetadata:
         tokenValidity: "3600"
         sessionExpiry: "604800"
     pipelineServiceClientConfig:
-      metadataApiEndpoint: "http://{{ .Name }}.{{ .Domain }}:8585/api"
+      metadataApiEndpoint: "http://{{ .Name }}:8585/api"
       airflow:
         apiEndpoint: "http://{{ .Namespace }}-api-server:8080"
 
