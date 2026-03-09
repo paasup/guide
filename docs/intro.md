@@ -6644,7 +6644,7 @@ openmetadata:
       provider: "custom-oidc"
       publicKeys:
       - "https://{{ .Name }}.{{ .Domain }}/api/v1/system/config/jwks"
-      - "https://$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/certs"
+      - "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/certs"
       clientId: "open-metadata"
       callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
       jwtPrincipalClaims:
@@ -6660,7 +6660,7 @@ openmetadata:
         clientSecret:
           secretRef: oidc-secrets
           secretKey: openmetadata-oidc-client-secret
-        discoveryUri: "https://$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"
+        discoveryUri: "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/.well-known/openid-configuration"
         serverUrl: "https://{{ .Name }}.{{ .Domain }}"
         callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
         tokenValidity: "3600"
@@ -6705,7 +6705,7 @@ extraEnvs:
   - name: OPENMETADATA_OPTS
     value: >
       -Djavax.net.ssl.trustStore=/etc/ssl/java/cacerts
-      -Djavax.net.ssl.trustStorePassword=changeit
+      -Djavax.net.ssl.trustStorePassword=openmetadata
   - name: LOG_LEVEL
     value: "INFO"
   - name: "OPENMETADATA_PUBLIC_URL"
