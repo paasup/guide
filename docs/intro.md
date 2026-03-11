@@ -6628,18 +6628,13 @@ openmetadata:
       containerRequestFilter: "org.openmetadata.service.security.JwtFilter"
       initialAdmins:
       - "admin"
-      - "paasup"
+      - "{{ .Username }}"
       principalDomain: "{{ .Domain }}"
       allowedDomains:
       - "{{ .Domain }}"
+      - "paasup.io"
 
     authentication:
-      provider: "basic"
-      callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
-      authority: "https://{{ .Name }}.{{ .Domain }}"
-      publicKeys:
-      - "https://{{ .Name }}.{{ .Domain }}/api/v1/system/config/jwks"
-
       clientType: confidential
       provider: "custom-oidc"
       publicKeys:
@@ -6648,8 +6643,8 @@ openmetadata:
       clientId: "open-metadata"
       callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
       jwtPrincipalClaims:
-        - "email"
         - "preferred_username"
+        - "email"
         - "sub"
       oidcConfiguration:
         enabled: true
