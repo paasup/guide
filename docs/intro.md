@@ -6629,6 +6629,7 @@ openmetadata:
       initialAdmins:
       - "admin"
       - "{{ .Username }}"
+      - "service-account-$KEYCLOAK_CLIENT_ID"
       principalDomain: "{{ .Domain }}"
 
     authentication:
