@@ -6630,9 +6630,6 @@ openmetadata:
       - "admin"
       - "{{ .Username }}"
       principalDomain: "{{ .Domain }}"
-      allowedDomains:
-      - "{{ .Domain }}"
-      - "paasup.io"
 
     authentication:
       clientType: confidential
@@ -6643,8 +6640,8 @@ openmetadata:
       clientId: "open-metadata"
       callbackUrl: "https://{{ .Name }}.{{ .Domain }}/callback"
       jwtPrincipalClaims:
-        - "preferred_username"
         - "email"
+        - "preferred_username"
         - "sub"
       oidcConfiguration:
         enabled: true
